@@ -100,9 +100,9 @@ export default function PartnerLobbyPage() {
   }
 
   return (
-    <div className="max-w-2xl">
+    <div className="flex flex-col" style={{ maxWidth: "1100px" }}>
       <button onClick={() => router.push("/dashboard/study-buddy")}
-        className="flex items-center gap-1.5 text-sm mb-6 transition-colors"
+        className="flex items-center gap-1.5 text-sm mb-6 transition-colors w-fit"
         style={{ color: "var(--text-faint)" }}
         onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-body)")}
         onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-faint)")}>
@@ -115,150 +115,159 @@ export default function PartnerLobbyPage() {
       <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
         Find a Study Partner
       </h1>
-      <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>
+      <p className="text-sm mb-6" style={{ color: "var(--text-muted)" }}>
         Post a topic or join an open room. Private rooms need a 6-character code.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        {/* Create room */}
-        <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid var(--border-accent)" }}>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
-            Post a room
-          </p>
-          <input value={topic} onChange={(e) => setTopic(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-            placeholder="e.g. Cell Division, Calculus…" className="dark-input mb-3" />
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            <button onClick={() => setSubject("")} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-              style={!subject ? { background: "rgba(103,33,255,0.25)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+      {/* Split layout */}
+      <div className="flex gap-5 items-start">
+
+        {/* ── Left: Create + Join private ── */}
+        <div className="flex flex-col gap-4" style={{ flex: "0 0 300px" }}>
+
+          {/* Create room */}
+          <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid var(--border-accent)" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
+              Post a room
+            </p>
+            <input value={topic} onChange={(e) => setTopic(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+              placeholder="e.g. Cell Division, Calculus…" className="dark-input mb-3" />
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              <button onClick={() => setSubject("")} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
+                style={!subject ? { background: "rgba(103,33,255,0.25)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+                  : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                General
+              </button>
+              {SUBJECTS.map((s) => (
+                <button key={s} onClick={() => setSubject(s)} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
+                  style={subject === s ? { background: "rgba(103,33,255,0.25)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+                    : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  {s}
+                </button>
+              ))}
+            </div>
+            <label className="flex items-center gap-2.5 mb-4 cursor-pointer select-none">
+              <div onClick={() => setIsPrivate((p) => !p)}
+                className="w-10 h-5 rounded-full relative transition-all flex-shrink-0"
+                style={{ background: isPrivate ? "linear-gradient(90deg,#6721FF,#00CBFF)" : "rgba(255,255,255,0.1)" }}>
+                <div className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
+                  style={{ left: isPrivate ? "calc(100% - 18px)" : "2px" }} />
+              </div>
+              <span className="text-xs font-medium flex items-center gap-1" style={{ color: "var(--text-muted)" }}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                Private room
+              </span>
+            </label>
+            <button onClick={handleCreate} disabled={creating || !topic.trim()} className="btn-glow w-full"
+              style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", padding: "10px 20px", fontSize: "13px" }}>
+              {creating ? "Creating…" : "Post room"}
+            </button>
+            {error && <p className="text-xs mt-2" style={{ color: "#fca5a5" }}>{error}</p>}
+          </div>
+
+          {/* Join private room */}
+          <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid rgba(103,33,255,0.2)" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
+              Join private room
+            </p>
+            <p className="text-xs mb-4 leading-relaxed" style={{ color: "var(--text-faint)" }}>
+              Got a 6-character code from your study partner? Enter it here.
+            </p>
+            <input value={privateCode}
+              onChange={(e) => setPrivateCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6))}
+              onKeyDown={(e) => e.key === "Enter" && handleJoinPrivate()}
+              placeholder="AB3X9Z" className="dark-input mb-3 text-center tracking-widest font-mono text-lg"
+              maxLength={6} />
+            <button onClick={handleJoinPrivate} disabled={joiningPrivate || privateCode.length !== 6}
+              className="btn-glow w-full"
+              style={{ background: "linear-gradient(90deg,#a855f7,#6721FF)", padding: "10px 20px", fontSize: "13px" }}>
+              {joiningPrivate ? "Joining…" : "Join private room"}
+            </button>
+            {privateError && <p className="text-xs mt-2" style={{ color: "#fca5a5" }}>{privateError}</p>}
+          </div>
+        </div>
+
+        {/* ── Right: Open rooms ── */}
+        <div className="flex-1 min-w-0">
+          {/* Subject filter */}
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Filter:</p>
+            <button onClick={() => setFilterSubject("")} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
+              style={!filterSubject ? { background: "rgba(103,33,255,0.2)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
                 : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              General
+              All
             </button>
             {SUBJECTS.map((s) => (
-              <button key={s} onClick={() => setSubject(s)} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-                style={subject === s ? { background: "rgba(103,33,255,0.25)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+              <button key={s} onClick={() => setFilterSubject(s)} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
+                style={filterSubject === s ? { background: "rgba(103,33,255,0.2)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
                   : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 {s}
               </button>
             ))}
           </div>
-          <label className="flex items-center gap-2.5 mb-4 cursor-pointer select-none">
-            <div onClick={() => setIsPrivate((p) => !p)}
-              className="w-10 h-5 rounded-full relative transition-all flex-shrink-0"
-              style={{ background: isPrivate ? "linear-gradient(90deg,#6721FF,#00CBFF)" : "rgba(255,255,255,0.1)" }}>
-              <div className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
-                style={{ left: isPrivate ? "calc(100% - 18px)" : "2px" }} />
+
+          {/* Header */}
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>
+              Open rooms {rooms.length > 0 && `(${rooms.length})`}
+            </p>
+            <button onClick={loadRooms} className="text-xs" style={{ color: "var(--text-faint)" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-body)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-faint)")}>
+              Refresh
+            </button>
+          </div>
+
+          {rooms.length === 0 ? (
+            <div className="rounded-2xl p-8 text-center" style={{ background: "var(--bg-card)", border: "1px dashed var(--border-card)" }}>
+              <p className="text-sm" style={{ color: "var(--text-faint)" }}>
+                No open rooms{filterSubject ? ` for ${filterSubject}` : ""} right now. Post one and wait for someone to join!
+              </p>
             </div>
-            <span className="text-xs font-medium flex items-center gap-1" style={{ color: "var(--text-muted)" }}>
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              Private room
-            </span>
-          </label>
-          <button onClick={handleCreate} disabled={creating || !topic.trim()} className="btn-glow w-full"
-            style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", padding: "10px 20px", fontSize: "13px" }}>
-            {creating ? "Creating…" : "Post room"}
-          </button>
-          {error && <p className="text-xs mt-2" style={{ color: "#fca5a5" }}>{error}</p>}
-        </div>
-
-        {/* Join private room */}
-        <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid rgba(103,33,255,0.2)" }}>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
-            Join private room
-          </p>
-          <p className="text-xs mb-4 leading-relaxed" style={{ color: "var(--text-faint)" }}>
-            Got a 6-character code from your study partner? Enter it here.
-          </p>
-          <input value={privateCode}
-            onChange={(e) => setPrivateCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6))}
-            onKeyDown={(e) => e.key === "Enter" && handleJoinPrivate()}
-            placeholder="AB3X9Z" className="dark-input mb-3 text-center tracking-widest font-mono text-lg"
-            maxLength={6} />
-          <button onClick={handleJoinPrivate} disabled={joiningPrivate || privateCode.length !== 6}
-            className="btn-glow w-full"
-            style={{ background: "linear-gradient(90deg,#a855f7,#6721FF)", padding: "10px 20px", fontSize: "13px" }}>
-            {joiningPrivate ? "Joining…" : "Join private room"}
-          </button>
-          {privateError && <p className="text-xs mt-2" style={{ color: "#fca5a5" }}>{privateError}</p>}
-        </div>
-      </div>
-
-      {/* Subject filter */}
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Filter:</p>
-        <button onClick={() => setFilterSubject("")} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
-          style={!filterSubject ? { background: "rgba(103,33,255,0.2)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
-            : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          All
-        </button>
-        {SUBJECTS.map((s) => (
-          <button key={s} onClick={() => setFilterSubject(s)} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
-            style={filterSubject === s ? { background: "rgba(103,33,255,0.2)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
-              : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            {s}
-          </button>
-        ))}
-      </div>
-
-      {/* Open rooms */}
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>
-          Open rooms {rooms.length > 0 && `(${rooms.length})`}
-        </p>
-        <button onClick={loadRooms} className="text-xs" style={{ color: "var(--text-faint)" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-body)")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-faint)")}>
-          Refresh
-        </button>
-      </div>
-
-      {rooms.length === 0 ? (
-        <div className="rounded-2xl p-8 text-center" style={{ background: "var(--bg-card)", border: "1px dashed var(--border-card)" }}>
-          <p className="text-sm" style={{ color: "var(--text-faint)" }}>
-            No open rooms{filterSubject ? ` for ${filterSubject}` : ""} right now. Post one and wait for someone to join!
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {rooms.map((room) => (
-            <div key={room.id} className="rounded-2xl px-5 py-4 flex items-center justify-between gap-4"
-              style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                  <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{room.topic}</p>
-                  {room.subject && (
-                    <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
-                      style={{ background: "rgba(103,33,255,0.12)", color: "#a78bfa", border: "1px solid rgba(103,33,255,0.2)" }}>
-                      {room.subject}
-                    </span>
-                  )}
+          ) : (
+            <div className="space-y-2">
+              {rooms.map((room) => (
+                <div key={room.id} className="rounded-2xl px-5 py-4 flex items-center justify-between gap-4"
+                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{room.topic}</p>
+                      {room.subject && (
+                        <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
+                          style={{ background: "rgba(103,33,255,0.12)", color: "#a78bfa", border: "1px solid rgba(103,33,255,0.2)" }}>
+                          {room.subject}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <p className="text-xs" style={{ color: "var(--text-faint)" }}>by {room.host_name}</p>
+                      <span className="text-xs font-semibold" style={{ color: "#00C39A" }}>1/2</span>
+                    </div>
+                  </div>
+                  <button onClick={() => { setJoining(room.id); router.push(`/dashboard/study-buddy/partner/${room.id}`); }}
+                    disabled={joining === room.id}
+                    className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all"
+                    style={{ background: "rgba(0,203,255,0.12)", color: "#00CBFF", border: "1px solid rgba(0,203,255,0.3)" }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.background = "rgba(0,203,255,0.2)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "#00CBFF";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.background = "rgba(0,203,255,0.12)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,203,255,0.3)";
+                    }}>
+                    {joining === room.id ? "Joining…" : "Join"}
+                  </button>
                 </div>
-                <div className="flex items-center gap-3">
-                  <p className="text-xs" style={{ color: "var(--text-faint)" }}>by {room.host_name}</p>
-                  <span className="text-xs font-semibold" style={{ color: "#00C39A" }}>1/2</span>
-                </div>
-              </div>
-              <button onClick={() => { setJoining(room.id); router.push(`/dashboard/study-buddy/partner/${room.id}`); }}
-                disabled={joining === room.id}
-                className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all"
-                style={{ background: "rgba(0,203,255,0.12)", color: "#00CBFF", border: "1px solid rgba(0,203,255,0.3)" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(0,203,255,0.2)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "#00CBFF";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(0,203,255,0.12)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,203,255,0.3)";
-                }}>
-                {joining === room.id ? "Joining…" : "Join"}
-              </button>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
