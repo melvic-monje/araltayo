@@ -291,12 +291,12 @@ export default async function LandingPage() {
                 Ligtas para sa mga kabataan
               </h3>
               <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-body)" }}>
-                AralTayo is designed for all ages. Para sa mga students na wala pang 18 years old,
-                kailangan ng parental consent bago ma-activate ang account —
-                email confirmation lang, walang ID na kinukuha.
+                AralTayo is designed for all ages. Para sa mga students, sineseryoso namin ang inyong
+                privacy at kaligtasan — ang inyong personal na impormasyon ay protektado at hindi
+                ibinabahagi sa kahit sino.
               </p>
               <div className="flex flex-wrap gap-3">
-                {["Walang ID na kinukuha", "Parental consent for minors", "Free forever", "10 AI requests/day"].map((b) => (
+                {["Privacy-first", "Safe for all ages", "Free forever", "10 AI requests/day"].map((b) => (
                   <span key={b} className="text-xs font-semibold px-3 py-1 rounded-full"
                     style={{ background: "rgba(0,195,154,0.1)", color: "#00C39A", border: "1px solid rgba(0,195,154,0.2)" }}>
                     {b}
