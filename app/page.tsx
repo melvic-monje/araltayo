@@ -171,7 +171,7 @@ export default async function LandingPage() {
             Tools
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
-            Lahat ng kailangan mo para <span className="gradient-text">pumasa</span>.
+            Kabado sa next exam? Relax—we&apos;ll help you <span className="gradient-text">pass</span>.
           </h2>
         </div>
 
