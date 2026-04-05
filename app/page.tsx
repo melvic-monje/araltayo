@@ -73,6 +73,11 @@ export default async function LandingPage() {
             AralTayo
           </span>
           <div className="flex items-center gap-3">
+            <Link href="/pricing"
+              className="text-sm font-medium px-4 py-1.5 rounded-full transition-all"
+              style={{ color: "var(--text-muted)" }}>
+              Pricing
+            </Link>
             <Link href="/login"
               className="text-sm font-medium px-4 py-1.5 rounded-full transition-all"
               style={{ color: "var(--text-muted)" }}>

@@ -96,6 +96,13 @@ export default function DashboardShell({
               </span>
             </div>
 
+            {/* Upgrade */}
+            <Link href="/pricing"
+              className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all"
+              style={{ background: 'linear-gradient(90deg,rgba(103,33,255,0.2),rgba(0,203,255,0.1))', color: 'var(--accent-cyan)', border: '1px solid rgba(103,33,255,0.3)' }}>
+              Pro
+            </Link>
+
             {/* Theme toggle */}
             <button onClick={toggle} className="p-1.5 rounded-full transition-all"
               style={{ color: 'var(--text-muted)', border: '1px solid var(--border-subtle)' }}
