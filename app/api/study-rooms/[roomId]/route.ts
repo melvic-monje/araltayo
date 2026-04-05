@@ -91,6 +91,46 @@ export async function PATCH(
     return NextResponse.json({ ok: true });
   }
 
+  if (body.action === "kick") {
+    const kickUserId = body.userId;
+    if (!kickUserId) return NextResponse.json({ error: "userId required" }, { status: 400 });
+
+    // Only host can kick
+    const { data: room } = await supabase
+      .from("study_rooms")
+      .select("host_id, members")
+      .eq("id", roomId)
+      .single();
+
+    if (!room) return NextResponse.json({ error: "Room not found" }, { status: 404 });
+    if (room.host_id !== user.id) return NextResponse.json({ error: "Only the room creator can kick members." }, { status: 403 });
+
+    const members = (room.members as Array<{ id: string; name: string; gender: string | null }>)
+      .filter((m) => m.id !== kickUserId);
+
+    const updates: Record<string, unknown> = { members };
+    // If kicking the partner (2-person legacy), clear partner fields
+    const { data: roomFull } = await supabase
+      .from("study_rooms")
+      .select("partner_id")
+      .eq("id", roomId)
+      .single();
+    if (roomFull?.partner_id === kickUserId) {
+      updates.partner_id = null;
+      updates.partner_name = null;
+      updates.status = "waiting";
+    }
+
+    const { error } = await supabase
+      .from("study_rooms")
+      .update(updates)
+      .eq("id", roomId)
+      .eq("host_id", user.id);
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, kicked: kickUserId });
+  }
+
   return NextResponse.json({ error: "Invalid action" }, { status: 400 });
 }
 

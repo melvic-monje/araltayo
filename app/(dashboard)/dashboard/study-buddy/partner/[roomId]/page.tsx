@@ -221,6 +221,11 @@ export default function RoomPage() {
         .on("broadcast", { event: "draw" }, ({ payload }) => {
           if (payload.senderId !== user.id) boardRef.current?.executeCommand(payload as DrawCommand);
         })
+        .on("broadcast", { event: "kick" }, ({ payload }) => {
+          if (payload.userId === user.id) {
+            router.push("/dashboard/study-buddy/partner?kicked=1");
+          }
+        })
         .subscribe();
     }
 
@@ -381,6 +386,15 @@ export default function RoomPage() {
 
   if (!room) return null;
 
+  async function kickUser(userId: string) {
+    await fetch(`/api/study-rooms/${roomId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "kick", userId }),
+    });
+    msgChannelRef.current?.send({ type: "broadcast", event: "kick", payload: { userId } });
+  }
+
   const isHost = room.host_id === myId;
   const partnerName = isHost ? room.partner_name : room.host_name;
   const isWaiting = room.status === "waiting";
@@ -419,9 +433,19 @@ export default function RoomPage() {
                 {room.topic}
               </h1>
             </div>
-            <p className="text-xs" style={{ color: isWaiting ? "var(--accent-yellow)" : isEnded ? "var(--text-faint)" : "var(--accent-green)" }}>
-              {isWaiting ? "Waiting for a partner…" : isEnded ? "Session ended" : `Studying with ${partnerName}`}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs" style={{ color: isWaiting ? "var(--accent-yellow)" : isEnded ? "var(--text-faint)" : "var(--accent-green)" }}>
+                {isWaiting ? "Waiting for a partner…" : isEnded ? "Session ended" : `Studying with ${partnerName}`}
+              </p>
+              {isHost && !isWaiting && !isEnded && room.partner_id && (
+                <button onClick={() => kickUser(room.partner_id!)}
+                  className="text-xs px-2 py-0.5 rounded-lg transition-all"
+                  style={{ color: "var(--accent-red)", border: "1px solid var(--accent-red-border)" }}
+                  title="Kick from room">
+                  Kick
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Timer + actions */}
