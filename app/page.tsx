@@ -128,7 +128,7 @@ export default async function LandingPage() {
             </div>
 
             <p className="mt-4 text-xs" style={{ color: "var(--text-faint)" }}>
-              Walang credit card para magsimula. 10 free requests per day.
+              Libre lang mag-register. Get 10 free AI requests daily.
             </p>
           </div>
 
