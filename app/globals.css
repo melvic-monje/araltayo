@@ -233,6 +233,10 @@ h1, h2, h3, h4, h5, h6 {
 .dark-input::placeholder {
   color: var(--input-placeholder);
 }
+select.dark-input option {
+  background: var(--bg-card-solid);
+  color: var(--text-primary);
+}
 
 
 /* Reviewer HTML content styles */

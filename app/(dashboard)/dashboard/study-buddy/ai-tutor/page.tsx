@@ -94,7 +94,7 @@ export default function AITutorPage() {
         <button
           onClick={() => router.push("/dashboard/study-buddy")}
           className="flex items-center gap-1.5 text-sm mb-4 transition-colors"
-          style={{ color: "#6b5a8a" }}
+          style={{ color: "var(--text-faint)" }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#C8B8E8")}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#6b5a8a")}
         >
@@ -106,10 +106,10 @@ export default function AITutorPage() {
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: "var(--font-heading)" }}>
+            <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-heading)" }}>
               AI Tutor
             </h1>
-            <p className="text-sm" style={{ color: "#8b78b0" }}>
+            <p className="text-sm" style={{ color: "var(--text-muted)" }}>
               Ask anything. Get clear explanations with Filipino context.
             </p>
           </div>
@@ -129,11 +129,11 @@ export default function AITutorPage() {
               className="px-3 py-1 rounded-full text-xs font-medium transition-all"
               style={!subject ? {
                 background: "linear-gradient(90deg, rgba(103,33,255,0.4), rgba(0,203,255,0.2))",
-                color: "#fff",
-                border: "1px solid rgba(103,33,255,0.5)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-strong)",
               } : {
-                color: "#6b5a8a",
-                border: "1px solid var(--bg-white-muted)",
+                color: "var(--text-faint)",
+                border: "1px solid var(--border-subtle)",
               }}
             >
               General
@@ -145,11 +145,11 @@ export default function AITutorPage() {
                 className="px-3 py-1 rounded-full text-xs font-medium transition-all"
                 style={subject === s ? {
                   background: "linear-gradient(90deg, rgba(103,33,255,0.4), rgba(0,203,255,0.2))",
-                  color: "#fff",
-                  border: "1px solid rgba(103,33,255,0.5)",
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border-strong)",
                 } : {
-                  color: "#6b5a8a",
-                  border: "1px solid var(--bg-white-muted)",
+                  color: "var(--text-faint)",
+                  border: "1px solid var(--border-subtle)",
                 }}
               >
                 {s}
@@ -161,24 +161,24 @@ export default function AITutorPage() {
 
       {/* Chat area */}
       <div className="flex-1 rounded-2xl overflow-hidden flex flex-col"
-        style={{ background: "rgba(22,0,66,0.7)", border: "1px solid rgba(103,33,255,0.15)", minHeight: 0 }}>
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", minHeight: 0 }}>
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {messages.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center text-center py-8">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-                style={{ background: "var(--accent-purple-bg)", border: "1px solid rgba(103,33,255,0.25)" }}>
+                style={{ background: "var(--accent-purple-bg)", border: "1px solid var(--accent-purple-border)" }}>
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   style={{ color: "var(--accent-purple)" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                     d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.613-1.388 2.613H4.186c-1.418 0-2.389-1.613-1.388-2.613L4.2 15.3" />
                 </svg>
               </div>
-              <p className="font-semibold text-white mb-1" style={{ fontFamily: "var(--font-heading)" }}>
+              <p className="font-semibold mb-1" style={{ fontFamily: "var(--font-heading)" }}>
                 Kumusta! I&apos;m {tutorName}.
               </p>
-              <p className="text-sm" style={{ color: "#8b78b0" }}>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>
                 Ask me anything about your studies. I&apos;m here to help!
               </p>
               <div className="mt-6 flex flex-col gap-2 w-full max-w-sm">
@@ -187,7 +187,7 @@ export default function AITutorPage() {
                     key={q}
                     onClick={() => { setInput(q); inputRef.current?.focus(); }}
                     className="text-sm text-left px-4 py-2.5 rounded-xl transition-all"
-                    style={{ background: "rgba(103,33,255,0.08)", color: "#C8B8E8", border: "1px solid rgba(103,33,255,0.15)" }}
+                    style={{ background: "var(--accent-purple-bg)", color: "var(--text-body)", border: "1px solid rgba(103,33,255,0.15)" }}
                     onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(103,33,255,0.4)")}
                     onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "var(--accent-purple-bg)")}
                   >
@@ -202,7 +202,7 @@ export default function AITutorPage() {
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
               {msg.role === "assistant" && (
                 <div className="w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center mr-2 mt-0.5"
-                  style={{ background: "rgba(103,33,255,0.2)" }}>
+                  style={{ background: "var(--accent-purple-bg)" }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     style={{ color: "var(--accent-purple)" }}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -227,7 +227,7 @@ export default function AITutorPage() {
                     className="rounded-2xl px-4 py-3 text-sm"
                     style={{
                       background: "var(--bg-white-subtle)",
-                      color: "#C8B8E8",
+                      color: "var(--text-body)",
                       borderBottomLeftRadius: "6px",
                       border: "1px solid var(--bg-white-subtle)",
                     }}
@@ -242,7 +242,7 @@ export default function AITutorPage() {
           {loading && (
             <div className="flex justify-start">
               <div className="w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center mr-2"
-                style={{ background: "rgba(103,33,255,0.2)" }}>
+                style={{ background: "var(--accent-purple-bg)" }}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   style={{ color: "var(--accent-purple)" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -261,7 +261,7 @@ export default function AITutorPage() {
           {error && (
             <div className="text-center">
               <span className="text-sm px-4 py-2 rounded-xl inline-block"
-                style={{ background: "var(--accent-red-bg)", color: "var(--accent-red)", border: "1px solid rgba(220,38,38,0.2)" }}>
+                style={{ background: "var(--accent-red-bg)", color: "var(--accent-red)", border: "1px solid var(--accent-red-border)" }}>
                 {error}
               </span>
             </div>
@@ -272,7 +272,7 @@ export default function AITutorPage() {
 
         {/* Input */}
         <div className="p-4 flex gap-2 flex-shrink-0"
-          style={{ borderTop: "1px solid rgba(103,33,255,0.12)" }}>
+          style={{ borderTop: "1px solid var(--border-divider)" }}>
           <textarea
             ref={inputRef}
             value={input}
