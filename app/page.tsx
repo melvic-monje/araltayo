@@ -51,10 +51,10 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { number: "01", title: "Gumawa ng free account", description: "Walang bayad. Walang credit card. Mag-sign up gamit ang email mo in under a minute." },
+  { number: "01", title: "Gumawa ng account", description: "Libre magsimula. Walang credit card. Mag-sign up gamit ang email mo in under a minute." },
   { number: "02", title: "Piliin ang tool mo", description: "Quiz, Reviewer, Flashcards, Explainer, o Study Buddy — ikaw ang bahala kung saan ka magsisimula." },
   { number: "03", title: "I-paste ang notes mo", description: "Kahit galing sa libro, sa board, o sa sariling notes mo — i-paste lang at hayaan ang AI." },
-  { number: "04", title: "Mag-aral nang mas smart", description: "10 AI requests ka per day. Sapat na para matapos ang buong reviewer bago mag-exam." },
+  { number: "04", title: "Mag-aral nang mas smart", description: "10 free AI requests per day. Kailangan ng more? AralPro is less than isang Starbucks tall a month." },
 ];
 
 export default async function LandingPage() {
@@ -101,7 +101,7 @@ export default async function LandingPage() {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-7"
               style={{ background: "rgba(103,33,255,0.12)", border: "1px solid rgba(103,33,255,0.3)", color: "#a78bfa" }}>
               <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-              100% free para sa lahat ng Filipino students
+              Libre magsimula — para sa lahat ng Filipino students
             </div>
 
             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-tight mb-6"
@@ -115,12 +115,12 @@ export default async function LandingPage() {
               style={{ color: "var(--text-body)" }}>
               Mas madali na mag-aral dahil sa AralTayo — ang AI-powered study platform na
               ginawa para sa mga Filipino students. Gumawa ng quiz, reviewer, at flashcards
-              mula sa notes mo in seconds. No cramming needed.
+              mula sa notes mo in seconds. Libre magsimula, at less than one Starbucks tall a month kung gusto mo ng unlimited.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <Link href="/signup" className="btn-glow text-base px-8 py-3.5 w-full sm:w-auto text-center">
-                Gumawa ng free account
+                Magsimula nang libre
               </Link>
               <Link href="/login" className="btn-outline-glow text-sm px-8 py-3.5 w-full sm:w-auto text-center">
                 Mag-log in
@@ -128,7 +128,7 @@ export default async function LandingPage() {
             </div>
 
             <p className="mt-4 text-xs" style={{ color: "var(--text-faint)" }}>
-              Walang credit card. Free forever.
+              Walang credit card para magsimula. 10 free requests per day.
             </p>
           </div>
 
@@ -157,7 +157,7 @@ export default async function LandingPage() {
             </div>
             <div className="absolute -top-4 -right-4 px-4 py-2.5 rounded-2xl shadow-xl"
               style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(0,203,255,0.3)" }}>
-              <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Always</p>
+              <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Start for</p>
               <p className="text-lg font-extrabold" style={{ color: "#00CBFF", fontFamily: "var(--font-heading)" }}>Free</p>
             </div>
           </div>
@@ -296,7 +296,7 @@ export default async function LandingPage() {
                 ibinabahagi sa kahit sino.
               </p>
               <div className="flex flex-wrap gap-3">
-                {["Privacy-first", "Safe for all ages", "Free forever", "10 AI requests/day"].map((b) => (
+                {["Privacy-first", "Safe for all ages", "Libre magsimula", "10 free requests/day"].map((b) => (
                   <span key={b} className="text-xs font-semibold px-3 py-1 rounded-full"
                     style={{ background: "rgba(0,195,154,0.1)", color: "#00C39A", border: "1px solid rgba(0,195,154,0.2)" }}>
                     {b}
@@ -318,7 +318,7 @@ export default async function LandingPage() {
           Sumali na sa mga students sa buong Pilipinas na gumagamit ng AralTayo para sa kanilang pag-aaral.
         </p>
         <Link href="/signup" className="btn-glow text-base px-10 py-4 inline-block">
-          Start for free
+          Magsimula nang libre
         </Link>
       </section>
 
@@ -329,7 +329,7 @@ export default async function LandingPage() {
             AralTayo
           </span>
           <p className="text-xs text-center" style={{ color: "var(--text-faint)" }}>
-            Free AI study platform para sa mga Filipino students. araltayo.ph
+            AI study platform para sa mga Filipino students. araltayo.ph
           </p>
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-xs" style={{ color: "var(--text-faint)" }}>Log in</Link>
