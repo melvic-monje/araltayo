@@ -36,6 +36,7 @@ export default function QuizPage() {
     if (!res.ok) { setError(data.error ?? "Failed to generate quiz."); return; }
     setQuestions(data.quiz);
     setRemaining(data.remaining);
+    localStorage.setItem("araltayo-first-quiz-done", "1");
   }
 
   function handleSubmit() {

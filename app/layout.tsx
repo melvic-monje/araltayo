@@ -23,11 +23,22 @@ export const metadata: Metadata = {
   description:
     "AralTayo is a free AI-powered study platform for Philippine K-12 and college students. Generate quizzes, reviewers, flashcards, and get topic explanations.",
   keywords: ["Philippines", "study", "AI", "K-12", "reviewer", "flashcards", "quiz"],
+  manifest: "/manifest.json",
+  themeColor: "#6721FF",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "AralTayo",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fil" className={`${outfit.variable} ${plusJakarta.variable} dark h-full antialiased`}>
+      <head>
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+      </head>
       <body className="min-h-full">
         <Providers>{children}</Providers>
       </body>
