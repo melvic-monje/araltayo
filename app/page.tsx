@@ -51,7 +51,7 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { number: "01", title: "Gumawa ng account", description: "Libre magsimula. Walang credit card. Mag-sign up gamit ang email mo in under a minute." },
+  { number: "01", title: "Libre lang mag-register", description: "Walang credit card. Mag-sign up gamit ang email mo in under a minute. Get 10 free AI requests daily." },
   { number: "02", title: "Piliin ang tool mo", description: "Quiz, Reviewer, Flashcards, Explainer, o Study Buddy — ikaw ang bahala kung saan ka magsisimula." },
   { number: "03", title: "I-paste ang notes mo", description: "Kahit galing sa libro, sa board, o sa sariling notes mo — i-paste lang at hayaan ang AI." },
   { number: "04", title: "Mag-aral with powerful AI Tools", description: "10 free AI requests per day. Kailangan ng more? Get AralPro for only ₱149/month." },
