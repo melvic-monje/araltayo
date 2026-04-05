@@ -54,7 +54,7 @@ const STEPS = [
   { number: "01", title: "Gumawa ng account", description: "Libre magsimula. Walang credit card. Mag-sign up gamit ang email mo in under a minute." },
   { number: "02", title: "Piliin ang tool mo", description: "Quiz, Reviewer, Flashcards, Explainer, o Study Buddy — ikaw ang bahala kung saan ka magsisimula." },
   { number: "03", title: "I-paste ang notes mo", description: "Kahit galing sa libro, sa board, o sa sariling notes mo — i-paste lang at hayaan ang AI." },
-  { number: "04", title: "Mag-aral nang mas smart", description: "10 free AI requests per day. Kailangan ng more? AralPro is less than isang Starbucks tall a month." },
+  { number: "04", title: "Mag-aral nang mas smart", description: "10 free AI requests per day. Kailangan ng more? Get AralPro for only ₱149/month." },
 ];
 
 export default async function LandingPage() {
@@ -115,7 +115,7 @@ export default async function LandingPage() {
               style={{ color: "var(--text-body)" }}>
               Mas madali na mag-aral dahil sa AralTayo — ang AI-powered study platform na
               ginawa para sa mga Filipino students. Gumawa ng quiz, reviewer, at flashcards
-              mula sa notes mo in seconds. Libre magsimula, at less than one Starbucks tall a month kung gusto mo ng unlimited.
+              mula sa notes mo in seconds. Libre magsimula — pero kung gusto mo ng unlimited, get AralPro for only ₱149/month.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
