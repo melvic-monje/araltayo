@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-client";
 import { useTheme } from "@/lib/theme";
+import { getAvatar } from "@/lib/avatars";
 
 const TOOLS = [
   {
@@ -35,9 +36,11 @@ const TOOLS = [
 
 export default function DashboardShell({
   displayName,
+  avatarId = "default",
   children,
 }: {
   displayName: string;
+  avatarId?: string;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -124,6 +127,24 @@ export default function DashboardShell({
         {/* Spacer */}
         <div className="flex-1" />
 
+        {/* Settings */}
+        <Link href="/dashboard/settings"
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all mb-2"
+          style={pathname === "/dashboard/settings" ? {
+            background: 'linear-gradient(90deg, rgba(103,33,255,0.25), rgba(0,203,255,0.1))',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--border-strong)',
+          } : {
+            color: 'var(--text-muted)',
+            border: '1px solid transparent',
+          }}>
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Settings
+        </Link>
+
         {/* Bottom section */}
         <div className="space-y-3 px-1">
           {/* Usage */}
@@ -155,9 +176,9 @@ export default function DashboardShell({
 
           {/* User row */}
           <div className="flex items-center gap-2 px-2">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg,#6721FF,#00CBFF)', color: '#fff' }}>
-              {displayName.charAt(0).toUpperCase()}
+            <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0"
+              style={{ background: getAvatar(avatarId).bg }}>
+              {getAvatar(avatarId).emoji}
             </div>
             <span className="text-xs font-medium truncate flex-1" style={{ color: 'var(--text-body)' }}>{displayName}</span>
             <button onClick={toggle} className="p-1 rounded-full transition-all flex-shrink-0"

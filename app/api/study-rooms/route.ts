@@ -34,15 +34,18 @@ export async function GET(req: NextRequest) {
   }
 
   // Public lobby listing — exclude private rooms
+  const genderFilter = searchParams.get("gender");
+
   let query = supabase
     .from("study_rooms")
-    .select("id, topic, host_name, status, subject, is_private, created_at")
+    .select("id, topic, host_name, status, subject, is_private, host_gender, max_members, members, created_at")
     .eq("status", "waiting")
     .eq("is_private", false)
     .neq("host_id", user.id)
     .order("created_at", { ascending: false });
 
   if (subject) query = query.eq("subject", subject);
+  if (genderFilter) query = query.eq("host_gender", genderFilter);
 
   const { data: rooms, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -55,12 +58,13 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { topic, subject, is_private } = await req.json();
+  const { topic, subject, is_private, max_members } = await req.json();
+  const capacity = Math.min(Math.max(Number(max_members) || 2, 2), 5);
   if (!topic?.trim()) return NextResponse.json({ error: "Topic is required" }, { status: 400 });
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name")
+    .select("display_name, gender")
     .eq("id", user.id)
     .single();
 
@@ -79,9 +83,12 @@ export async function POST(req: NextRequest) {
       topic: topic.trim(),
       host_id: user.id,
       host_name: profile?.display_name ?? "Unknown",
+      host_gender: profile?.gender ?? null,
       subject: subject || null,
       is_private: !!is_private,
       room_code: roomCode,
+      max_members: capacity,
+      members: [{ id: user.id, name: profile?.display_name ?? "Unknown", gender: profile?.gender ?? null }],
     })
     .select()
     .single();

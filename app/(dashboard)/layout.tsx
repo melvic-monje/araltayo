@@ -16,7 +16,7 @@ export default async function DashboardLayout({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name, is_active, is_minor")
+    .select("display_name, is_active, is_minor, avatar")
     .eq("id", user.id)
     .single();
 
@@ -29,7 +29,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <DashboardShell displayName={profile.display_name}>
+    <DashboardShell displayName={profile.display_name} avatarId={profile.avatar ?? "default"}>
       {children}
     </DashboardShell>
   );

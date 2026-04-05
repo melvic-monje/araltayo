@@ -6,12 +6,17 @@ import { createClient } from "@/lib/supabase-client";
 
 const SUBJECTS = ["Math", "Science", "Filipino", "English", "History", "Physics", "Chemistry", "Biology", "Economics", "Statistics"];
 
+interface RoomMember { id: string; name: string; gender: string | null; }
+
 interface Room {
   id: string;
   topic: string;
   host_name: string;
   status: string;
   subject: string | null;
+  host_gender: string | null;
+  max_members: number;
+  members: RoomMember[];
   created_at: string;
 }
 
@@ -21,11 +26,14 @@ export default function PartnerLobbyPage() {
   const [topic, setTopic] = useState("");
   const [subject, setSubject] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
+  const [maxMembers, setMaxMembers] = useState(2);
   const [filterSubject, setFilterSubject] = useState("");
   const [creating, setCreating] = useState(false);
   const [joining, setJoining] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [displayName, setDisplayName] = useState("");
+
+  const [filterGender, setFilterGender] = useState("");
 
   const [privateCode, setPrivateCode] = useState("");
   const [joiningPrivate, setJoiningPrivate] = useState(false);
@@ -33,6 +41,8 @@ export default function PartnerLobbyPage() {
 
   const filterRef = useRef(filterSubject);
   filterRef.current = filterSubject;
+  const filterGenderRef = useRef(filterGender);
+  filterGenderRef.current = filterGender;
 
   useEffect(() => {
     const supabase = createClient();
@@ -52,11 +62,12 @@ export default function PartnerLobbyPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => { loadRooms(); }, [filterSubject]);
+  useEffect(() => { loadRooms(); }, [filterSubject, filterGender]);
 
   async function loadRooms() {
     const params = new URLSearchParams();
     if (filterRef.current) params.set("subject", filterRef.current);
+    if (filterGenderRef.current) params.set("gender", filterGenderRef.current);
     const res = await fetch(`/api/study-rooms${params.size ? "?" + params : ""}`);
     if (res.ok) setRooms((await res.json()).rooms ?? []);
   }
@@ -67,7 +78,7 @@ export default function PartnerLobbyPage() {
     const res = await fetch("/api/study-rooms", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, subject: subject || null, is_private: isPrivate }),
+      body: JSON.stringify({ topic, subject: subject || null, is_private: isPrivate, max_members: maxMembers }),
     });
     setCreating(false);
     if (!res.ok) { setError("Failed to create room."); return; }
@@ -147,6 +158,23 @@ export default function PartnerLobbyPage() {
                 </button>
               ))}
             </div>
+            {/* Room size */}
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>Room size:</span>
+              {[2, 3, 4, 5].map((n) => (
+                <button key={n} onClick={() => setMaxMembers(n)}
+                  className="w-8 h-8 rounded-lg text-xs font-bold transition-all flex items-center justify-center"
+                  style={maxMembers === n ? {
+                    background: "linear-gradient(135deg,rgba(103,33,255,0.3),rgba(0,203,255,0.15))",
+                    color: "var(--text-primary)", border: "1px solid var(--border-strong)",
+                  } : {
+                    color: "var(--text-faint)", border: "1px solid var(--border-subtle)",
+                  }}>
+                  {n}
+                </button>
+              ))}
+            </div>
+
             <label className="flex items-center gap-2.5 mb-4 cursor-pointer select-none">
               <div onClick={() => setIsPrivate((p) => !p)}
                 className="w-10 h-5 rounded-full relative transition-all flex-shrink-0"
@@ -210,6 +238,19 @@ export default function PartnerLobbyPage() {
             ))}
           </div>
 
+          {/* Gender filter */}
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Gender:</p>
+            {[{ value: "", label: "All" }, { value: "male", label: "Male" }, { value: "female", label: "Female" }].map((g) => (
+              <button key={g.value} onClick={() => setFilterGender(g.value)}
+                className="px-3 py-1 rounded-full text-xs font-medium transition-all"
+                style={filterGender === g.value ? { background: "var(--accent-cyan-bg)", color: "var(--accent-cyan)", border: "1px solid var(--accent-cyan-border)" }
+                  : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
+                {g.label}
+              </button>
+            ))}
+          </div>
+
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>
@@ -245,7 +286,17 @@ export default function PartnerLobbyPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <p className="text-xs" style={{ color: "var(--text-faint)" }}>by {room.host_name}</p>
-                      <span className="text-xs font-semibold" style={{ color: "var(--accent-green)" }}>1/2</span>
+                      {room.host_gender && room.host_gender !== "prefer_not_to_say" && (
+                        <span className="text-xs px-1.5 py-0.5 rounded"
+                          style={{ background: room.host_gender === "female" ? "rgba(236,72,153,0.1)" : "rgba(59,130,246,0.1)",
+                            color: room.host_gender === "female" ? "#ec4899" : "#3b82f6",
+                            border: `1px solid ${room.host_gender === "female" ? "rgba(236,72,153,0.2)" : "rgba(59,130,246,0.2)"}` }}>
+                          {room.host_gender === "female" ? "F" : "M"}
+                        </span>
+                      )}
+                      <span className="text-xs font-semibold" style={{ color: "var(--accent-green)" }}>
+                        {(room.members?.length ?? 1)}/{room.max_members ?? 2}
+                      </span>
                     </div>
                   </div>
                   <button onClick={() => { setJoining(room.id); router.push(`/dashboard/study-buddy/partner/${room.id}`); }}
