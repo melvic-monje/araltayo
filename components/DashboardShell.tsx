@@ -131,7 +131,7 @@ export default function DashboardShell({
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium" style={{ color: 'var(--text-faint)' }}>AI Requests</span>
               <span className="text-xs font-bold" style={{ color: pct >= 80 ? 'var(--accent-yellow)' : 'var(--accent-cyan)' }}>
-                {used}/10
+                {10 - used} left
               </span>
             </div>
             <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-white-muted)' }}>
@@ -197,7 +197,7 @@ export default function DashboardShell({
             </Link>
             <div className="flex items-center gap-3">
               <span className="text-xs font-semibold" style={{ color: pct >= 80 ? 'var(--accent-yellow)' : 'var(--accent-cyan)' }}>
-                {used}/10
+                {10 - used} left
               </span>
               <button onClick={() => setMenuOpen(!menuOpen)} className="p-1" style={{ color: 'var(--text-body)' }}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
