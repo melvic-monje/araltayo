@@ -314,7 +314,7 @@ export default async function LandingPage() {
           Ready ka na bang <span className="gradient-text">mag-aral</span>?
         </h2>
         <p className="text-base sm:text-lg mb-8 max-w-xl mx-auto" style={{ color: "var(--text-body)" }}>
-          Sumali na sa mga students sa buong Pilipinas na gumagamit ng AralTayo para sa kanilang pag-aaral.
+          Join our growing community ng students sa buong Pilipinas na gumagamit ng AralTayo sa pag-aaral nila.
         </p>
         <Link href="/signup" className="btn-glow text-base px-10 py-4 inline-block">
           Magsimula nang libre
