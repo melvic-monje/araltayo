@@ -219,7 +219,7 @@ export default async function LandingPage() {
               Mag-aral with friends in real-time, o gamitin ang AI Tutor para mas mabilis at mas marami kang matutunan.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              {["Real-time study rooms", "AI Tutor na may Filipino context", "Anonymous — walang full name"].map((b) => (
+              {["Real-time study rooms", "AI Tutor na may Filipino context"].map((b) => (
                 <span key={b} className="text-xs font-semibold px-3 py-1.5 rounded-full"
                   style={{ background: "rgba(167,139,250,0.1)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.2)" }}>
                   {b}
