@@ -9,20 +9,33 @@ export default function PushOptIn() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Only show after first quiz is completed (flag set by quiz page)
-    const quizDone = localStorage.getItem("araltayo-first-quiz-done");
-    if (!quizDone) return;
+    function check() {
+      const quizDone = localStorage.getItem("araltayo-first-quiz-done");
+      if (!quizDone) return;
+      if (localStorage.getItem(OPT_IN_KEY)) return;
+      if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+      if (Notification.permission !== "default") return;
+      setShow(true);
+    }
 
-    // Don't ask again if already asked
-    if (localStorage.getItem(OPT_IN_KEY)) return;
+    // Check on mount
+    check();
 
-    // Check if push is supported
-    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    // Also listen for storage changes (quiz page sets the flag)
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "araltayo-first-quiz-done") check();
+    };
+    window.addEventListener("storage", onStorage);
 
-    // Already granted or denied
-    if (Notification.permission !== "default") return;
+    // Poll briefly in case same-tab localStorage write (storage event only fires cross-tab)
+    const interval = setInterval(check, 3000);
+    const timeout = setTimeout(() => clearInterval(interval), 30000); // stop polling after 30s
 
-    setShow(true);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, []);
 
   async function handleEnable() {
