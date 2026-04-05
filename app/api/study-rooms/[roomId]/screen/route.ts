@@ -51,13 +51,13 @@ export async function POST(
     return await handleViolation(admin, user.id, roomId, message, regexResult);
   }
 
-  // ── Layer 2: Semantic (only if > 20 chars) ──
-  if (message.length > 20) {
-    const semanticResult = await semanticScreen(message);
-    if (!semanticResult.ok) {
-      return await handleViolation(admin, user.id, roomId, message, semanticResult);
-    }
-  }
+  // ── Layer 2: Semantic (paused — enable when ready) ──
+  // if (message.length > 20) {
+  //   const semanticResult = await semanticScreen(message);
+  //   if (!semanticResult.ok) {
+  //     return await handleViolation(admin, user.id, roomId, message, semanticResult);
+  //   }
+  // }
 
   return NextResponse.json({ ok: true });
 }
