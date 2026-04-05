@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from("study_rooms")
-    .select("id, topic, host_name, status, subject, is_private, host_gender, max_members, members, created_at")
+    .select("id, topic, host_name, status, subject, is_private, host_gender, preferred_gender, max_members, members, created_at")
     .eq("status", "waiting")
     .eq("is_private", false)
     .neq("host_id", user.id)
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { topic, subject, is_private, max_members } = await req.json();
+  const { topic, subject, is_private, max_members, preferred_gender } = await req.json();
   const capacity = Math.min(Math.max(Number(max_members) || 2, 2), 5);
   if (!topic?.trim()) return NextResponse.json({ error: "Topic is required" }, { status: 400 });
 
@@ -88,6 +88,7 @@ export async function POST(req: NextRequest) {
       is_private: !!is_private,
       room_code: roomCode,
       max_members: capacity,
+      preferred_gender: ["male", "female"].includes(preferred_gender) ? preferred_gender : null,
       members: [{ id: user.id, name: profile?.display_name ?? "Unknown", gender: profile?.gender ?? null }],
     })
     .select()

@@ -11,4 +11,5 @@ alter table public.profiles
 alter table public.study_rooms
   add column host_gender text,
   add column max_members int not null default 2,
-  add column members jsonb not null default '[]'::jsonb;
+  add column members jsonb not null default '[]'::jsonb,
+  add column preferred_gender text;

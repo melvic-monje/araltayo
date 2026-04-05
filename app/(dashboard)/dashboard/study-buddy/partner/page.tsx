@@ -15,6 +15,7 @@ interface Room {
   status: string;
   subject: string | null;
   host_gender: string | null;
+  preferred_gender: string | null;
   max_members: number;
   members: RoomMember[];
   created_at: string;
@@ -27,6 +28,7 @@ export default function PartnerLobbyPage() {
   const [subject, setSubject] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [maxMembers, setMaxMembers] = useState(2);
+  const [preferGender, setPreferGender] = useState("");
   const [filterSubject, setFilterSubject] = useState("");
   const [creating, setCreating] = useState(false);
   const [joining, setJoining] = useState<string | null>(null);
@@ -78,7 +80,7 @@ export default function PartnerLobbyPage() {
     const res = await fetch("/api/study-rooms", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, subject: subject || null, is_private: isPrivate, max_members: maxMembers }),
+      body: JSON.stringify({ topic, subject: subject || null, is_private: isPrivate, max_members: maxMembers, preferred_gender: preferGender || null }),
     });
     setCreating(false);
     if (!res.ok) { setError("Failed to create room."); return; }
@@ -171,6 +173,23 @@ export default function PartnerLobbyPage() {
                     color: "var(--text-faint)", border: "1px solid var(--border-subtle)",
                   }}>
                   {n}
+                </button>
+              ))}
+            </div>
+
+            {/* Preferred gender */}
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>Prefer:</span>
+              {[{ value: "", label: "Anyone" }, { value: "male", label: "Male" }, { value: "female", label: "Female" }].map((g) => (
+                <button key={g.value} onClick={() => setPreferGender(g.value)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                  style={preferGender === g.value ? {
+                    background: "linear-gradient(135deg,rgba(103,33,255,0.3),rgba(0,203,255,0.15))",
+                    color: "var(--text-primary)", border: "1px solid var(--border-strong)",
+                  } : {
+                    color: "var(--text-faint)", border: "1px solid var(--border-subtle)",
+                  }}>
+                  {g.label}
                 </button>
               ))}
             </div>
@@ -281,6 +300,14 @@ export default function PartnerLobbyPage() {
                         <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
                           style={{ background: "rgba(103,33,255,0.12)", color: "var(--accent-purple)", border: "1px solid rgba(103,33,255,0.2)" }}>
                           {room.subject}
+                        </span>
+                      )}
+                      {room.preferred_gender && (
+                        <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
+                          style={{ background: room.preferred_gender === "female" ? "rgba(236,72,153,0.1)" : "rgba(59,130,246,0.1)",
+                            color: room.preferred_gender === "female" ? "#ec4899" : "#3b82f6",
+                            border: `1px solid ${room.preferred_gender === "female" ? "rgba(236,72,153,0.2)" : "rgba(59,130,246,0.2)"}` }}>
+                          {room.preferred_gender === "female" ? "Girls only" : "Boys only"}
                         </span>
                       )}
                     </div>
