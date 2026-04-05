@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
         <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
           style={{ background: 'rgba(0,203,255,0.1)', border: '1px solid rgba(0,203,255,0.25)' }}>
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            style={{ color: '#00CBFF' }}>
+            style={{ color: 'var(--accent-cyan)' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
               d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
           </svg>
@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
           <span className="font-semibold" style={{ color: 'var(--text-body)' }}>{email}</span>.
         </p>
         <p className="text-center">
-          <Link href="/login" className="text-sm font-semibold" style={{ color: '#00CBFF' }}>
+          <Link href="/login" className="text-sm font-semibold" style={{ color: 'var(--accent-cyan)' }}>
             Back to sign in
           </Link>
         </p>
@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
 
         {error && (
           <p className="text-sm rounded-xl px-4 py-2.5"
-            style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+            style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
             {error}
           </p>
         )}
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
 
       <p className="mt-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
         Remember it?{" "}
-        <Link href="/login" className="font-semibold" style={{ color: '#00CBFF' }}>
+        <Link href="/login" className="font-semibold" style={{ color: 'var(--accent-cyan)' }}>
           Sign in
         </Link>
       </p>

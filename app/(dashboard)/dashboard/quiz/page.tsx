@@ -52,7 +52,7 @@ export default function QuizPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#6721FF' }}>AI Tool</p>
+        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--accent-purple)' }}>AI Tool</p>
         <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>Quiz Generator</h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Paste your notes and get a quiz in seconds.</p>
       </div>
@@ -80,7 +80,7 @@ export default function QuizPage() {
 
           {error && (
             <p className="text-sm rounded-xl px-4 py-2.5"
-              style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+              style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
               {error}
             </p>
           )}
@@ -102,7 +102,7 @@ export default function QuizPage() {
               </div>
             )}
             <button onClick={() => { setQuestions([]); setSubmitted(false); setAnswers({}); }}
-              className="text-xs ml-auto font-medium" style={{ color: '#6721FF' }}>
+              className="text-xs ml-auto font-medium" style={{ color: 'var(--accent-purple)' }}>
               ← New quiz
             </button>
           </div>
@@ -118,16 +118,16 @@ export default function QuizPage() {
                 </p>
                 <div className="space-y-2">
                   {q.choices.map((choice) => {
-                    let bg = 'rgba(255,255,255,0.03)';
-                    let border = 'rgba(255,255,255,0.08)';
+                    let bg = 'var(--bg-white-subtle)';
+                    let border = 'var(--bg-white-muted)';
                     let color = 'var(--text-body)';
 
                     if (submitted) {
-                      if (choice === q.answer) { bg = 'rgba(0,195,154,0.12)'; border = '#00C39A'; color = 'var(--text-primary)'; }
-                      else if (choice === selected) { bg = 'rgba(220,38,38,0.1)'; border = 'rgba(220,38,38,0.4)'; color = '#fca5a5'; }
-                      else { color = '#4a3a6a'; }
+                      if (choice === q.answer) { bg = 'var(--accent-green-bg)'; border = 'var(--accent-green)'; color = 'var(--text-primary)'; }
+                      else if (choice === selected) { bg = 'var(--accent-red-bg)'; border = 'var(--accent-red)'; color = 'var(--accent-red)'; }
+                      else { color = 'var(--text-faint)'; }
                     } else if (selected === choice) {
-                      bg = 'rgba(103,33,255,0.15)'; border = '#6721FF'; color = 'var(--text-primary)';
+                      bg = 'var(--accent-purple-bg)'; border = 'var(--accent-purple)'; color = 'var(--text-primary)';
                     }
 
                     return (
@@ -143,7 +143,7 @@ export default function QuizPage() {
                 {submitted && (
                   <p className="mt-3 text-sm rounded-xl px-4 py-3"
                     style={{ background: 'var(--bg-surface)', color: 'var(--text-body)', border: '1px solid var(--border-subtle)' }}>
-                    <span className="font-semibold" style={{ color: '#00CBFF' }}>Explanation: </span>
+                    <span className="font-semibold" style={{ color: 'var(--accent-cyan)' }}>Explanation: </span>
                     {q.explanation}
                   </p>
                 )}
@@ -155,7 +155,7 @@ export default function QuizPage() {
             <>
               {error && (
                 <p className="text-sm rounded-xl px-4 py-2.5"
-                  style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+                  style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
                   {error}
                 </p>
               )}

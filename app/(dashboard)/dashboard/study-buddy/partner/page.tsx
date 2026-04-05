@@ -135,14 +135,14 @@ export default function PartnerLobbyPage() {
               placeholder="e.g. Cell Division, Calculus…" className="dark-input mb-3" />
             <div className="flex flex-wrap gap-1.5 mb-3">
               <button onClick={() => setSubject("")} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-                style={!subject ? { background: "rgba(103,33,255,0.25)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
-                  : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                style={!subject ? { background: "var(--accent-purple-bg-strong)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+                  : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
                 General
               </button>
               {SUBJECTS.map((s) => (
                 <button key={s} onClick={() => setSubject(s)} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-                  style={subject === s ? { background: "rgba(103,33,255,0.25)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
-                    : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  style={subject === s ? { background: "var(--accent-purple-bg-strong)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+                    : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
                   {s}
                 </button>
               ))}
@@ -150,7 +150,7 @@ export default function PartnerLobbyPage() {
             <label className="flex items-center gap-2.5 mb-4 cursor-pointer select-none">
               <div onClick={() => setIsPrivate((p) => !p)}
                 className="w-10 h-5 rounded-full relative transition-all flex-shrink-0"
-                style={{ background: isPrivate ? "linear-gradient(90deg,#6721FF,#00CBFF)" : "rgba(255,255,255,0.1)" }}>
+                style={{ background: isPrivate ? "linear-gradient(90deg,#6721FF,#00CBFF)" : "var(--bg-white-muted)" }}>
                 <div className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
                   style={{ left: isPrivate ? "calc(100% - 18px)" : "2px" }} />
               </div>
@@ -166,7 +166,7 @@ export default function PartnerLobbyPage() {
               style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", padding: "10px 20px", fontSize: "13px" }}>
               {creating ? "Creating…" : "Post room"}
             </button>
-            {error && <p className="text-xs mt-2" style={{ color: "#fca5a5" }}>{error}</p>}
+            {error && <p className="text-xs mt-2" style={{ color: "var(--accent-red)" }}>{error}</p>}
           </div>
 
           {/* Join private room */}
@@ -187,7 +187,7 @@ export default function PartnerLobbyPage() {
               style={{ background: "linear-gradient(90deg,#a855f7,#6721FF)", padding: "10px 20px", fontSize: "13px" }}>
               {joiningPrivate ? "Joining…" : "Join private room"}
             </button>
-            {privateError && <p className="text-xs mt-2" style={{ color: "#fca5a5" }}>{privateError}</p>}
+            {privateError && <p className="text-xs mt-2" style={{ color: "var(--accent-red)" }}>{privateError}</p>}
           </div>
         </div>
 
@@ -197,14 +197,14 @@ export default function PartnerLobbyPage() {
           <div className="flex items-center gap-2 mb-4 flex-wrap">
             <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Filter:</p>
             <button onClick={() => setFilterSubject("")} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
-              style={!filterSubject ? { background: "rgba(103,33,255,0.2)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
-                : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              style={!filterSubject ? { background: "var(--accent-purple-bg)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
+                : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
               All
             </button>
             {SUBJECTS.map((s) => (
               <button key={s} onClick={() => setFilterSubject(s)} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
-                style={filterSubject === s ? { background: "rgba(103,33,255,0.2)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
-                  : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                style={filterSubject === s ? { background: "var(--accent-purple-bg)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
+                  : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
                 {s}
               </button>
             ))}
@@ -238,27 +238,27 @@ export default function PartnerLobbyPage() {
                       <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{room.topic}</p>
                       {room.subject && (
                         <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
-                          style={{ background: "rgba(103,33,255,0.12)", color: "#a78bfa", border: "1px solid rgba(103,33,255,0.2)" }}>
+                          style={{ background: "rgba(103,33,255,0.12)", color: "var(--accent-purple)", border: "1px solid rgba(103,33,255,0.2)" }}>
                           {room.subject}
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-3">
                       <p className="text-xs" style={{ color: "var(--text-faint)" }}>by {room.host_name}</p>
-                      <span className="text-xs font-semibold" style={{ color: "#00C39A" }}>1/2</span>
+                      <span className="text-xs font-semibold" style={{ color: "var(--accent-green)" }}>1/2</span>
                     </div>
                   </div>
                   <button onClick={() => { setJoining(room.id); router.push(`/dashboard/study-buddy/partner/${room.id}`); }}
                     disabled={joining === room.id}
                     className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all"
-                    style={{ background: "rgba(0,203,255,0.12)", color: "#00CBFF", border: "1px solid rgba(0,203,255,0.3)" }}
+                    style={{ background: "var(--accent-cyan-bg)", color: "var(--accent-cyan)", border: "1px solid rgba(0,203,255,0.3)" }}
                     onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "rgba(0,203,255,0.2)";
-                      (e.currentTarget as HTMLElement).style.borderColor = "#00CBFF";
+                      (e.currentTarget as HTMLElement).style.background = "var(--accent-cyan-border)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "var(--accent-cyan)";
                     }}
                     onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "rgba(0,203,255,0.12)";
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,203,255,0.3)";
+                      (e.currentTarget as HTMLElement).style.background = "var(--accent-cyan-bg)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "var(--accent-cyan-border)";
                     }}>
                     {joining === room.id ? "Joining…" : "Join"}
                   </button>

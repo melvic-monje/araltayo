@@ -98,7 +98,7 @@ export default function SignupPage() {
             onChange={(e) => setBirthYear(e.target.value)}
             className="dark-input" placeholder={String(CURRENT_YEAR - 16)} />
           {isMinor && (
-            <p className="text-xs mt-1.5 font-medium" style={{ color: '#FDCF6D' }}>
+            <p className="text-xs mt-1.5 font-medium" style={{ color: 'var(--accent-yellow)' }}>
               You&apos;re under 18 — parental consent is required.
             </p>
           )}
@@ -117,7 +117,7 @@ export default function SignupPage() {
 
         {error && (
           <p className="text-sm rounded-xl px-4 py-2.5"
-            style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+            style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
             {error}
           </p>
         )}
@@ -129,7 +129,7 @@ export default function SignupPage() {
 
       <p className="mt-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold" style={{ color: '#00CBFF' }}>
+        <Link href="/login" className="font-semibold" style={{ color: 'var(--accent-cyan)' }}>
           Sign in
         </Link>
       </p>

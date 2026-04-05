@@ -37,7 +37,7 @@ export default function ExplainPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#FDCF6D' }}>AI Tool</p>
+        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--accent-yellow)' }}>AI Tool</p>
         <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>Explainer</h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
           Ask AI to explain any topic clearly, at your level.
@@ -45,7 +45,7 @@ export default function ExplainPage() {
       </div>
 
       <div className="rounded-2xl p-6 space-y-5"
-        style={{ background: 'var(--bg-card)', border: '1px solid rgba(253,207,109,0.15)' }}>
+        style={{ background: 'var(--bg-card)', border: '1px solid var(--accent-yellow-border)' }}>
         <div>
           <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--text-muted)' }}>
             Topic or question
@@ -66,13 +66,13 @@ export default function ExplainPage() {
 
         {error && (
           <p className="text-sm rounded-xl px-4 py-2.5"
-            style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+            style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
             {error}
           </p>
         )}
 
         <button onClick={handleExplain} disabled={loading || !topic.trim()} className="btn-glow w-full"
-          style={{ background: 'linear-gradient(90deg, #c47c00, #FDCF6D)', color: 'var(--bg-page)' }}>
+          style={{ background: 'linear-gradient(90deg, #c47c00, var(--accent-yellow))', color: 'var(--bg-page)' }}>
           {loading ? "Explaining…" : "Explain this"}
         </button>
         {remaining !== null && (
@@ -82,7 +82,7 @@ export default function ExplainPage() {
 
       {explanation && (
         <div className="mt-6 rounded-2xl p-6 space-y-4"
-          style={{ background: 'var(--bg-card)', border: '1px solid rgba(253,207,109,0.2)' }}>
+          style={{ background: 'var(--bg-card)', border: '1px solid var(--accent-yellow-border)' }}>
           <div className="flex items-center justify-between">
             <h2 className="font-bold" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>
               Explanation
@@ -93,7 +93,7 @@ export default function ExplainPage() {
             </button>
           </div>
           <div className="text-sm leading-relaxed whitespace-pre-wrap rounded-xl p-4"
-            style={{ background: 'rgba(253,207,109,0.04)', color: 'var(--text-body)', border: '1px solid rgba(253,207,109,0.1)' }}>
+            style={{ background: 'var(--accent-yellow-bg)', color: 'var(--text-body)', border: '1px solid var(--accent-yellow-border)' }}>
             {explanation}
           </div>
         </div>

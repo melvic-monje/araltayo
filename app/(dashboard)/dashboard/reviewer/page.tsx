@@ -133,7 +133,7 @@ export default function ReviewerPage() {
     <div className="max-w-2xl">
       <div className="mb-8">
         <span className="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3"
-          style={{ background: 'rgba(0,203,255,0.12)', color: '#00CBFF', border: '1px solid rgba(0,203,255,0.25)' }}>
+          style={{ background: 'var(--accent-cyan-bg)', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan-border)' }}>
           AI Tool
         </span>
         <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>
@@ -161,13 +161,13 @@ export default function ReviewerPage() {
 
         {error && (
           <p className="text-sm rounded-xl px-4 py-2.5"
-            style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+            style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
             {error}
           </p>
         )}
 
         <button onClick={handleGenerate} disabled={loading || !notes.trim()} className="btn-glow w-full"
-          style={{ background: 'linear-gradient(90deg, #0066cc, #00CBFF)' }}>
+          style={{ background: 'linear-gradient(90deg, #0066cc, var(--accent-cyan))' }}>
           {loading ? "Generating reviewer…" : "Generate reviewer"}
         </button>
 
@@ -194,13 +194,13 @@ export default function ReviewerPage() {
                 onClick={handleSave}
                 disabled={saving || saved}
                 className="flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-semibold transition-all disabled:opacity-50"
-                style={{ background: 'rgba(0,195,154,0.15)', color: '#00C39A', border: '1px solid rgba(0,195,154,0.3)' }}>
+                style={{ background: 'var(--accent-green-bg)', color: 'var(--accent-green)', border: '1px solid var(--accent-green-border)' }}>
                 {saved ? "Saved!" : saving ? "Saving…" : "Save"}
               </button>
               <button
                 onClick={() => printReviewer(reviewerBody, title)}
                 className="flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5"
-                style={{ background: 'rgba(103,33,255,0.15)', color: '#a78bfa', border: '1px solid rgba(103,33,255,0.3)' }}>
+                style={{ background: 'var(--accent-purple-bg)', color: 'var(--accent-purple)', border: '1px solid var(--accent-purple-border)' }}>
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
@@ -211,7 +211,7 @@ export default function ReviewerPage() {
             <div
               id="reviewer-print"
               className="reviewer-content rounded-xl p-5 text-sm leading-relaxed"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+              style={{ background: 'var(--bg-white-subtle)', border: '1px solid var(--border-subtle)' }}
               dangerouslySetInnerHTML={{ __html: reviewerBody }}
             />
           </div>
@@ -219,8 +219,8 @@ export default function ReviewerPage() {
           {/* Next topics — outside print area */}
           {nextTopics.length > 0 && (
             <div className="rounded-2xl p-5"
-              style={{ background: 'rgba(103,33,255,0.06)', border: '1px dashed rgba(103,33,255,0.3)' }}>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#a78bfa' }}>
+              style={{ background: 'rgba(103,33,255,0.06)', border: '1px dashed var(--accent-purple-border)' }}>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--accent-purple)' }}>
                 Continue studying — generate a reviewer for:
               </p>
               <div className="flex flex-wrap gap-2">
@@ -229,9 +229,9 @@ export default function ReviewerPage() {
                     key={topic}
                     onClick={() => { setNotes(topic); setReviewerBody(""); setNextTopics([]); }}
                     className="px-3 py-1.5 rounded-full text-sm transition-all"
-                    style={{ background: 'rgba(103,33,255,0.12)', color: 'var(--text-body)', border: '1px solid rgba(103,33,255,0.25)' }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#6721FF'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(103,33,255,0.25)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-body)'; }}>
+                    style={{ background: 'var(--accent-purple-bg)', color: 'var(--text-body)', border: '1px solid var(--accent-purple-border)' }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-purple)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-purple-border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-body)'; }}>
                     {topic}
                   </button>
                 ))}

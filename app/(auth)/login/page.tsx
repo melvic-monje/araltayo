@@ -57,7 +57,7 @@ export default function LoginPage() {
             <label className="block text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
               Password
             </label>
-            <Link href="/forgot-password" className="text-xs font-medium" style={{ color: '#00CBFF' }}>
+            <Link href="/forgot-password" className="text-xs font-medium" style={{ color: 'var(--accent-cyan)' }}>
               Forgot password?
             </Link>
           </div>
@@ -73,7 +73,7 @@ export default function LoginPage() {
 
         {error && (
           <p className="text-sm rounded-xl px-4 py-2.5"
-            style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+            style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
             {error}
           </p>
         )}
@@ -85,7 +85,7 @@ export default function LoginPage() {
 
       <p className="mt-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
         No account yet?{" "}
-        <Link href="/signup" className="font-semibold" style={{ color: '#00CBFF' }}>
+        <Link href="/signup" className="font-semibold" style={{ color: 'var(--accent-cyan)' }}>
           Sign up
         </Link>
       </p>

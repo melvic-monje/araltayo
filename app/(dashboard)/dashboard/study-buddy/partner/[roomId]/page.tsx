@@ -347,7 +347,7 @@ export default function RoomPage() {
   if (error) {
     return (
       <div className="max-w-md mx-auto text-center py-16">
-        <p className="text-sm mb-4" style={{ color: "#fca5a5" }}>{error}</p>
+        <p className="text-sm mb-4" style={{ color: "var(--accent-red)" }}>{error}</p>
         <button onClick={() => router.push("/dashboard/study-buddy/partner")} className="btn-glow"
           style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)" }}>
           Back to lobby
@@ -387,7 +387,7 @@ export default function RoomPage() {
             <div className="flex items-center gap-2 mb-0.5">
               {room.is_private && (
                 <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  style={{ color: "#a78bfa" }}>
+                  style={{ color: "var(--accent-purple)" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -396,7 +396,7 @@ export default function RoomPage() {
                 {room.topic}
               </h1>
             </div>
-            <p className="text-xs" style={{ color: isWaiting ? "#FDCF6D" : isEnded ? "var(--text-faint)" : "#00C39A" }}>
+            <p className="text-xs" style={{ color: isWaiting ? "var(--accent-yellow)" : isEnded ? "var(--text-faint)" : "var(--accent-green)" }}>
               {isWaiting ? "Waiting for a partner…" : isEnded ? "Session ended" : `Studying with ${partnerName}`}
             </p>
           </div>
@@ -406,12 +406,12 @@ export default function RoomPage() {
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl"
               style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)" }}>
               <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                style={{ color: timerRunning ? "#00C39A" : "var(--text-faint)" }}>
+                style={{ color: timerRunning ? "var(--accent-green)" : "var(--text-faint)" }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span className="text-sm font-mono font-bold tabular-nums"
-                style={{ color: timerDone ? "#FDCF6D" : timerRunning ? "#00C39A" : "var(--text-primary)" }}>
+                style={{ color: timerDone ? "var(--accent-yellow)" : timerRunning ? "var(--accent-green)" : "var(--text-primary)" }}>
                 {fmtTime(displayTime)}
               </span>
               <button onClick={resetTimer} title="Restart timer"
@@ -426,7 +426,7 @@ export default function RoomPage() {
 
             <button onClick={copyInvite} title={room.is_private ? "Copy room code" : "Copy room link"}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
-              style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", color: copied ? "#00C39A" : "var(--text-muted)" }}>
+              style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", color: copied ? "var(--accent-green)" : "var(--text-muted)" }}>
               {copied ? (
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -442,9 +442,9 @@ export default function RoomPage() {
 
             <button onClick={leaveRoom}
               className="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
-              style={{ background: "rgba(220,38,38,0.08)", color: "#fca5a5", border: "1px solid rgba(220,38,38,0.15)" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(220,38,38,0.15)")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(220,38,38,0.08)")}>
+              style={{ background: "var(--accent-red-bg)", color: "var(--accent-red)", border: "1px solid rgba(220,38,38,0.15)" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--accent-red-border)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--accent-red-bg)")}>
               Leave
             </button>
           </div>
@@ -465,13 +465,13 @@ export default function RoomPage() {
             {isWaiting && (
               <div className="text-center py-6">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-3"
-                  style={{ background: "rgba(253,207,109,0.1)", color: "#FDCF6D", border: "1px solid rgba(253,207,109,0.2)" }}>
+                  style={{ background: "var(--accent-yellow-bg)", color: "var(--accent-yellow)", border: "1px solid rgba(253,207,109,0.2)" }}>
                   <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse inline-block" />
                   Waiting for a partner…
                 </div>
                 {room.is_private && room.room_code && (
                   <div className="inline-block mt-2 px-4 py-3 rounded-2xl"
-                    style={{ background: "rgba(103,33,255,0.1)", border: "1px solid rgba(103,33,255,0.25)" }}>
+                    style={{ background: "var(--accent-purple-bg)", border: "1px solid rgba(103,33,255,0.25)" }}>
                     <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "var(--text-faint)" }}>
                       Room Code
                     </p>
@@ -510,8 +510,8 @@ export default function RoomPage() {
                         background: "linear-gradient(135deg,rgba(103,33,255,0.4),rgba(0,203,255,0.2))",
                         color: "var(--text-primary)", borderBottomRightRadius: "6px",
                       } : {
-                        background: "rgba(255,255,255,0.06)", color: "var(--text-body)",
-                        borderBottomLeftRadius: "6px", border: "1px solid rgba(255,255,255,0.06)",
+                        background: "var(--bg-white-subtle)", color: "var(--text-body)",
+                        borderBottomLeftRadius: "6px", border: "1px solid var(--bg-white-subtle)",
                       }}>
                       {msg.content}
                     </div>
@@ -523,7 +523,7 @@ export default function RoomPage() {
             {isEnded && messages.length > 0 && (
               <div className="text-center py-2">
                 <span className="text-xs px-3 py-1 rounded-full"
-                  style={{ background: "rgba(220,38,38,0.1)", color: "#fca5a5" }}>
+                  style={{ background: "rgba(220,38,38,0.1)", color: "var(--accent-red)" }}>
                   Session ended
                 </span>
               </div>
@@ -575,12 +575,12 @@ export default function RoomPage() {
           {/* Continue prompt overlay (chat side) */}
           {showContinuePrompt && (
             <div className="absolute inset-0 flex items-center justify-center rounded-2xl z-10"
-              style={{ background: "rgba(13,1,38,0.85)", backdropFilter: "blur(8px)" }}>
+              style={{ background: "var(--bg-overlay)", backdropFilter: "blur(8px)" }}>
               <div className="text-center px-6 py-6 rounded-2xl mx-4"
                 style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(103,33,255,0.3)", maxWidth: "300px" }}>
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3"
-                  style={{ background: "rgba(253,207,109,0.15)" }}>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#FDCF6D" }}>
+                  style={{ background: "var(--accent-yellow-bg)" }}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-yellow)" }}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -594,7 +594,7 @@ export default function RoomPage() {
                 <div className="flex gap-2">
                   <button onClick={leaveRoom}
                     className="flex-1 py-2 rounded-xl text-xs font-semibold transition-all"
-                    style={{ background: "rgba(255,255,255,0.06)", color: "var(--text-muted)", border: "1px solid var(--border-subtle)" }}>
+                    style={{ background: "var(--bg-white-subtle)", color: "var(--text-muted)", border: "1px solid var(--border-subtle)" }}>
                     End
                   </button>
                   <button onClick={continueSession}
@@ -640,14 +640,14 @@ export default function RoomPage() {
                 placeholder="Start typing your notes here… both of you can edit at the same time."
                 className="flex-1 w-full rounded-xl p-4 text-sm resize-none outline-none transition-all"
                 style={{
-                  background: "rgba(255,255,255,0.04)",
+                  background: "var(--bg-input)",
                   border: "1px solid rgba(103,33,255,0.15)",
                   color: "var(--text-body)",
                   fontFamily: "var(--font-sans)",
                   lineHeight: "1.7",
                 }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(103,33,255,0.4)")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(103,33,255,0.15)")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--border-strong)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border-subtle)")}
               />
             </div>
           )}
@@ -683,7 +683,7 @@ export default function RoomPage() {
                   style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)" }}>
                   <p className="text-xs h-4 mb-1 truncate" style={{ color: "var(--text-faint)" }}>{calcHistory}</p>
                   <p className="text-3xl font-bold font-mono truncate"
-                    style={{ color: calcExpr === "Error" ? "#fca5a5" : "var(--text-primary)" }}>
+                    style={{ color: calcExpr === "Error" ? "var(--accent-red)" : "var(--text-primary)" }}>
                     {calcExpr}
                   </p>
                 </div>
@@ -702,9 +702,9 @@ export default function RoomPage() {
                               else calcPress(btn);
                             }}
                             className="py-2 rounded-xl text-xs font-semibold transition-all"
-                            style={{ background: "rgba(103,33,255,0.12)", color: "#a78bfa", border: "1px solid rgba(103,33,255,0.2)" }}
-                            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(103,33,255,0.25)")}
-                            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(103,33,255,0.12)")}>
+                            style={{ background: "var(--border-divider)", color: "var(--accent-purple)", border: "1px solid rgba(103,33,255,0.2)" }}
+                            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--accent-purple-border)")}
+                            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--border-divider)")}>
                             {btn}
                           </button>
                         ))}
@@ -728,9 +728,9 @@ export default function RoomPage() {
                             style={isEq ? {
                               background: "linear-gradient(135deg,#6721FF,#00CBFF)", color: "#fff",
                             } : isClear ? {
-                              background: "rgba(220,38,38,0.12)", color: "#fca5a5", border: "1px solid rgba(220,38,38,0.2)",
+                              background: "rgba(220,38,38,0.12)", color: "var(--accent-red)", border: "1px solid rgba(220,38,38,0.2)",
                             } : isOp ? {
-                              background: "rgba(0,203,255,0.1)", color: "#00CBFF", border: "1px solid rgba(0,203,255,0.2)",
+                              background: "rgba(0,203,255,0.1)", color: "var(--accent-cyan)", border: "1px solid rgba(0,203,255,0.2)",
                             } : {
                               background: "var(--bg-surface)", color: "var(--text-primary)", border: "1px solid var(--border-subtle)",
                             }}

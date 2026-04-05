@@ -52,13 +52,13 @@ export default function FlashcardsPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#00C39A' }}>AI Tool</p>
+        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--accent-green)' }}>AI Tool</p>
         <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>Flashcards</h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Create flashcard sets to drill terms and definitions.</p>
       </div>
 
       <div className="rounded-2xl p-6 space-y-5"
-        style={{ background: 'var(--bg-card)', border: '1px solid rgba(0,195,154,0.15)' }}>
+        style={{ background: 'var(--bg-card)', border: '1px solid var(--accent-green-bg)' }}>
         <div>
           <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--text-muted)' }}>
             Your notes
@@ -76,12 +76,12 @@ export default function FlashcardsPage() {
         </div>
         {error && (
           <p className="text-sm rounded-xl px-4 py-2.5"
-            style={{ background: 'rgba(220,38,38,0.1)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.2)' }}>
+            style={{ background: 'var(--accent-red-bg)', color: 'var(--accent-red)', border: '1px solid var(--accent-red-border)' }}>
             {error}
           </p>
         )}
         <button onClick={handleGenerate} disabled={loading || !notes.trim()} className="btn-glow w-full"
-          style={{ background: 'linear-gradient(90deg, #009966, #00C39A)' }}>
+          style={{ background: 'linear-gradient(90deg, #009966, var(--accent-green))' }}>
           {loading ? "Generating flashcards…" : "Generate flashcards"}
         </button>
         {remaining !== null && (
@@ -94,12 +94,12 @@ export default function FlashcardsPage() {
           {/* Controls */}
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-1 rounded-xl p-1"
-              style={{ background: 'rgba(255,255,255,0.04)' }}>
+              style={{ background: 'var(--bg-white-subtle)' }}>
               {(["grid", "study"] as const).map((m) => (
                 <button key={m} onClick={() => { setMode(m); setCurrent(0); setFlipped({}); }}
                   className="px-4 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all"
                   style={mode === m
-                    ? { background: 'rgba(0,195,154,0.2)', color: '#00C39A' }
+                    ? { background: 'var(--accent-green-bg)', color: 'var(--accent-green)' }
                     : { color: 'var(--text-faint)' }}>
                   {m}
                 </button>
@@ -110,7 +110,7 @@ export default function FlashcardsPage() {
                 placeholder="Title…" className="dark-input w-32 py-1.5 text-xs" />
               <button onClick={handleSave} disabled={saving || saved}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
-                style={{ background: 'rgba(0,195,154,0.15)', color: '#00C39A', border: '1px solid rgba(0,195,154,0.3)' }}>
+                style={{ background: 'var(--accent-green-bg)', color: 'var(--accent-green)', border: '1px solid var(--accent-green-border)' }}>
                 {saved ? "Saved!" : saving ? "…" : "Save"}
               </button>
             </div>
@@ -124,17 +124,17 @@ export default function FlashcardsPage() {
                 <button key={i} onClick={() => setFlipped((p) => ({ ...p, [i]: !p[i] }))}
                   className="rounded-2xl p-4 text-left min-h-[110px] flex flex-col justify-between transition-all duration-200"
                   style={{
-                    background: flipped[i] ? 'rgba(0,195,154,0.08)' : 'var(--bg-card)',
-                    border: `1px solid ${flipped[i] ? 'rgba(0,195,154,0.3)' : 'rgba(255,255,255,0.06)'}`,
+                    background: flipped[i] ? 'var(--accent-green-bg)' : 'var(--bg-card)',
+                    border: `1px solid ${flipped[i] ? 'var(--accent-green-border)' : 'var(--bg-white-subtle)'}`,
                   }}>
                   <p className="text-xs font-semibold uppercase tracking-wider mb-2"
-                    style={{ color: flipped[i] ? '#00C39A' : '#6721FF' }}>
+                    style={{ color: flipped[i] ? 'var(--accent-green)' : 'var(--accent-purple)' }}>
                     {flipped[i] ? "Back" : "Front"}
                   </p>
                   <p className="text-sm leading-snug" style={{ color: 'var(--text-primary)' }}>
                     {flipped[i] ? card.back : card.front}
                   </p>
-                  <p className="text-xs mt-2" style={{ color: '#4a3a6a' }}>Tap to flip</p>
+                  <p className="text-xs mt-2" style={{ color: 'var(--text-faint)' }}>Tap to flip</p>
                 </button>
               ))}
             </div>
@@ -146,11 +146,11 @@ export default function FlashcardsPage() {
               <button onClick={() => setFlipped((p) => ({ ...p, [current]: !p[current] }))}
                 className="w-full rounded-2xl p-8 min-h-[180px] flex flex-col items-center justify-center transition-all duration-300"
                 style={{
-                  background: flipped[current] ? 'rgba(0,195,154,0.08)' : 'var(--bg-card)',
+                  background: flipped[current] ? 'var(--accent-green-bg)' : 'var(--bg-card)',
                   border: `1px solid ${flipped[current] ? 'rgba(0,195,154,0.4)' : 'rgba(103,33,255,0.3)'}`,
                 }}>
                 <p className="text-xs font-semibold uppercase tracking-wider mb-3"
-                  style={{ color: flipped[current] ? '#00C39A' : '#6721FF' }}>
+                  style={{ color: flipped[current] ? 'var(--accent-green)' : 'var(--accent-purple)' }}>
                   {flipped[current] ? "Back" : "Front"} — tap to flip
                 </p>
                 <p className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>

@@ -11,7 +11,7 @@ export default function WelcomePage({
         style={{ background: 'var(--bg-card)', border: '1px solid rgba(0,195,154,0.25)', backdropFilter: 'blur(20px)' }}>
         <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           style={{ background: 'rgba(0,195,154,0.12)', border: '1px solid rgba(0,195,154,0.3)' }}>
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: '#00C39A' }}>
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--accent-green)' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>

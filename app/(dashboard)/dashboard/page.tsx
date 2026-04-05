@@ -11,7 +11,7 @@ const TOOLS = [
     ),
     title: "Quiz Generator",
     description: "Turn your notes into multiple-choice quizzes and test yourself.",
-    accent: "#6721FF",
+    accent: "var(--accent-purple)",
     glow: "rgba(103,33,255,0.2)",
   },
   {
@@ -23,7 +23,7 @@ const TOOLS = [
     ),
     title: "Reviewer",
     description: "Generate a structured study reviewer from your notes.",
-    accent: "#00CBFF",
+    accent: "var(--accent-cyan)",
     glow: "rgba(0,203,255,0.15)",
   },
   {
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
   return (
     <div className="max-w-3xl">
       <div className="mb-10">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#6721FF' }}>
+        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--accent-purple)' }}>
           Dashboard
         </p>
         <h1 className="text-3xl font-bold mb-1" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>
@@ -82,7 +82,7 @@ export default async function DashboardPage() {
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
           <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>AralTayo</span> is a free AI study platform
           for Filipino K-12 and college students. You get{" "}
-          <span className="font-semibold" style={{ color: '#00CBFF' }}>10 AI requests per day</span> — paste
+          <span className="font-semibold" style={{ color: 'var(--accent-cyan)' }}>10 AI requests per day</span> — paste
           your notes into any tool to get started.
         </p>
       </div>

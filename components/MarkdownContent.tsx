@@ -49,7 +49,7 @@ export default function MarkdownContent({ content }: { content: string }) {
               <code className="block text-xs p-3 rounded-xl mb-3 overflow-x-auto"
                 style={{
                   background: "rgba(0,0,0,0.15)",
-                  color: "#00CBFF",
+                  color: "var(--accent-cyan)",
                   border: "1px solid rgba(0,203,255,0.15)",
                   fontFamily: "monospace",
                 }}>
@@ -61,7 +61,7 @@ export default function MarkdownContent({ content }: { content: string }) {
             <code className="px-1.5 py-0.5 rounded text-xs"
               style={{
                 background: "rgba(103,33,255,0.15)",
-                color: "#a78bfa",
+                color: "var(--accent-purple)",
                 fontFamily: "monospace",
               }}>
               {children}
@@ -90,7 +90,7 @@ export default function MarkdownContent({ content }: { content: string }) {
           <th className="text-left px-3 py-2 text-xs font-semibold uppercase tracking-wider"
             style={{
               background: "rgba(103,33,255,0.15)",
-              color: "#a78bfa",
+              color: "var(--accent-purple)",
               border: "1px solid var(--border-card)",
             }}>
             {children}

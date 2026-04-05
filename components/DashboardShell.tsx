@@ -82,16 +82,16 @@ export default function DashboardShell({
           <div className="hidden md:flex items-center gap-4">
             {/* Usage pill */}
             <div className="flex items-center gap-2">
-              <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-white-muted)' }}>
                 <div className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${pct}%`,
                     background: pct >= 80
-                      ? 'linear-gradient(90deg, #FDCF6D, #EE6E4D)'
-                      : 'linear-gradient(90deg, #6721FF, #00CBFF)',
+                      ? 'linear-gradient(90deg, var(--accent-yellow), #EE6E4D)'
+                      : 'linear-gradient(90deg, #6721FF, var(--accent-cyan))',
                   }} />
               </div>
-              <span className="text-xs font-semibold" style={{ color: pct >= 80 ? '#FDCF6D' : '#00CBFF' }}>
+              <span className="text-xs font-semibold" style={{ color: pct >= 80 ? 'var(--accent-yellow)' : 'var(--accent-cyan)' }}>
                 {used}/10
               </span>
             </div>
@@ -115,14 +115,14 @@ export default function DashboardShell({
 
             <button onClick={handleSignOut}
               className="text-xs px-3 py-1.5 rounded-full transition-all"
-              style={{ color: 'var(--text-muted)', border: '1px solid rgba(255,255,255,0.08)' }}
+              style={{ color: 'var(--text-muted)', border: '1px solid var(--bg-white-muted)' }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.color = '#fca5a5';
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(220,38,38,0.3)';
+                (e.currentTarget as HTMLElement).style.color = 'var(--accent-red)';
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent-red-border)';
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)';
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--bg-white-muted)';
               }}>
               Sign out
             </button>
@@ -130,7 +130,7 @@ export default function DashboardShell({
 
           {/* Mobile hamburger */}
           <div className="md:hidden flex items-center gap-3">
-            <span className="text-xs font-semibold" style={{ color: pct >= 80 ? '#FDCF6D' : '#00CBFF' }}>
+            <span className="text-xs font-semibold" style={{ color: pct >= 80 ? 'var(--accent-yellow)' : 'var(--accent-cyan)' }}>
               {used}/10
             </span>
             <button onClick={() => setMenuOpen(!menuOpen)} className="p-1" style={{ color: 'var(--text-body)' }}>
@@ -174,7 +174,7 @@ export default function DashboardShell({
                     </svg>
                   )}
                 </button>
-                <button onClick={handleSignOut} className="text-xs" style={{ color: '#fca5a5' }}>
+                <button onClick={handleSignOut} className="text-xs" style={{ color: 'var(--accent-red)' }}>
                   Sign out
                 </button>
               </div>
