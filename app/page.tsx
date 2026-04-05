@@ -212,12 +212,11 @@ export default async function LandingPage() {
               Study Buddy
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-5" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
-              Mas masaya ang pag-aaral{" "}
-              <span className="gradient-text">kapag magkasama</span>.
+              Study better with a{" "}
+              <span className="gradient-text">buddy</span>.
             </h2>
             <p className="text-base leading-relaxed mb-6" style={{ color: "var(--text-body)" }}>
-              Mag-aral kasama ang friends mo sa real-time Study Rooms, o kausapin ang aming AI Tutor
-              na parang guro mo — complete with Filipino teacher names pa.
+              Mag-aral with friends in real-time, o gamitin ang AI Tutor para mas mabilis at mas marami kang matutunan.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               {["Real-time study rooms", "AI Tutor na may Filipino context", "Anonymous — walang full name"].map((b) => (
