@@ -133,10 +133,10 @@ export default function PartnerLobbyPage() {
       </p>
 
       {/* Split layout */}
-      <div className="flex gap-5 items-start">
+      <div className="flex flex-col lg:flex-row gap-5 items-start">
 
         {/* ── Left: Create + Join private ── */}
-        <div className="flex flex-col gap-4" style={{ flex: "0 0 300px" }}>
+        <div className="flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-[300px] lg:flex-shrink-0">
 
           {/* Create room */}
           <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid var(--border-accent)" }}>

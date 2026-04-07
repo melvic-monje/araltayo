@@ -419,7 +419,7 @@ export default function RoomPage() {
 
       {/* Header */}
       <div className="flex-shrink-0 mb-3">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-3">
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
               {room.is_private && (
@@ -499,11 +499,11 @@ export default function RoomPage() {
       </div>
 
       {/* Split layout */}
-      <div className="flex-1 flex gap-3 min-h-0">
+      <div className="flex-1 flex flex-col lg:flex-row gap-3 min-h-0">
 
         {/* ── Left: Chat ── */}
-        <div className="flex flex-col rounded-2xl overflow-hidden relative"
-          style={{ flex: "0 0 340px", background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
+        <div className="flex flex-col rounded-2xl overflow-hidden relative lg:w-[340px] lg:flex-shrink-0"
+          style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", minHeight: "300px" }}>
 
           {/* Chat messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">

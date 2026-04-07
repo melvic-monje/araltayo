@@ -72,18 +72,18 @@ export default async function LandingPage() {
           <span className="text-xl font-bold gradient-text" style={{ fontFamily: "var(--font-heading)" }}>
             AralTayo
           </span>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             <Link href="/pricing"
-              className="text-sm font-medium px-4 py-1.5 rounded-full transition-all"
+              className="hidden sm:inline text-sm font-medium px-4 py-1.5 rounded-full transition-all"
               style={{ color: "var(--text-muted)" }}>
               Pricing
             </Link>
             <Link href="/login"
-              className="text-sm font-medium px-4 py-1.5 rounded-full transition-all"
+              className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 rounded-full transition-all"
               style={{ color: "var(--text-muted)" }}>
               Log in
             </Link>
-            <Link href="/signup" className="btn-glow text-sm px-5 py-2">
+            <Link href="/signup" className="btn-glow text-xs sm:text-sm px-4 sm:px-5 py-2">
               Magsimula
             </Link>
           </div>
@@ -109,7 +109,7 @@ export default async function LandingPage() {
               Libre magsimula — para sa lahat ng Filipino students
             </div>
 
-            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-tight mb-6"
+            <h1 className="text-3xl sm:text-5xl xl:text-6xl font-extrabold leading-tight mb-6"
               style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
               The future of{" "}
               <span className="gradient-text">learning</span>
@@ -155,12 +155,12 @@ export default async function LandingPage() {
             </div>
 
             {/* Floating stat badges */}
-            <div className="absolute -bottom-4 -left-4 px-4 py-2.5 rounded-2xl shadow-xl"
+            <div className="absolute -bottom-4 left-0 sm:-left-4 px-4 py-2.5 rounded-2xl shadow-xl"
               style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(103,33,255,0.3)" }}>
               <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>AI requests per day</p>
               <p className="text-2xl font-extrabold gradient-text" style={{ fontFamily: "var(--font-heading)" }}>10</p>
             </div>
-            <div className="absolute -top-4 -right-4 px-4 py-2.5 rounded-2xl shadow-xl"
+            <div className="absolute -top-4 right-0 sm:-right-4 px-4 py-2.5 rounded-2xl shadow-xl"
               style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(0,203,255,0.3)" }}>
               <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Start for</p>
               <p className="text-lg font-extrabold" style={{ color: "#00CBFF", fontFamily: "var(--font-heading)" }}>Free</p>
