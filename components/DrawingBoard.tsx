@@ -17,7 +17,7 @@ export interface DrawingBoardHandle {
   executeCommand: (cmd: DrawCommand) => void;
 }
 
-const COLORS = ["#111827", "#6721FF", "#00CBFF", "#ef4444", "#00C39A", "#FDCF6D", "#f97316", "#ec4899"];
+const COLORS = ["#111827", "#F59E0B", "#6FC0B4", "#ef4444", "#93C36E", "#E5B65A", "#f97316", "#ec4899"];
 const WIDTHS = [2, 5, 12];
 const ERASER_WIDTH = 28;
 const CANVAS_W = 1200;
@@ -125,7 +125,7 @@ const DrawingBoard = forwardRef<DrawingBoardHandle, DrawingBoardProps>(
       <div className="flex flex-col h-full">
         {/* Toolbar */}
         <div className="flex items-center gap-3 px-4 py-2.5 flex-shrink-0 flex-wrap"
-          style={{ borderBottom: "1px solid rgba(103,33,255,0.12)" }}>
+          style={{ borderBottom: "1px solid rgba(245,158,11,0.12)" }}>
 
           {/* Colors */}
           <div className="flex items-center gap-1.5">
@@ -149,7 +149,7 @@ const DrawingBoard = forwardRef<DrawingBoardHandle, DrawingBoardProps>(
               <button key={w} onClick={() => { setLineWidth(w); setErasing(false); }}
                 className="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
                 style={lineWidth === w && !erasing ? {
-                  background: "rgba(103,33,255,0.2)", border: "1px solid rgba(103,33,255,0.4)",
+                  background: "rgba(245,158,11,0.2)", border: "1px solid rgba(245,158,11,0.4)",
                 } : { border: "1px solid transparent" }}>
                 <div className="rounded-full" style={{ width: Math.min(w + 2, 12), height: Math.min(w + 2, 12), background: "var(--text-muted)" }} />
               </button>
@@ -162,7 +162,7 @@ const DrawingBoard = forwardRef<DrawingBoardHandle, DrawingBoardProps>(
           <button onClick={() => setErasing((p) => !p)}
             className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
             style={erasing ? {
-              background: "rgba(253,207,109,0.15)", color: "#FDCF6D", border: "1px solid rgba(253,207,109,0.3)",
+              background: "rgba(229,182,90,0.15)", color: "#E5B65A", border: "1px solid rgba(229,182,90,0.3)",
             } : { color: "var(--text-faint)", border: "1px solid rgba(255,255,255,0.08)" }}>
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

@@ -95,7 +95,7 @@ export default function AITutorPage() {
           onClick={() => router.push("/dashboard/study-buddy")}
           className="flex items-center gap-1.5 text-sm mb-4 transition-colors"
           style={{ color: "var(--text-faint)" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#C8B8E8")}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4C9B3")}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#6b5a8a")}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +128,7 @@ export default function AITutorPage() {
               onClick={() => setSubject("")}
               className="px-3 py-1 rounded-full text-xs font-medium transition-all"
               style={!subject ? {
-                background: "linear-gradient(90deg, rgba(103,33,255,0.4), rgba(0,203,255,0.2))",
+                background: "linear-gradient(90deg, rgba(245,158,11,0.4), rgba(111,192,180,0.2))",
                 color: "var(--text-primary)",
                 border: "1px solid var(--border-strong)",
               } : {
@@ -144,7 +144,7 @@ export default function AITutorPage() {
                 onClick={() => setSubject(s)}
                 className="px-3 py-1 rounded-full text-xs font-medium transition-all"
                 style={subject === s ? {
-                  background: "linear-gradient(90deg, rgba(103,33,255,0.4), rgba(0,203,255,0.2))",
+                  background: "linear-gradient(90deg, rgba(245,158,11,0.4), rgba(111,192,180,0.2))",
                   color: "var(--text-primary)",
                   border: "1px solid var(--border-strong)",
                 } : {
@@ -187,8 +187,8 @@ export default function AITutorPage() {
                     key={q}
                     onClick={() => { setInput(q); inputRef.current?.focus(); }}
                     className="text-sm text-left px-4 py-2.5 rounded-xl transition-all"
-                    style={{ background: "var(--accent-purple-bg)", color: "var(--text-body)", border: "1px solid rgba(103,33,255,0.15)" }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(103,33,255,0.4)")}
+                    style={{ background: "var(--accent-purple-bg)", color: "var(--text-body)", border: "1px solid rgba(245,158,11,0.15)" }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "rgba(245,158,11,0.4)")}
                     onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "var(--accent-purple-bg)")}
                   >
                     {q}
@@ -215,7 +215,7 @@ export default function AITutorPage() {
                   <div
                     className="rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap"
                     style={{
-                      background: "linear-gradient(135deg, rgba(103,33,255,0.4), rgba(0,203,255,0.2))",
+                      background: "linear-gradient(135deg, rgba(245,158,11,0.4), rgba(111,192,180,0.2))",
                       color: "#fff",
                       borderBottomRightRadius: "6px",
                     }}
@@ -293,7 +293,7 @@ export default function AITutorPage() {
             onClick={sendMessage}
             disabled={loading || !input.trim() || isLimitReached}
             className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-40"
-            style={{ background: "linear-gradient(135deg, #6721FF, #00CBFF)" }}
+            style={{ background: "linear-gradient(135deg, #F59E0B, #6FC0B4)" }}
           >
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

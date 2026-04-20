@@ -36,7 +36,7 @@ export default async function PricingPage() {
 
       {/* Nav */}
       <header className="sticky top-0 z-20"
-        style={{ background: "rgba(13,1,38,0.85)", borderBottom: "1px solid rgba(103,33,255,0.12)", backdropFilter: "blur(20px)" }}>
+        style={{ background: "rgba(13,1,38,0.85)", borderBottom: "1px solid rgba(245,158,11,0.12)", backdropFilter: "blur(20px)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
           <Link href={isLoggedIn ? "/dashboard" : "/"} className="text-xl font-bold gradient-text" style={{ fontFamily: "var(--font-heading)" }}>
             AralTayo
@@ -117,9 +117,9 @@ export default async function PricingPage() {
 
           {/* AralPro Monthly — highlighted */}
           <div className="rounded-2xl p-6 flex flex-col relative"
-            style={{ background: "var(--bg-card)", border: "2px solid rgba(103,33,255,0.5)", boxShadow: "0 8px 48px rgba(103,33,255,0.2)" }}>
+            style={{ background: "var(--bg-card)", border: "2px solid rgba(245,158,11,0.5)", boxShadow: "0 8px 48px rgba(245,158,11,0.2)" }}>
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
-              style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", color: "#fff" }}>
+              style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)", color: "#fff" }}>
               Most Popular
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "var(--accent-purple)" }}>

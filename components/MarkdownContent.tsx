@@ -38,7 +38,7 @@ export default function MarkdownContent({ content }: { content: string }) {
         li: ({ children }) => (
           <li className="flex gap-2 text-sm leading-relaxed" style={{ color: "var(--text-body)" }}>
             <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: "#6721FF" }} />
+              style={{ background: "#F59E0B" }} />
             <span>{children}</span>
           </li>
         ),
@@ -50,7 +50,7 @@ export default function MarkdownContent({ content }: { content: string }) {
                 style={{
                   background: "rgba(0,0,0,0.15)",
                   color: "var(--accent-cyan)",
-                  border: "1px solid rgba(0,203,255,0.15)",
+                  border: "1px solid rgba(111,192,180,0.15)",
                   fontFamily: "monospace",
                 }}>
                 {children}
@@ -60,7 +60,7 @@ export default function MarkdownContent({ content }: { content: string }) {
           return (
             <code className="px-1.5 py-0.5 rounded text-xs"
               style={{
-                background: "rgba(103,33,255,0.15)",
+                background: "rgba(245,158,11,0.15)",
                 color: "var(--accent-purple)",
                 fontFamily: "monospace",
               }}>
@@ -72,7 +72,7 @@ export default function MarkdownContent({ content }: { content: string }) {
         blockquote: ({ children }) => (
           <blockquote className="pl-3 my-3 text-sm italic"
             style={{
-              borderLeft: "3px solid rgba(103,33,255,0.5)",
+              borderLeft: "3px solid rgba(245,158,11,0.5)",
               color: "var(--text-muted)",
             }}>
             {children}
@@ -89,7 +89,7 @@ export default function MarkdownContent({ content }: { content: string }) {
         th: ({ children }) => (
           <th className="text-left px-3 py-2 text-xs font-semibold uppercase tracking-wider"
             style={{
-              background: "rgba(103,33,255,0.15)",
+              background: "rgba(245,158,11,0.15)",
               color: "var(--accent-purple)",
               border: "1px solid var(--border-card)",
             }}>

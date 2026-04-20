@@ -219,7 +219,7 @@ export default function ReviewerPage() {
           {/* Next topics — outside print area */}
           {nextTopics.length > 0 && (
             <div className="rounded-2xl p-5"
-              style={{ background: 'rgba(103,33,255,0.06)', border: '1px dashed var(--accent-purple-border)' }}>
+              style={{ background: 'rgba(245,158,11,0.06)', border: '1px dashed var(--accent-purple-border)' }}>
               <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--accent-purple)' }}>
                 Continue studying — generate a reviewer for:
               </p>

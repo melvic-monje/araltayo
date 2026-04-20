@@ -377,7 +377,7 @@ export default function RoomPage() {
       <div className="max-w-md mx-auto text-center py-16">
         <p className="text-sm mb-4" style={{ color: "var(--accent-red)" }}>{error}</p>
         <button onClick={() => router.push("/dashboard/study-buddy/partner")} className="btn-glow"
-          style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)" }}>
+          style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)" }}>
           Back to lobby
         </button>
       </div>
@@ -525,13 +525,13 @@ export default function RoomPage() {
             {isWaiting && (
               <div className="text-center py-6">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-3"
-                  style={{ background: "var(--accent-yellow-bg)", color: "var(--accent-yellow)", border: "1px solid rgba(253,207,109,0.2)" }}>
+                  style={{ background: "var(--accent-yellow-bg)", color: "var(--accent-yellow)", border: "1px solid rgba(229,182,90,0.2)" }}>
                   <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse inline-block" />
                   Waiting for a partner…
                 </div>
                 {room.is_private && room.room_code && (
                   <div className="inline-block mt-2 px-4 py-3 rounded-2xl"
-                    style={{ background: "var(--accent-purple-bg)", border: "1px solid rgba(103,33,255,0.25)" }}>
+                    style={{ background: "var(--accent-purple-bg)", border: "1px solid rgba(245,158,11,0.25)" }}>
                     <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "var(--text-faint)" }}>
                       Room Code
                     </p>
@@ -567,7 +567,7 @@ export default function RoomPage() {
                     )}
                     <div className="rounded-2xl px-3 py-2 text-sm"
                       style={isMe ? {
-                        background: "linear-gradient(135deg,rgba(103,33,255,0.4),rgba(0,203,255,0.2))",
+                        background: "linear-gradient(135deg,rgba(245,158,11,0.4),rgba(111,192,180,0.2))",
                         color: "var(--text-primary)", borderBottomRightRadius: "6px",
                       } : {
                         background: "var(--bg-white-subtle)", color: "var(--text-body)",
@@ -620,7 +620,7 @@ export default function RoomPage() {
                   }} />
                 <button onClick={sendMessage} disabled={isWaiting || screenBanned || !input.trim()}
                   className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-40"
-                  style={{ background: "linear-gradient(135deg,#6721FF,#00CBFF)" }}>
+                  style={{ background: "linear-gradient(135deg,#F59E0B,#6FC0B4)" }}>
                   <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
@@ -630,9 +630,9 @@ export default function RoomPage() {
           )}
 
           {isEnded && (
-            <div className="p-3 text-center flex-shrink-0" style={{ borderTop: "1px solid rgba(103,33,255,0.12)" }}>
+            <div className="p-3 text-center flex-shrink-0" style={{ borderTop: "1px solid rgba(245,158,11,0.12)" }}>
               <button onClick={() => router.push("/dashboard/study-buddy/partner")} className="btn-glow text-sm"
-                style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", padding: "8px 20px" }}>
+                style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)", padding: "8px 20px" }}>
                 Back to lobby
               </button>
             </div>
@@ -643,7 +643,7 @@ export default function RoomPage() {
             <div className="absolute inset-0 flex items-center justify-center rounded-2xl z-10"
               style={{ background: "var(--bg-overlay)", backdropFilter: "blur(8px)" }}>
               <div className="text-center px-6 py-6 rounded-2xl mx-4"
-                style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(103,33,255,0.3)", maxWidth: "300px" }}>
+                style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(245,158,11,0.3)", maxWidth: "300px" }}>
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3"
                   style={{ background: "var(--accent-yellow-bg)" }}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-yellow)" }}>
@@ -665,7 +665,7 @@ export default function RoomPage() {
                   </button>
                   <button onClick={continueSession}
                     className="flex-1 py-2 rounded-xl text-xs font-semibold btn-glow"
-                    style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)" }}>
+                    style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)" }}>
                     Continue
                   </button>
                 </div>
@@ -680,13 +680,13 @@ export default function RoomPage() {
 
           {/* Right tab bar */}
           <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5"
-            style={{ borderBottom: "1px solid rgba(103,33,255,0.12)" }}>
+            style={{ borderBottom: "1px solid rgba(245,158,11,0.12)" }}>
             {(["notes", "board", "calc"] as const).map((t) => (
               <button key={t} onClick={() => setRightTab(t)}
                 className="px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all"
                 style={rightTab === t ? {
-                  background: "linear-gradient(90deg,rgba(103,33,255,0.35),rgba(0,203,255,0.15))",
-                  color: "var(--text-primary)", border: "1px solid rgba(103,33,255,0.4)",
+                  background: "linear-gradient(90deg,rgba(245,158,11,0.35),rgba(111,192,180,0.15))",
+                  color: "var(--text-primary)", border: "1px solid rgba(245,158,11,0.4)",
                 } : { color: "var(--text-muted)", border: "1px solid transparent" }}>
                 {t === "calc" ? "Calculator" : t.charAt(0).toUpperCase() + t.slice(1)}
               </button>
@@ -707,7 +707,7 @@ export default function RoomPage() {
                 className="flex-1 w-full rounded-xl p-4 text-sm resize-none outline-none transition-all"
                 style={{
                   background: "var(--bg-input)",
-                  border: "1px solid rgba(103,33,255,0.15)",
+                  border: "1px solid rgba(245,158,11,0.15)",
                   color: "var(--text-body)",
                   fontFamily: "var(--font-sans)",
                   lineHeight: "1.7",
@@ -736,8 +736,8 @@ export default function RoomPage() {
                     <button key={m} onClick={() => setCalcSci(m === "Scientific")}
                       className="px-3 py-1 rounded-lg text-xs font-semibold transition-all"
                       style={(m === "Scientific") === calcSci ? {
-                        background: "linear-gradient(90deg,rgba(103,33,255,0.35),rgba(0,203,255,0.15))",
-                        color: "var(--text-primary)", border: "1px solid rgba(103,33,255,0.4)",
+                        background: "linear-gradient(90deg,rgba(245,158,11,0.35),rgba(111,192,180,0.15))",
+                        color: "var(--text-primary)", border: "1px solid rgba(245,158,11,0.4)",
                       } : { color: "var(--text-muted)", border: "1px solid transparent" }}>
                       {m}
                     </button>
@@ -768,7 +768,7 @@ export default function RoomPage() {
                               else calcPress(btn);
                             }}
                             className="py-2 rounded-xl text-xs font-semibold transition-all"
-                            style={{ background: "var(--border-divider)", color: "var(--accent-purple)", border: "1px solid rgba(103,33,255,0.2)" }}
+                            style={{ background: "var(--border-divider)", color: "var(--accent-purple)", border: "1px solid rgba(245,158,11,0.2)" }}
                             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--accent-purple-border)")}
                             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--border-divider)")}>
                             {btn}
@@ -792,11 +792,11 @@ export default function RoomPage() {
                           <button key={btn} onClick={() => calcPress(btn)}
                             className="py-3.5 rounded-xl text-sm font-semibold transition-all"
                             style={isEq ? {
-                              background: "linear-gradient(135deg,#6721FF,#00CBFF)", color: "#fff",
+                              background: "linear-gradient(135deg,#F59E0B,#6FC0B4)", color: "#fff",
                             } : isClear ? {
                               background: "rgba(220,38,38,0.12)", color: "var(--accent-red)", border: "1px solid rgba(220,38,38,0.2)",
                             } : isOp ? {
-                              background: "rgba(0,203,255,0.1)", color: "var(--accent-cyan)", border: "1px solid rgba(0,203,255,0.2)",
+                              background: "rgba(111,192,180,0.1)", color: "var(--accent-cyan)", border: "1px solid rgba(111,192,180,0.2)",
                             } : {
                               background: "var(--bg-surface)", color: "var(--text-primary)", border: "1px solid var(--border-subtle)",
                             }}

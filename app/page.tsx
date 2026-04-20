@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase-server";
+import { Reveal, ScrollReveal, ScrollStagger } from "@/components/Motion";
 
 const HERO_IMG     = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&auto=format&fit=crop";
 const BUDDY_IMG    = "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=800&q=80&auto=format&fit=crop";
@@ -16,7 +17,7 @@ const FEATURES = [
     ),
     title: "Quiz Generator",
     description: "I-paste mo lang ang notes mo — mag-ge-generate agad ng multiple-choice quiz para ma-test mo ang sarili mo.",
-    accent: "#6721FF",
+    accent: "var(--accent-purple)",
   },
   {
     icon: (
@@ -26,7 +27,7 @@ const FEATURES = [
     ),
     title: "Reviewer",
     description: "Gawa ng structured study reviewer mula sa iyong notes — puwede pa i-print para sa buong klase.",
-    accent: "#00CBFF",
+    accent: "var(--accent-cyan)",
   },
   {
     icon: (
@@ -36,7 +37,7 @@ const FEATURES = [
     ),
     title: "Flashcards",
     description: "Mag-memorize ng terms at definitions gamit ang AI-generated flashcards — perfect for vocab, formulas, at definitions.",
-    accent: "#00C39A",
+    accent: "var(--accent-green)",
   },
   {
     icon: (
@@ -46,7 +47,7 @@ const FEATURES = [
     ),
     title: "Explainer",
     description: "Di mo gets ang topic? Ipapaliwanag ng AI sa simpleng paraan — may Filipino context pa para mas madaling maintindihan.",
-    accent: "#FDCF6D",
+    accent: "var(--accent-yellow)",
   },
 ];
 
@@ -67,9 +68,9 @@ export default async function LandingPage() {
 
       {/* Nav */}
       <header className="sticky top-0 z-20"
-        style={{ background: "rgba(13,1,38,0.85)", borderBottom: "1px solid rgba(103,33,255,0.12)", backdropFilter: "blur(20px)" }}>
+        style={{ background: "var(--bg-navbar)", borderBottom: "1px solid var(--border-subtle)", backdropFilter: "blur(20px)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-          <span className="text-xl font-bold gradient-text" style={{ fontFamily: "var(--font-heading)" }}>
+          <span className="text-xl font-semibold gradient-text" style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em" }}>
             AralTayo
           </span>
           <div className="flex items-center gap-1 sm:gap-3">
@@ -93,54 +94,64 @@ export default async function LandingPage() {
       {/* Hero — split layout */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <div className="absolute top-[-80px] left-0 w-[600px] h-[500px] rounded-full opacity-20"
-            style={{ background: "radial-gradient(ellipse, #6721FF 0%, transparent 70%)" }} />
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full opacity-10"
-            style={{ background: "radial-gradient(ellipse, #00CBFF 0%, transparent 70%)" }} />
+          <div className="absolute top-[-80px] left-0 w-[600px] h-[500px] rounded-full opacity-25"
+            style={{ background: "radial-gradient(ellipse, var(--accent-purple) 0%, transparent 70%)" }} />
+          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full opacity-15"
+            style={{ background: "radial-gradient(ellipse, var(--accent-red-strong) 0%, transparent 70%)" }} />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-28 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
           {/* Text */}
           <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-7"
-              style={{ background: "rgba(103,33,255,0.12)", border: "1px solid rgba(103,33,255,0.3)", color: "#a78bfa" }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-              Libre magsimula — para sa lahat ng Filipino students
-            </div>
+            <Reveal delay={0.05}>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-7"
+                style={{ background: "var(--accent-purple-bg)", border: "1px solid var(--accent-purple-border)", color: "var(--accent-purple)" }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                Libre magsimula — para sa lahat ng Filipino students
+              </div>
+            </Reveal>
 
-            <h1 className="text-3xl sm:text-5xl xl:text-6xl font-extrabold leading-tight mb-6"
-              style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
-              The future of{" "}
-              <span className="gradient-text">learning</span>
-              <br />is here.
-            </h1>
+            <Reveal delay={0.2}>
+              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-semibold leading-[1.05] mb-6"
+                style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                Mag-aral with{" "}
+                <span className="gradient-text italic">focus</span>
+                <br />and joy.
+              </h1>
+            </Reveal>
 
-            <p className="text-lg max-w-xl mx-auto lg:mx-0 mb-9 leading-relaxed"
-              style={{ color: "var(--text-body)" }}>
-              Mas madali na mag-aral dahil sa AralTayo — ang AI-powered study platform na
-              ginawa para sa mga Filipino students. Gumawa ng quiz, reviewer, at flashcards
-              mula sa notes mo in seconds. Libre magsimula — pero kung gusto mo ng unlimited, get AralPro for only ₱149/month.
-            </p>
+            <Reveal delay={0.35}>
+              <p className="text-lg max-w-xl mx-auto lg:mx-0 mb-9 leading-relaxed"
+                style={{ color: "var(--text-body)" }}>
+                Mas madali na mag-aral dahil sa AralTayo — ang AI-powered study platform na
+                ginawa para sa mga Filipino students. Gumawa ng quiz, reviewer, at flashcards
+                mula sa notes mo in seconds. Libre magsimula — pero kung gusto mo ng unlimited, get AralPro for only ₱149/month.
+              </p>
+            </Reveal>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <Link href="/signup" className="btn-glow text-base px-8 py-3.5 w-full sm:w-auto text-center">
-                Magsimula nang libre
-              </Link>
-              <Link href="/login" className="btn-outline-glow text-sm px-8 py-3.5 w-full sm:w-auto text-center">
-                Mag-log in
-              </Link>
-            </div>
+            <Reveal delay={0.5}>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <Link href="/signup" className="btn-glow text-base px-8 py-3.5 w-full sm:w-auto text-center">
+                  Magsimula nang libre
+                </Link>
+                <Link href="/login" className="btn-outline-glow text-sm px-8 py-3.5 w-full sm:w-auto text-center">
+                  Mag-log in
+                </Link>
+              </div>
+            </Reveal>
 
-            <p className="mt-4 text-xs" style={{ color: "var(--text-faint)" }}>
-              Libre lang mag-register. Get 10 free AI requests daily.
-            </p>
+            <Reveal delay={0.65}>
+              <p className="mt-4 text-xs" style={{ color: "var(--text-faint)" }}>
+                Libre lang mag-register. Get 10 free AI requests daily.
+              </p>
+            </Reveal>
           </div>
 
           {/* Hero image */}
-          <div className="flex-1 w-full max-w-lg lg:max-w-none relative">
+          <Reveal delay={0.3} y={32} duration={1.1} className="flex-1 w-full max-w-lg lg:max-w-none relative">
             <div className="relative rounded-2xl overflow-hidden"
-              style={{ border: "1px solid rgba(103,33,255,0.25)", boxShadow: "0 24px 80px rgba(103,33,255,0.25)" }}>
+              style={{ border: "1px solid var(--border-strong)", boxShadow: "var(--shadow-glow)" }}>
               <Image
                 src={HERO_IMG}
                 alt="Filipino students studying together"
@@ -149,76 +160,77 @@ export default async function LandingPage() {
                 className="w-full object-cover"
                 priority
               />
-              {/* Overlay tint */}
               <div className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(135deg, rgba(103,33,255,0.15) 0%, rgba(0,203,255,0.08) 100%)" }} />
+                style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(232,130,107,0.1) 100%)" }} />
             </div>
 
             {/* Floating stat badges */}
             <div className="absolute -bottom-4 left-0 sm:-left-4 px-4 py-2.5 rounded-2xl shadow-xl"
-              style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(103,33,255,0.3)" }}>
+              style={{ background: "var(--bg-card-solid)", border: "1px solid var(--accent-purple-border)" }}>
               <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>AI requests per day</p>
-              <p className="text-2xl font-extrabold gradient-text" style={{ fontFamily: "var(--font-heading)" }}>10</p>
+              <p className="text-2xl font-semibold gradient-text" style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em" }}>10</p>
             </div>
             <div className="absolute -top-4 right-0 sm:-right-4 px-4 py-2.5 rounded-2xl shadow-xl"
-              style={{ background: "var(--bg-card-solid)", border: "1px solid rgba(0,203,255,0.3)" }}>
+              style={{ background: "var(--bg-card-solid)", border: "1px solid var(--accent-cyan-border)" }}>
               <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Start for</p>
-              <p className="text-lg font-extrabold" style={{ color: "#00CBFF", fontFamily: "var(--font-heading)" }}>Free</p>
+              <p className="text-lg font-semibold" style={{ color: "var(--accent-cyan)", fontFamily: "var(--font-heading)" }}>Free</p>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Features */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#6721FF" }}>
+        <ScrollReveal className="text-center mb-12">
+          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-purple)" }}>
             Tools
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
-            Kabado sa next exam? Relax—we&apos;ll help you <span className="gradient-text">pass</span>.
+          <h2 className="text-3xl sm:text-4xl font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+            Kabado sa next exam? Relax—we&apos;ll help you <span className="gradient-text italic">pass</span>.
           </h2>
-        </div>
+        </ScrollReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <ScrollStagger className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {FEATURES.map((f) => (
             <div key={f.title} className="p-6 rounded-2xl"
               style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
               <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: `${f.accent}18`, color: f.accent }}>
+                style={{ background: `color-mix(in srgb, ${f.accent} 14%, transparent)`, color: f.accent }}>
                 {f.icon}
               </div>
-              <h3 className="font-bold mb-2" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+              <h3 className="font-semibold mb-2 text-lg" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                 {f.title}
               </h3>
               <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{f.description}</p>
             </div>
           ))}
-        </div>
+        </ScrollStagger>
       </section>
 
       {/* Study Buddy — photo left, text right */}
-      <section style={{ background: "rgba(103,33,255,0.04)", borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
+      <section style={{ background: "var(--bg-surface)", borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 flex flex-col lg:flex-row items-center gap-12">
-          <div className="flex-1 w-full max-w-md lg:max-w-none relative rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(103,33,255,0.2)", boxShadow: "0 16px 48px rgba(103,33,255,0.2)" }}>
-            <Image
-              src={BUDDY_IMG}
-              alt="Students studying and discussing together"
-              width={640}
-              height={420}
-              className="w-full object-cover"
-            />
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(135deg, rgba(103,33,255,0.1) 0%, transparent 60%)" }} />
-          </div>
-          <div className="flex-1 text-center lg:text-left">
-            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#a78bfa" }}>
+          <ScrollReveal className="flex-1 w-full max-w-md lg:max-w-none">
+            <div className="relative rounded-2xl overflow-hidden"
+              style={{ border: "1px solid var(--border-card)", boxShadow: "var(--shadow-glow)" }}>
+              <Image
+                src={BUDDY_IMG}
+                alt="Students studying and discussing together"
+                width={640}
+                height={420}
+                className="w-full object-cover"
+              />
+              <div className="absolute inset-0 pointer-events-none"
+                style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.1) 0%, transparent 60%)" }} />
+            </div>
+          </ScrollReveal>
+          <ScrollReveal className="flex-1 text-center lg:text-left">
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-purple)" }}>
               Study Buddy
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-5" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+            <h2 className="text-3xl sm:text-4xl font-semibold mb-5" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
               Study better with a{" "}
-              <span className="gradient-text">buddy</span>.
+              <span className="gradient-text italic">buddy</span>.
             </h2>
             <p className="text-base leading-relaxed mb-6" style={{ color: "var(--text-body)" }}>
               Mag-aral with friends in real-time, o gamitin ang AI Tutor para mas mabilis at mas marami kang matutunan.
@@ -226,35 +238,35 @@ export default async function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               {["Real-time study rooms", "AI Tutor na may Filipino context"].map((b) => (
                 <span key={b} className="text-xs font-semibold px-3 py-1.5 rounded-full"
-                  style={{ background: "rgba(167,139,250,0.1)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.2)" }}>
+                  style={{ background: "var(--accent-purple-bg)", color: "var(--accent-purple)", border: "1px solid var(--accent-purple-border)" }}>
                   {b}
                 </span>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* How it works — with photo */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#00CBFF" }}>
+        <ScrollReveal className="text-center mb-12">
+          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-cyan)" }}>
             How It Works
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+          <h2 className="text-3xl sm:text-4xl font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
             In 4 Steps, Ready ka na.
           </h2>
-        </div>
+        </ScrollReveal>
 
         <div className="flex flex-col lg:flex-row items-start gap-12">
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <ScrollStagger className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {STEPS.map((step) => (
               <div key={step.number}>
-                <div className="text-5xl font-extrabold mb-2 leading-none"
-                  style={{ fontFamily: "var(--font-heading)", color: "rgba(103,33,255,0.2)" }}>
+                <div className="text-5xl font-semibold mb-2 leading-none"
+                  style={{ fontFamily: "var(--font-heading)", color: "var(--accent-purple-bg-strong)", letterSpacing: "-0.03em" }}>
                   {step.number}
                 </div>
-                <h3 className="font-bold mb-1.5" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+                <h3 className="font-semibold mb-1.5 text-lg" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                   {step.title}
                 </h3>
                 <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
@@ -262,74 +274,80 @@ export default async function LandingPage() {
                 </p>
               </div>
             ))}
-          </div>
+          </ScrollStagger>
 
-          <div className="flex-1 w-full max-w-md lg:max-w-none rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(0,203,255,0.2)", boxShadow: "0 16px 48px rgba(0,203,255,0.12)" }}>
-            <Image
-              src={LIBRARY_IMG}
-              alt="Students studying with laptops"
-              width={640}
-              height={420}
-              className="w-full object-cover"
-            />
-          </div>
+          <ScrollReveal className="flex-1 w-full max-w-md lg:max-w-none">
+            <div className="rounded-2xl overflow-hidden"
+              style={{ border: "1px solid var(--accent-cyan-border)", boxShadow: "0 16px 48px rgba(95,178,168,0.14)" }}>
+              <Image
+                src={LIBRARY_IMG}
+                alt="Students studying with laptops"
+                width={640}
+                height={420}
+                className="w-full object-cover"
+              />
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Safety note */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20">
-        <div className="rounded-2xl p-8 sm:p-10"
-          style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-          <div className="flex flex-col sm:flex-row items-start gap-5">
-            <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center"
-              style={{ background: "rgba(0,195,154,0.12)", color: "#00C39A" }}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-2"
-                style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
-                Ligtas para sa mga kabataan
-              </h3>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-body)" }}>
-                AralTayo is designed for all ages. Para sa mga students, sineseryoso namin ang inyong
-                privacy at kaligtasan — ang inyong personal na impormasyon ay protektado at hindi
-                ibinabahagi sa kahit sino.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {["Privacy-first", "Safe for all ages", "Libre magsimula", "10 free requests/day"].map((b) => (
-                  <span key={b} className="text-xs font-semibold px-3 py-1 rounded-full"
-                    style={{ background: "rgba(0,195,154,0.1)", color: "#00C39A", border: "1px solid rgba(0,195,154,0.2)" }}>
-                    {b}
-                  </span>
-                ))}
+        <ScrollReveal>
+          <div className="rounded-2xl p-8 sm:p-10"
+            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
+            <div className="flex flex-col sm:flex-row items-start gap-5">
+              <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center"
+                style={{ background: "var(--accent-green-bg)", color: "var(--accent-green)" }}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2"
+                  style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                  Ligtas para sa mga kabataan
+                </h3>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-body)" }}>
+                  AralTayo is designed for all ages. Para sa mga students, sineseryoso namin ang inyong
+                  privacy at kaligtasan — ang inyong personal na impormasyon ay protektado at hindi
+                  ibinabahagi sa kahit sino.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {["Privacy-first", "Safe for all ages", "Libre magsimula", "10 free requests/day"].map((b) => (
+                    <span key={b} className="text-xs font-semibold px-3 py-1 rounded-full"
+                      style={{ background: "var(--accent-green-bg)", color: "var(--accent-green)", border: "1px solid var(--accent-green-border)" }}>
+                      {b}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* CTA */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-24 text-center">
-        <h2 className="text-3xl sm:text-5xl font-extrabold mb-5"
-          style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
-          Ready ka na bang <span className="gradient-text">mag-aral</span>?
-        </h2>
-        <p className="text-base sm:text-lg mb-8 max-w-xl mx-auto" style={{ color: "var(--text-body)" }}>
-          Join our growing community ng students sa buong Pilipinas na gumagamit ng AralTayo sa pag-aaral nila.
-        </p>
-        <Link href="/signup" className="btn-glow text-base px-10 py-4 inline-block">
-          Magsimula nang libre
-        </Link>
+        <ScrollReveal>
+          <h2 className="text-3xl sm:text-5xl font-semibold mb-5"
+            style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+            Ready ka na bang <span className="gradient-text italic">mag-aral</span>?
+          </h2>
+          <p className="text-base sm:text-lg mb-8 max-w-xl mx-auto" style={{ color: "var(--text-body)" }}>
+            Join our growing community ng students sa buong Pilipinas na gumagamit ng AralTayo sa pag-aaral nila.
+          </p>
+          <Link href="/signup" className="btn-glow text-base px-10 py-4 inline-block">
+            Magsimula nang libre
+          </Link>
+        </ScrollReveal>
       </section>
 
       {/* Footer */}
       <footer style={{ borderTop: "1px solid var(--border-subtle)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-lg font-bold gradient-text" style={{ fontFamily: "var(--font-heading)" }}>
+          <span className="text-lg font-semibold gradient-text" style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em" }}>
             AralTayo
           </span>
           <p className="text-xs text-center" style={{ color: "var(--text-faint)" }}>

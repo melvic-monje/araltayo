@@ -147,7 +147,7 @@ export default function FlashcardsPage() {
                 className="w-full rounded-2xl p-8 min-h-[180px] flex flex-col items-center justify-center transition-all duration-300"
                 style={{
                   background: flipped[current] ? 'var(--accent-green-bg)' : 'var(--bg-card)',
-                  border: `1px solid ${flipped[current] ? 'rgba(0,195,154,0.4)' : 'rgba(103,33,255,0.3)'}`,
+                  border: `1px solid ${flipped[current] ? 'rgba(127,176,105,0.4)' : 'rgba(245,158,11,0.3)'}`,
                 }}>
                 <p className="text-xs font-semibold uppercase tracking-wider mb-3"
                   style={{ color: flipped[current] ? 'var(--accent-green)' : 'var(--accent-purple)' }}>

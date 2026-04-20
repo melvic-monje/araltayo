@@ -105,7 +105,7 @@ export default function PushOptIn() {
             </button>
             <button onClick={handleEnable}
               className="px-3 py-1.5 rounded-lg text-xs font-bold"
-              style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", color: "#fff" }}>
+              style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)", color: "#fff" }}>
               I-enable
             </button>
           </div>

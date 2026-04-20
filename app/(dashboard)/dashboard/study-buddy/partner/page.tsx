@@ -148,13 +148,13 @@ export default function PartnerLobbyPage() {
               placeholder="e.g. Cell Division, Calculus…" className="dark-input mb-3" />
             <div className="flex flex-wrap gap-1.5 mb-3">
               <button onClick={() => setSubject("")} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-                style={!subject ? { background: "var(--accent-purple-bg-strong)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+                style={!subject ? { background: "var(--accent-purple-bg-strong)", color: "#fff", border: "1px solid rgba(245,158,11,0.5)" }
                   : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
                 General
               </button>
               {SUBJECTS.map((s) => (
                 <button key={s} onClick={() => setSubject(s)} className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
-                  style={subject === s ? { background: "var(--accent-purple-bg-strong)", color: "#fff", border: "1px solid rgba(103,33,255,0.5)" }
+                  style={subject === s ? { background: "var(--accent-purple-bg-strong)", color: "#fff", border: "1px solid rgba(245,158,11,0.5)" }
                     : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
                   {s}
                 </button>
@@ -167,7 +167,7 @@ export default function PartnerLobbyPage() {
                 <button key={n} onClick={() => setMaxMembers(n)}
                   className="w-8 h-8 rounded-lg text-xs font-bold transition-all flex items-center justify-center"
                   style={maxMembers === n ? {
-                    background: "linear-gradient(135deg,rgba(103,33,255,0.3),rgba(0,203,255,0.15))",
+                    background: "linear-gradient(135deg,rgba(245,158,11,0.3),rgba(111,192,180,0.15))",
                     color: "var(--text-primary)", border: "1px solid var(--border-strong)",
                   } : {
                     color: "var(--text-faint)", border: "1px solid var(--border-subtle)",
@@ -184,7 +184,7 @@ export default function PartnerLobbyPage() {
                 <button key={g.value} onClick={() => setPreferGender(g.value)}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                   style={preferGender === g.value ? {
-                    background: "linear-gradient(135deg,rgba(103,33,255,0.3),rgba(0,203,255,0.15))",
+                    background: "linear-gradient(135deg,rgba(245,158,11,0.3),rgba(111,192,180,0.15))",
                     color: "var(--text-primary)", border: "1px solid var(--border-strong)",
                   } : {
                     color: "var(--text-faint)", border: "1px solid var(--border-subtle)",
@@ -197,7 +197,7 @@ export default function PartnerLobbyPage() {
             <label className="flex items-center gap-2.5 mb-4 cursor-pointer select-none">
               <div onClick={() => setIsPrivate((p) => !p)}
                 className="w-10 h-5 rounded-full relative transition-all flex-shrink-0"
-                style={{ background: isPrivate ? "linear-gradient(90deg,#6721FF,#00CBFF)" : "var(--bg-white-muted)" }}>
+                style={{ background: isPrivate ? "linear-gradient(90deg,#F59E0B,#6FC0B4)" : "var(--bg-white-muted)" }}>
                 <div className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
                   style={{ left: isPrivate ? "calc(100% - 18px)" : "2px" }} />
               </div>
@@ -210,14 +210,14 @@ export default function PartnerLobbyPage() {
               </span>
             </label>
             <button onClick={handleCreate} disabled={creating || !topic.trim()} className="btn-glow w-full"
-              style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", padding: "10px 20px", fontSize: "13px" }}>
+              style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)", padding: "10px 20px", fontSize: "13px" }}>
               {creating ? "Creating…" : "Post room"}
             </button>
             {error && <p className="text-xs mt-2" style={{ color: "var(--accent-red)" }}>{error}</p>}
           </div>
 
           {/* Join private room */}
-          <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid rgba(103,33,255,0.2)" }}>
+          <div className="rounded-2xl p-5" style={{ background: "var(--bg-card)", border: "1px solid rgba(245,158,11,0.2)" }}>
             <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
               Join private room
             </p>
@@ -231,7 +231,7 @@ export default function PartnerLobbyPage() {
               maxLength={6} />
             <button onClick={handleJoinPrivate} disabled={joiningPrivate || privateCode.length !== 6}
               className="btn-glow w-full"
-              style={{ background: "linear-gradient(90deg,#a855f7,#6721FF)", padding: "10px 20px", fontSize: "13px" }}>
+              style={{ background: "linear-gradient(90deg,#a855f7,#F59E0B)", padding: "10px 20px", fontSize: "13px" }}>
               {joiningPrivate ? "Joining…" : "Join private room"}
             </button>
             {privateError && <p className="text-xs mt-2" style={{ color: "var(--accent-red)" }}>{privateError}</p>}
@@ -244,13 +244,13 @@ export default function PartnerLobbyPage() {
           <div className="flex items-center gap-2 mb-4 flex-wrap">
             <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-faint)" }}>Filter:</p>
             <button onClick={() => setFilterSubject("")} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
-              style={!filterSubject ? { background: "var(--accent-purple-bg)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
+              style={!filterSubject ? { background: "var(--accent-purple-bg)", color: "#fff", border: "1px solid rgba(245,158,11,0.4)" }
                 : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
               All
             </button>
             {SUBJECTS.map((s) => (
               <button key={s} onClick={() => setFilterSubject(s)} className="px-3 py-1 rounded-full text-xs font-medium transition-all"
-                style={filterSubject === s ? { background: "var(--accent-purple-bg)", color: "#fff", border: "1px solid rgba(103,33,255,0.4)" }
+                style={filterSubject === s ? { background: "var(--accent-purple-bg)", color: "#fff", border: "1px solid rgba(245,158,11,0.4)" }
                   : { color: "var(--text-faint)", border: "1px solid var(--bg-white-muted)" }}>
                 {s}
               </button>
@@ -298,7 +298,7 @@ export default function PartnerLobbyPage() {
                       <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{room.topic}</p>
                       {room.subject && (
                         <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0"
-                          style={{ background: "rgba(103,33,255,0.12)", color: "var(--accent-purple)", border: "1px solid rgba(103,33,255,0.2)" }}>
+                          style={{ background: "rgba(245,158,11,0.12)", color: "var(--accent-purple)", border: "1px solid rgba(245,158,11,0.2)" }}>
                           {room.subject}
                         </span>
                       )}
@@ -329,7 +329,7 @@ export default function PartnerLobbyPage() {
                   <button onClick={() => { setJoining(room.id); router.push(`/dashboard/study-buddy/partner/${room.id}`); }}
                     disabled={joining === room.id}
                     className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all"
-                    style={{ background: "var(--accent-cyan-bg)", color: "var(--accent-cyan)", border: "1px solid rgba(0,203,255,0.3)" }}
+                    style={{ background: "var(--accent-cyan-bg)", color: "var(--accent-cyan)", border: "1px solid rgba(111,192,180,0.3)" }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLElement).style.background = "var(--accent-cyan-border)";
                       (e.currentTarget as HTMLElement).style.borderColor = "var(--accent-cyan)";

@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase-server";
 import ToolCard from "@/components/ToolCard";
+import { Reveal, Stagger } from "@/components/Motion";
 
 const TOOLS = [
   {
@@ -12,7 +13,7 @@ const TOOLS = [
     title: "Quiz Generator",
     description: "Turn your notes into multiple-choice quizzes and test yourself.",
     accent: "var(--accent-purple)",
-    glow: "rgba(103,33,255,0.2)",
+    glow: "rgba(245,158,11,0.22)",
   },
   {
     href: "/dashboard/reviewer",
@@ -24,7 +25,7 @@ const TOOLS = [
     title: "Reviewer",
     description: "Generate a structured study reviewer from your notes.",
     accent: "var(--accent-cyan)",
-    glow: "rgba(0,203,255,0.15)",
+    glow: "rgba(95,178,168,0.2)",
   },
   {
     href: "/dashboard/flashcards",
@@ -35,8 +36,8 @@ const TOOLS = [
     ),
     title: "Flashcards",
     description: "Create flashcard sets to memorize terms and definitions.",
-    accent: "#00C39A",
-    glow: "rgba(0,195,154,0.15)",
+    accent: "var(--accent-green)",
+    glow: "rgba(127,176,105,0.2)",
   },
   {
     href: "/dashboard/explain",
@@ -47,8 +48,8 @@ const TOOLS = [
     ),
     title: "Explainer",
     description: "Ask AI to explain any topic clearly, at your level.",
-    accent: "#FDCF6D",
-    glow: "rgba(253,207,109,0.15)",
+    accent: "var(--accent-yellow)",
+    glow: "rgba(229,182,90,0.2)",
   },
 ];
 
@@ -60,24 +61,24 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-10">
+      <Reveal className="mb-10">
         <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--accent-purple)' }}>
           Dashboard
         </p>
-        <h1 className="text-3xl font-bold mb-1" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>
+        <h1 className="text-4xl font-semibold mb-1" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
           Kumusta,{" "}
-          <span className="gradient-text">{profile?.display_name ?? "Estudyante"}</span>!
+          <span className="gradient-text italic">{profile?.display_name ?? "Estudyante"}</span>!
         </h1>
-        <p style={{ color: 'var(--text-muted)' }}>What would you like to study today?</p>
-      </div>
+        <p className="text-base" style={{ color: 'var(--text-muted)' }}>What would you like to study today?</p>
+      </Reveal>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+      <Stagger className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8" delay={0.25} stagger={0.08}>
         {TOOLS.map((tool) => (
           <ToolCard key={tool.href} {...tool} />
         ))}
-      </div>
+      </Stagger>
 
-      <div className="rounded-2xl p-5"
+      <Reveal delay={0.7} className="rounded-2xl p-5"
         style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-card)' }}>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
           <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>AralTayo</span> is a free AI study platform
@@ -85,7 +86,7 @@ export default async function DashboardPage() {
           <span className="font-semibold" style={{ color: 'var(--accent-cyan)' }}>10 AI requests per day</span> — paste
           your notes into any tool to get started.
         </p>
-      </div>
+      </Reveal>
     </div>
   );
 }

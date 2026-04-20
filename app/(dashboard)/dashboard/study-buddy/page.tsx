@@ -23,7 +23,7 @@ export default function StudyBuddyPage() {
         <Link href="/dashboard/study-buddy/ai-tutor"
           className="rounded-2xl p-6 flex flex-col gap-4 transition-all duration-200 group"
           style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)' }}
-          onMouseEnter={(e) => (e.currentTarget.style.border = '1px solid rgba(103,33,255,0.5)')}
+          onMouseEnter={(e) => (e.currentTarget.style.border = '1px solid rgba(245,158,11,0.5)')}
           onMouseLeave={(e) => (e.currentTarget.style.border = '1px solid var(--border-card)')}>
           <div className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ background: 'var(--accent-purple-bg)' }}>

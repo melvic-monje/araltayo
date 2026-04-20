@@ -5,9 +5,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Background glow orbs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(103,33,255,0.15) 0%, transparent 70%)', filter: 'blur(40px)' }} />
+        style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%)', filter: 'blur(40px)' }} />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(0,203,255,0.1) 0%, transparent 70%)', filter: 'blur(40px)' }} />
+        style={{ background: 'radial-gradient(circle, rgba(111,192,180,0.1) 0%, transparent 70%)', filter: 'blur(40px)' }} />
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}

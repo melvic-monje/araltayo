@@ -21,7 +21,7 @@ export default function OfflineBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 px-4 py-3 text-center text-sm font-medium"
-      style={{ background: "var(--accent-yellow)", color: "#0D0126" }}>
+      style={{ background: "var(--accent-yellow)", color: "#0F1A20" }}>
       <span className="mr-2">📡</span>
       Wala kang internet connection ngayon. Ang AI tools ay hindi gagana habang offline.
     </div>

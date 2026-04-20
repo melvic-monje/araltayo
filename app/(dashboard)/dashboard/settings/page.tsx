@@ -180,7 +180,7 @@ export default function SettingsPage() {
                 <button key={g.value} onClick={() => setGender(g.value)}
                   className="px-4 py-2 rounded-xl text-sm font-medium transition-all"
                   style={gender === g.value ? {
-                    background: "linear-gradient(90deg, rgba(103,33,255,0.25), rgba(0,203,255,0.1))",
+                    background: "linear-gradient(90deg, rgba(245,158,11,0.25), rgba(111,192,180,0.1))",
                     color: "var(--text-primary)",
                     border: "1px solid var(--border-strong)",
                   } : {
@@ -236,7 +236,7 @@ export default function SettingsPage() {
           <label className="flex items-center gap-3 cursor-pointer select-none">
             <div onClick={() => setShowSchool((p) => !p)}
               className="w-10 h-5 rounded-full relative transition-all flex-shrink-0"
-              style={{ background: showSchool ? "linear-gradient(90deg,#6721FF,#00CBFF)" : "var(--bg-white-muted)" }}>
+              style={{ background: showSchool ? "linear-gradient(90deg,#F59E0B,#6FC0B4)" : "var(--bg-white-muted)" }}>
               <div className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
                 style={{ left: showSchool ? "calc(100% - 18px)" : "2px" }} />
             </div>

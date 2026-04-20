@@ -1,124 +1,135 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════
+   Warm Study Theme — slate-teal base, amber primary, sage/coral
+   Designed to reduce eye strain & boost focus for long sessions
+   ═══════════════════════════════════════════════════════════ */
+
 :root {
-  --bg-page: #0D0126;
-  --bg-card: rgba(22,0,66,0.8);
-  --bg-card-solid: #160042;
-  --bg-navbar: rgba(13,1,38,0.9);
-  --bg-input: rgba(255,255,255,0.04);
-  --bg-surface: rgba(103,33,255,0.08);
-  --bg-overlay: rgba(13,1,38,0.85);
-  --bg-white-subtle: rgba(255,255,255,0.06);
-  --bg-white-muted: rgba(255,255,255,0.1);
+  /* Backgrounds — deep slate-teal, not harsh black */
+  --bg-page: #0F1A20;
+  --bg-card: rgba(23,36,46,0.85);
+  --bg-card-solid: #17242E;
+  --bg-navbar: rgba(15,26,32,0.9);
+  --bg-input: rgba(245,236,217,0.04);
+  --bg-surface: rgba(245,158,11,0.06);
+  --bg-overlay: rgba(15,26,32,0.85);
+  --bg-white-subtle: rgba(245,236,217,0.05);
+  --bg-white-muted: rgba(245,236,217,0.08);
 
-  --text-primary: #ffffff;
-  --text-body: #C8B8E8;
-  --text-muted: #8b78b0;
-  --text-faint: #6b5a8a;
+  /* Text — warm cream over pure white reduces glare */
+  --text-primary: #F5ECD9;
+  --text-body: #D4C9B3;
+  --text-muted: #9A8E78;
+  --text-faint: #6F6552;
 
-  /* Accent text colors */
-  --accent-purple: #a78bfa;
-  --accent-cyan: #00CBFF;
-  --accent-green: #00C39A;
-  --accent-yellow: #FDCF6D;
-  --accent-red: #fca5a5;
-  --accent-red-strong: #ef4444;
+  /* Accent text — warm palette */
+  --accent-purple: #F59E0B;   /* amber (primary) */
+  --accent-cyan: #6FC0B4;     /* muted teal */
+  --accent-green: #93C36E;    /* sage */
+  --accent-yellow: #E5B65A;   /* warm gold */
+  --accent-red: #F4A58E;      /* soft coral */
+  --accent-red-strong: #E8826B;
 
   /* Accent backgrounds */
-  --accent-purple-bg: rgba(103,33,255,0.12);
-  --accent-purple-bg-strong: rgba(103,33,255,0.25);
-  --accent-purple-border: rgba(103,33,255,0.3);
-  --accent-cyan-bg: rgba(0,203,255,0.12);
-  --accent-cyan-border: rgba(0,203,255,0.3);
-  --accent-green-bg: rgba(0,195,154,0.1);
-  --accent-green-border: rgba(0,195,154,0.2);
-  --accent-yellow-bg: rgba(253,207,109,0.1);
-  --accent-yellow-border: rgba(253,207,109,0.2);
-  --accent-red-bg: rgba(220,38,38,0.08);
-  --accent-red-border: rgba(220,38,38,0.15);
+  --accent-purple-bg: rgba(245,158,11,0.12);
+  --accent-purple-bg-strong: rgba(245,158,11,0.22);
+  --accent-purple-border: rgba(245,158,11,0.3);
+  --accent-cyan-bg: rgba(95,178,168,0.12);
+  --accent-cyan-border: rgba(95,178,168,0.3);
+  --accent-green-bg: rgba(127,176,105,0.1);
+  --accent-green-border: rgba(127,176,105,0.25);
+  --accent-yellow-bg: rgba(229,182,90,0.1);
+  --accent-yellow-border: rgba(229,182,90,0.25);
+  --accent-red-bg: rgba(232,130,107,0.08);
+  --accent-red-border: rgba(232,130,107,0.2);
 
-  --border-subtle: rgba(103,33,255,0.15);
-  --border-card: rgba(103,33,255,0.2);
-  --border-strong: rgba(103,33,255,0.4);
-  --border-input: rgba(255,255,255,0.1);
-  --border-accent: rgba(0,203,255,0.2);
-  --border-divider: rgba(103,33,255,0.12);
+  /* Borders — warm amber tint */
+  --border-subtle: rgba(245,158,11,0.12);
+  --border-card: rgba(245,158,11,0.18);
+  --border-strong: rgba(245,158,11,0.38);
+  --border-input: rgba(245,236,217,0.12);
+  --border-accent: rgba(95,178,168,0.22);
+  --border-divider: rgba(245,158,11,0.1);
 
-  --input-placeholder: rgba(200,184,232,0.4);
-  --input-focus-shadow: rgba(103,33,255,0.15);
+  --input-placeholder: rgba(212,201,179,0.45);
+  --input-focus-shadow: rgba(245,158,11,0.18);
 
-  --scrollbar-track: #0D0126;
-  --scrollbar-thumb: rgba(103,33,255,0.4);
-  --scrollbar-thumb-hover: rgba(103,33,255,0.7);
+  --scrollbar-track: #0F1A20;
+  --scrollbar-thumb: rgba(245,158,11,0.35);
+  --scrollbar-thumb-hover: rgba(245,158,11,0.6);
 
-  --shadow-glow: 0 24px 80px rgba(103,33,255,0.25);
+  --shadow-glow: 0 24px 80px rgba(245,158,11,0.18);
 }
 
 [data-theme="light"] {
-  --bg-page: #F5F3FF;
-  --bg-card: rgba(255,255,255,0.9);
-  --bg-card-solid: #ffffff;
-  --bg-navbar: rgba(255,255,255,0.95);
-  --bg-input: #ffffff;
-  --bg-surface: rgba(103,33,255,0.05);
-  --bg-overlay: rgba(255,255,255,0.9);
-  --bg-white-subtle: rgba(103,33,255,0.04);
-  --bg-white-muted: rgba(103,33,255,0.08);
+  /* Paper cream — warmer and easier on eyes than pure white */
+  --bg-page: #FBF7EE;
+  --bg-card: rgba(255,253,247,0.95);
+  --bg-card-solid: #FFFDF7;
+  --bg-navbar: rgba(255,253,247,0.95);
+  --bg-input: #FFFDF7;
+  --bg-surface: rgba(245,158,11,0.06);
+  --bg-overlay: rgba(255,253,247,0.92);
+  --bg-white-subtle: rgba(90,60,20,0.04);
+  --bg-white-muted: rgba(90,60,20,0.08);
 
-  --text-primary: #1a0050;
-  --text-body: #3d3460;
-  --text-muted: #5e5382;
-  --text-faint: #7d72a0;
+  /* Text — deep charcoal-blue, not true black */
+  --text-primary: #1E2A33;
+  --text-body: #3F4B55;
+  --text-muted: #6B6558;
+  --text-faint: #8A8272;
 
-  /* Accent text — darker for light bg contrast */
-  --accent-purple: #6721FF;
-  --accent-cyan: #0090B8;
-  --accent-green: #008A6E;
-  --accent-yellow: #B8860B;
-  --accent-red: #DC2626;
-  --accent-red-strong: #B91C1C;
+  /* Accents — deeper for light-bg contrast */
+  --accent-purple: #B87A0F;
+  --accent-cyan: #3E7F77;
+  --accent-green: #4F7A3E;
+  --accent-yellow: #A57918;
+  --accent-red: #B85430;
+  --accent-red-strong: #9B3E22;
 
-  /* Accent backgrounds — stronger for light bg visibility */
-  --accent-purple-bg: rgba(103,33,255,0.08);
-  --accent-purple-bg-strong: rgba(103,33,255,0.15);
-  --accent-purple-border: rgba(103,33,255,0.25);
-  --accent-cyan-bg: rgba(0,144,184,0.08);
-  --accent-cyan-border: rgba(0,144,184,0.25);
-  --accent-green-bg: rgba(0,138,110,0.08);
-  --accent-green-border: rgba(0,138,110,0.2);
-  --accent-yellow-bg: rgba(184,134,11,0.08);
-  --accent-yellow-border: rgba(184,134,11,0.2);
-  --accent-red-bg: rgba(220,38,38,0.06);
-  --accent-red-border: rgba(220,38,38,0.15);
+  --accent-purple-bg: rgba(184,122,15,0.08);
+  --accent-purple-bg-strong: rgba(184,122,15,0.16);
+  --accent-purple-border: rgba(184,122,15,0.25);
+  --accent-cyan-bg: rgba(62,127,119,0.08);
+  --accent-cyan-border: rgba(62,127,119,0.25);
+  --accent-green-bg: rgba(79,122,62,0.08);
+  --accent-green-border: rgba(79,122,62,0.22);
+  --accent-yellow-bg: rgba(165,121,24,0.08);
+  --accent-yellow-border: rgba(165,121,24,0.22);
+  --accent-red-bg: rgba(184,84,48,0.06);
+  --accent-red-border: rgba(184,84,48,0.18);
 
-  --border-subtle: rgba(103,33,255,0.1);
-  --border-card: rgba(103,33,255,0.12);
-  --border-strong: rgba(103,33,255,0.35);
-  --border-input: rgba(103,33,255,0.18);
-  --border-accent: rgba(0,144,184,0.2);
-  --border-divider: rgba(103,33,255,0.1);
+  --border-subtle: rgba(184,122,15,0.1);
+  --border-card: rgba(184,122,15,0.15);
+  --border-strong: rgba(184,122,15,0.35);
+  --border-input: rgba(60,50,30,0.15);
+  --border-accent: rgba(62,127,119,0.2);
+  --border-divider: rgba(184,122,15,0.1);
 
-  --input-placeholder: rgba(74,63,107,0.45);
-  --input-focus-shadow: rgba(103,33,255,0.1);
+  --input-placeholder: rgba(74,66,55,0.45);
+  --input-focus-shadow: rgba(184,122,15,0.12);
 
-  --scrollbar-track: #F5F3FF;
-  --scrollbar-thumb: rgba(103,33,255,0.2);
-  --scrollbar-thumb-hover: rgba(103,33,255,0.4);
+  --scrollbar-track: #FBF7EE;
+  --scrollbar-thumb: rgba(184,122,15,0.22);
+  --scrollbar-thumb-hover: rgba(184,122,15,0.45);
 
-  --shadow-glow: 0 16px 48px rgba(103,33,255,0.12);
+  --shadow-glow: 0 16px 48px rgba(184,122,15,0.14);
 }
 
 @theme {
-  --color-primary: #6721FF;
-  --color-accent: #00CBFF;
-  --color-dark: #0D0126;
-  --color-dark-2: #160042;
-  --color-dark-3: #1a0050;
-  --color-dark-4: #222325;
-  --color-body: #C8B8E8;
-  --color-muted: #8b78b0;
-  --font-sans: 'Outfit', sans-serif;
-  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --color-primary: #F59E0B;
+  --color-accent: #6FC0B4;
+  --color-warm: #E8826B;
+  --color-sage: #93C36E;
+  --color-dark: #0F1A20;
+  --color-dark-2: #17242E;
+  --color-dark-3: #1E2A33;
+  --color-dark-4: #243240;
+  --color-body: #D4C9B3;
+  --color-muted: #9A8E78;
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Fraunces', serif;
 }
 
 * {
@@ -129,16 +140,20 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-page);
   color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--text-primary);
+  font-feature-settings: 'ss01', 'ss02';
+  letter-spacing: -0.01em;
 }
 
-/* Gradient text */
+/* Gradient text — amber → coral, warm & inviting */
 .gradient-text {
-  background: linear-gradient(90deg, #C8BDFF -20%, #6721FF 40%, #00CBFF 100%);
+  background: linear-gradient(90deg, #FFD89E -20%, #F59E0B 40%, #E8826B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -146,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Gradient background */
 .gradient-bg {
-  background: linear-gradient(90deg, #6721FF, #00CBFF);
+  background: linear-gradient(90deg, #F59E0B, #E8826B);
 }
 
 /* Gradient border card */
@@ -161,7 +176,7 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   border-radius: 20px;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(103, 33, 255, 0.5), rgba(0, 203, 255, 0.3));
+  background: linear-gradient(135deg, rgba(245,158,11,0.5), rgba(232,130,107,0.3));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -170,9 +185,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Glow button */
 .btn-glow {
-  background: linear-gradient(90deg, #6721FF, #00CBFF);
+  background: linear-gradient(90deg, #F59E0B, #E8826B);
   border-radius: 30px;
-  color: white;
+  color: #17242E;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.04em;
@@ -185,7 +200,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 .btn-glow:hover {
-  box-shadow: 0 0 24px rgba(103, 33, 255, 0.6), 0 0 48px rgba(0, 203, 255, 0.2);
+  box-shadow: 0 0 24px rgba(245,158,11,0.55), 0 0 48px rgba(232,130,107,0.22);
   transform: translateY(-1px);
 }
 .btn-glow:disabled {
@@ -197,7 +212,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Outline button */
 .btn-outline-glow {
   background: transparent;
-  border: 1px solid rgba(103, 33, 255, 0.5);
+  border: 1px solid rgba(245,158,11,0.5);
   border-radius: 30px;
   color: var(--text-body);
   font-weight: 600;
@@ -208,9 +223,9 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
 }
 .btn-outline-glow:hover {
-  border-color: #6721FF;
+  border-color: #F59E0B;
   color: var(--text-primary);
-  box-shadow: 0 0 16px rgba(103, 33, 255, 0.3);
+  box-shadow: 0 0 16px rgba(245,158,11,0.28);
 }
 
 /* Input */
@@ -227,7 +242,7 @@ h1, h2, h3, h4, h5, h6 {
   outline: none;
 }
 .dark-input:focus {
-  border-color: rgba(103, 33, 255, 0.7);
+  border-color: rgba(245,158,11,0.7);
   box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 .dark-input::placeholder {
@@ -238,27 +253,34 @@ select.dark-input option {
   color: var(--text-primary);
 }
 
+/* Focus mode — subtle paper texture for cards */
+.paper-texture {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(245,158,11,0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
 
 /* Reviewer HTML content styles */
 .reviewer-content h2 {
   font-family: var(--font-heading);
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--text-primary);
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
   padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--border-accent);
-  background: linear-gradient(90deg, #C8BDFF, #6721FF 40%, #00CBFF);
+  background: linear-gradient(90deg, #FFD89E, #F59E0B 40%, #E8826B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.01em;
 }
 .reviewer-content h3 {
   font-family: var(--font-heading);
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #00CBFF;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
   margin-top: 1.1rem;
   margin-bottom: 0.35rem;
   text-transform: uppercase;
@@ -267,7 +289,7 @@ select.dark-input option {
 .reviewer-content p {
   color: var(--text-body);
   margin-bottom: 0.5rem;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 .reviewer-content ul {
   margin: 0.5rem 0 0.75rem 0;
@@ -284,7 +306,7 @@ select.dark-input option {
   content: '•';
   position: absolute;
   left: -0.5rem;
-  color: #6721FF;
+  color: var(--accent-purple);
   font-weight: bold;
 }
 .reviewer-content ol {
@@ -317,18 +339,18 @@ select.dark-input option {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  border-bottom: 1px solid rgba(103, 33, 255, 0.25);
+  border-bottom: 1px solid rgba(245,158,11,0.25);
 }
 .reviewer-content td {
   padding: 7px 12px;
   color: var(--text-body);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(245,236,217,0.05);
 }
 .reviewer-content tr:last-child td {
   border-bottom: none;
 }
 .reviewer-content tr:nth-child(even) td {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(245,236,217,0.02);
 }
 .reviewer-content > *:first-child {
   margin-top: 0;
@@ -340,10 +362,10 @@ select.dark-input option {
   padding: 12px 16px;
   border-radius: 10px;
   background: var(--bg-surface);
-  border: 1px dashed rgba(103, 33, 255, 0.35);
+  border: 1px dashed rgba(245,158,11,0.35);
 }
 .reviewer-content .next-topics p {
-  color: #a78bfa;
+  color: var(--accent-purple);
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -358,17 +380,15 @@ select.dark-input option {
   font-size: 0.82rem;
 }
 .reviewer-content .next-topics ul li::before {
-  color: #a78bfa;
+  color: var(--accent-purple);
 }
 
 /* Print styles — plain black on white, no design */
 @media print {
-  /* Hide everything on the page except the reviewer */
   body > * { display: none !important; }
   #__next > * { display: none !important; }
   .reviewer-print-wrapper { display: block !important; }
 
-  /* Make the reviewer fill the page naturally so columns paginate correctly */
   .reviewer-print-wrapper {
     position: absolute;
     top: 0; left: 0;
@@ -381,14 +401,11 @@ select.dark-input option {
     border: none !important;
     border-radius: 0 !important;
     padding: 0 !important;
-
-    /* Two columns for print */
     column-count: 2;
     column-gap: 1cm;
     column-rule: 0.5pt solid #ccc;
   }
 
-  /* Tables span both columns to avoid overlap */
   #reviewer-print table {
     column-span: all;
     break-before: avoid;
@@ -396,10 +413,8 @@ select.dark-input option {
     width: 100%;
   }
 
-  /* Section headings span both columns */
   #reviewer-print h2 { column-span: all; }
 
-  /* No design — plain black text */
   #reviewer-print h2 {
     background: none !important;
     -webkit-text-fill-color: #000 !important;
@@ -458,4 +473,9 @@ select.dark-input option {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
+}
+
+/* GSAP reveal helper — prevent FOUC before JS hydrates */
+.gsap-hidden {
+  opacity: 0;
 }

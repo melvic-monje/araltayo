@@ -63,7 +63,7 @@ export default function InstallPrompt() {
     <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto rounded-2xl px-4 py-4 flex items-center gap-3 shadow-xl"
       style={{ maxWidth: "420px", background: "var(--bg-card-solid)", border: "1px solid var(--border-strong)" }}>
       <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
-        style={{ background: "linear-gradient(135deg,#6721FF,#00CBFF)" }}>
+        style={{ background: "linear-gradient(135deg,#F59E0B,#6FC0B4)" }}>
         📚
       </div>
       <div className="flex-1 min-w-0">
@@ -82,7 +82,7 @@ export default function InstallPrompt() {
         </button>
         <button onClick={handleInstall}
           className="px-3 py-1.5 rounded-lg text-xs font-bold"
-          style={{ background: "linear-gradient(90deg,#6721FF,#00CBFF)", color: "#fff" }}>
+          style={{ background: "linear-gradient(90deg,#F59E0B,#6FC0B4)", color: "#fff" }}>
           I-install
         </button>
       </div>

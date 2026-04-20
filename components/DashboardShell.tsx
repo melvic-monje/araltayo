@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-client";
 import { useTheme } from "@/lib/theme";
 import { getAvatar } from "@/lib/avatars";
+import { ProgressFill } from "@/components/Motion";
 
 const TOOLS = [
   {
@@ -80,7 +81,7 @@ export default function DashboardShell({
         <Link href="/dashboard"
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all mb-1"
           style={pathname === "/dashboard" ? {
-            background: 'linear-gradient(90deg, rgba(103,33,255,0.25), rgba(0,203,255,0.1))',
+            background: 'linear-gradient(90deg, rgba(245,158,11,0.25), rgba(111,192,180,0.1))',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-strong)',
           } : {
@@ -108,7 +109,7 @@ export default function DashboardShell({
               <Link key={item.href} href={item.href}
                 className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all"
                 style={active ? {
-                  background: 'linear-gradient(90deg, rgba(103,33,255,0.25), rgba(0,203,255,0.1))',
+                  background: 'linear-gradient(90deg, rgba(245,158,11,0.25), rgba(111,192,180,0.1))',
                   color: 'var(--text-primary)',
                   border: '1px solid var(--border-strong)',
                 } : {
@@ -131,7 +132,7 @@ export default function DashboardShell({
         <Link href="/dashboard/settings"
           className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all mb-2"
           style={pathname === "/dashboard/settings" ? {
-            background: 'linear-gradient(90deg, rgba(103,33,255,0.25), rgba(0,203,255,0.1))',
+            background: 'linear-gradient(90deg, rgba(245,158,11,0.25), rgba(111,192,180,0.1))',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-strong)',
           } : {
@@ -156,17 +157,19 @@ export default function DashboardShell({
               </span>
             </div>
             <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-white-muted)' }}>
-              <div className="h-full rounded-full transition-all duration-500"
+              <ProgressFill
+                percent={pct}
+                className="h-full rounded-full"
                 style={{
-                  width: `${pct}%`,
                   background: pct >= 80
-                    ? 'linear-gradient(90deg, var(--accent-yellow), #EE6E4D)'
-                    : 'linear-gradient(90deg, #6721FF, var(--accent-cyan))',
-                }} />
+                    ? 'linear-gradient(90deg, var(--accent-yellow), #E8826B)'
+                    : 'linear-gradient(90deg, #F59E0B, var(--accent-cyan))',
+                }}
+              />
             </div>
             <Link href="/pricing"
               className="flex items-center justify-center gap-1.5 mt-2.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all"
-              style={{ background: 'linear-gradient(90deg,rgba(103,33,255,0.15),rgba(0,203,255,0.08))', color: 'var(--accent-cyan)', border: '1px solid rgba(103,33,255,0.25)' }}>
+              style={{ background: 'linear-gradient(90deg,rgba(245,158,11,0.15),rgba(111,192,180,0.08))', color: 'var(--accent-cyan)', border: '1px solid rgba(245,158,11,0.25)' }}>
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
