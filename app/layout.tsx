@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -24,12 +24,15 @@ export const metadata: Metadata = {
     "AralTayo is a free AI-powered study platform for Philippine K-12 and college students. Generate quizzes, reviewers, flashcards, and get topic explanations.",
   keywords: ["Philippines", "study", "AI", "K-12", "reviewer", "flashcards", "quiz"],
   manifest: "/manifest.json",
-  themeColor: "#F59E0B",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "AralTayo",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#F59E0B",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

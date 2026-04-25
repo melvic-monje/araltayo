@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase-server";
 import { Reveal, ScrollReveal, ScrollStagger } from "@/components/Motion";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const HERO_IMG     = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&auto=format&fit=crop";
 const BUDDY_IMG    = "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=800&q=80&auto=format&fit=crop";
@@ -79,6 +80,7 @@ export default async function LandingPage() {
               style={{ color: "var(--text-muted)" }}>
               Pricing
             </Link>
+            <ThemeToggle />
             <Link href="/login"
               className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 rounded-full transition-all"
               style={{ color: "var(--text-muted)" }}>
