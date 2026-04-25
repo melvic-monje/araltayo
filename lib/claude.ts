@@ -5,7 +5,7 @@ const client = new Anthropic({
 });
 
 const MODEL = "claude-haiku-4-5-20251001";
-const MAX_TOKENS = 1024;
+const MAX_TOKENS = 4096;
 
 export async function callClaude(
   prompt: string,

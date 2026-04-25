@@ -40,11 +40,22 @@ export async function POST(req: NextRequest) {
 
   const raw = await callClaude(prompt, SYSTEM_PROMPT);
 
-  let cards: Flashcard[];
-  try {
-    cards = JSON.parse(raw);
-    if (!Array.isArray(cards)) throw new Error("Not an array");
-  } catch {
+  let cards: Flashcard[] | null = null;
+  const tryParse = (s: string): Flashcard[] | null => {
+    try {
+      const v = JSON.parse(s);
+      return Array.isArray(v) ? (v as Flashcard[]) : null;
+    } catch {
+      return null;
+    }
+  };
+  cards = tryParse(raw);
+  if (!cards) {
+    const match = raw.match(/\[[\s\S]*\]/);
+    if (match) cards = tryParse(match[0]);
+  }
+  if (!cards) {
+    console.error("[ai/flashcards] parse failed. Raw head:", raw.slice(0, 400));
     return NextResponse.json(
       { error: "Failed to parse AI response. Please try again." },
       { status: 500 }

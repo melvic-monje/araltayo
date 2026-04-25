@@ -43,11 +43,22 @@ export async function POST(req: NextRequest) {
 
   const raw = await callClaude(prompt, SYSTEM_PROMPT);
 
-  let questions: Question[];
-  try {
-    questions = JSON.parse(raw);
-    if (!Array.isArray(questions)) throw new Error("Not an array");
-  } catch {
+  let questions: Question[] | null = null;
+  const tryParse = (s: string): Question[] | null => {
+    try {
+      const v = JSON.parse(s);
+      return Array.isArray(v) ? (v as Question[]) : null;
+    } catch {
+      return null;
+    }
+  };
+  questions = tryParse(raw);
+  if (!questions) {
+    const match = raw.match(/\[[\s\S]*\]/);
+    if (match) questions = tryParse(match[0]);
+  }
+  if (!questions) {
+    console.error("[ai/quiz] parse failed. Raw head:", raw.slice(0, 400));
     return NextResponse.json(
       { error: "Failed to parse AI response. Please try again." },
       { status: 500 }
