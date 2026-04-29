@@ -70,9 +70,10 @@ export default function PlayerMesh({
 
   return (
     <group ref={group} position={[x, 0, z]} rotation={[0, rotY, 0]}>
-      {/* Loaded character. Scale and orient: GLBs come facing -Z; we want +X,
-          so rotate -90° around Y. Our movement uses +X as forward. */}
-      <group rotation={[0, -Math.PI / 2, 0]} scale={1.15}>
+      {/* Loaded character. The Quaternius set ships facing +Z; our movement
+          uses +X as forward (toward the finish line). Rotate +90° around Y
+          so the character looks down the track. */}
+      <group rotation={[0, Math.PI / 2, 0]} scale={1.15}>
         <primitive object={cloned} />
       </group>
 
