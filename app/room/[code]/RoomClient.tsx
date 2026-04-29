@@ -347,70 +347,113 @@ export default function RoomClient({ code }: { code: string }) {
     );
   }
 
-  // Lobby
+  // Lobby — 3D warm-up scene with overlay UI
   if (room.status === "lobby") {
+    const initialPlayers = players.map((p) => ({
+      id: p.id,
+      name: p.name,
+      avatarUrl: p.avatar_url ?? null,
+      characterId: isCharacterId(p.character_id) ? p.character_id : null,
+    }));
+    const readyCount = players.filter((p) => p.is_ready).length;
+    const allReady = players.length > 0 && readyCount === players.length;
+    const farFuture = Date.now() + 10 * 60 * 1000;
     return (
-      <main className="min-h-screen p-6 sm:p-10">
-        <div className="max-w-3xl mx-auto">
-          <header className="flex items-center justify-between mb-8">
-            <Link href="/" className="text-sm text-slate-400 hover:text-slate-200">← Home</Link>
-            <span className="text-xs uppercase tracking-widest text-slate-500">Lobby</span>
-          </header>
-
-          <div className="text-center mb-10">
-            <p className="text-sm uppercase tracking-widest text-slate-400 mb-2">Room Code</p>
-            <h1 className="text-7xl sm:text-9xl font-extrabold neon-text font-mono tracking-widest">{code}</h1>
-            <p className="text-slate-400 mt-3">Share this code with players to join.</p>
+      <OrientationGate>
+        <main className="fixed inset-0 overflow-hidden" style={{ background: "#0B0E1A" }}>
+          <div className="absolute inset-0">
+            <GameScene
+              code={code}
+              selfId={playerId!}
+              startsAt={Date.now()}
+              endsAt={farFuture}
+              initialPlayers={initialPlayers}
+              inputRef={inputRef}
+              skillTriggerRef={skillTriggerRef}
+              onCooldown={setCooldowns}
+              onLap={setMeStatus}
+              onFinish={() => {}}
+              lobbyMode
+            />
           </div>
 
-          <PlayerGrid players={players} selfId={playerId} />
+          {/* Top bar — code + leave */}
+          <div className="absolute top-0 left-0 right-0 p-3 flex items-center justify-between pointer-events-none z-10">
+            <div className="bg-black/40 backdrop-blur rounded-xl px-4 py-2">
+              <div className="text-[10px] uppercase tracking-widest text-slate-300">Room Code</div>
+              <div className="text-3xl sm:text-4xl font-extrabold neon-text font-mono tracking-widest">{code}</div>
+            </div>
+            <Link href="/" className="text-xs text-slate-300 hover:text-white bg-black/40 backdrop-blur rounded-full px-3 py-1.5 pointer-events-auto">Leave</Link>
+          </div>
 
-          {(() => {
-            const readyCount = players.filter((p) => p.is_ready).length;
-            const allReady = players.length > 0 && readyCount === players.length;
-            return (
-              <div className="mt-10 text-center space-y-4">
-                <div className="text-sm text-slate-400">
-                  <span className="font-mono font-bold" style={{ color: allReady ? "#22D3EE" : "#F472B6" }}>
-                    {readyCount}/{players.length}
-                  </span> ready
-                </div>
-                <button
-                  className={me?.is_ready ? "btn-ghost text-lg" : "btn-neon text-lg"}
-                  onClick={toggleReady}
-                  disabled={togglingReady}
-                >
-                  {me?.is_ready ? "Unready" : "I'm Ready"}
-                </button>
-                {isHost ? (
-                  <div>
-                    <button
-                      className="btn-neon text-xl"
-                      onClick={startRace}
-                      disabled={!allReady}
-                    >
-                      Start Race
-                    </button>
-                    {!allReady && (
-                      <p className="text-xs text-slate-500 mt-2">
-                        Waiting for everyone to ready up…
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-slate-400 italic text-sm">
-                    {allReady ? "Waiting for host to start…" : "Tap I'm Ready when you're set."}
-                  </p>
-                )}
+          {/* Right panel — player ready states */}
+          <div className="absolute top-24 sm:top-28 right-3 max-w-[220px] pointer-events-none z-10">
+            <div className="bg-black/40 backdrop-blur rounded-xl px-3 py-2 space-y-1.5">
+              <div className="text-[10px] uppercase tracking-widest text-slate-300">
+                <span className="font-mono font-bold" style={{ color: allReady ? "#22D3EE" : "#F472B6" }}>
+                  {readyCount}/{players.length}
+                </span> ready
               </div>
-            );
-          })()}
+              {players.map((p) => {
+                const av = avatarFor(p.id);
+                return (
+                  <div key={p.id} className="flex items-center gap-2 text-xs">
+                    {p.avatar_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.avatar_url} alt="" className="w-5 h-5 rounded-full object-cover" />
+                    ) : (
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: av.color + "44" }}>{av.emoji}</span>
+                    )}
+                    <span className="truncate flex-1" style={{ color: av.color }}>
+                      {p.name}{p.id === playerId ? " (you)" : ""}
+                    </span>
+                    {p.is_ready && <span className="text-[#22D3EE] font-bold">✓</span>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
-          <p className="text-center text-xs text-slate-500 mt-8 leading-relaxed">
-            Bardagulan 2026 · Arrows to move/turn · U throw (stuns) · I harpoon (yanks back) · 3 s cooldown each. Mobile: on-screen joystick + buttons.
-          </p>
-        </div>
-      </main>
+          {/* HUD with skill cooldown buttons (works in lobby for practice) */}
+          <HUD
+            cooldowns={cooldowns}
+            distance={meStatus.distance}
+            place={meStatus.place}
+            totalPlayers={players.length}
+            onTouchForward={setForward}
+            onTouchTurn={setTurn}
+            onTouchThrow={triggerThrow}
+            onTouchHarpoon={triggerHarpoon}
+          />
+
+          {/* Bottom controls — Ready + Start */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 pointer-events-none">
+            <div className="flex items-center gap-3 pointer-events-auto">
+              <button
+                className={me?.is_ready ? "btn-ghost" : "btn-neon"}
+                onClick={toggleReady}
+                disabled={togglingReady}
+              >
+                {me?.is_ready ? "Unready" : "I'm Ready"}
+              </button>
+              {isHost && (
+                <button
+                  className="btn-neon"
+                  onClick={startRace}
+                  disabled={!allReady}
+                >
+                  Start Race
+                </button>
+              )}
+            </div>
+            {!isHost && (
+              <p className="text-[11px] text-slate-300 bg-black/40 backdrop-blur rounded-full px-3 py-1">
+                {allReady ? "Waiting for host to start…" : "Warm up while waiting — tap I'm Ready when set."}
+              </p>
+            )}
+          </div>
+        </main>
+      </OrientationGate>
     );
   }
 

@@ -55,8 +55,9 @@ export const PROJECTILE_HIT_RADIUS = 1.6;
 
 export const HARPOON_RANGE = 30;
 export const HARPOON_CONE_DEG = 30;
-export const HARPOON_PULL_BACK = 12;  // units to push target backward
+export const HARPOON_PULL_BACK = 12;  // units the target gets dragged back
 export const HARPOON_LINE_LIFETIME_MS = 500;
+export const HARPOON_STUN_MS = 1200;  // stun + animated pull duration
 
 export const POSITION_BROADCAST_HZ = 12;
 

@@ -10,6 +10,7 @@ import {
   HARPOON_LINE_LIFETIME_MS,
   HARPOON_PULL_BACK,
   HARPOON_RANGE,
+  HARPOON_STUN_MS,
   MAX_SPEED,
   OBSTACLES,
   PLAYER_RADIUS,
@@ -47,6 +48,8 @@ export type GameSceneProps = {
   onCooldown: (s: { throw: number; harpoon: number }) => void;
   onLap: (data: { distance: number; place: number }) => void;
   onFinish: (finishMs: number) => void;
+  /** Lobby/practice mode: no finish detection, looser camera, controls still work. */
+  lobbyMode?: boolean;
 };
 
 export default function GameScene(props: GameSceneProps) {
@@ -99,6 +102,7 @@ function World({
   onCooldown,
   onLap,
   onFinish,
+  lobbyMode = false,
 }: GameSceneProps) {
   const { camera } = useThree();
   const lastFrameRef = useRef<number>(performance.now());
@@ -112,6 +116,8 @@ function World({
   const lastHarpoonFiredRef = useRef<number>(-Infinity);
 
   const finishedRef = useRef(false);
+  // Active harpoon pull on self — interpolates x over the stun window.
+  const pullRef = useRef<{ startMs: number; endMs: number; fromX: number; toX: number } | null>(null);
 
   const avatarMap = useMemo<Record<string, string | null>>(() => {
     const m: Record<string, string | null> = {};
@@ -204,19 +210,30 @@ function World({
         return { ...prev, [e.targetId]: { ...cur, stunUntil: e.until, vx: 0, vz: 0 } };
       });
     } else if (e.type === "harpoon") {
-      setPlayers((prev) => {
-        const cur = prev[e.targetId];
-        if (!cur) return prev;
-        const newX = Math.max(0, cur.x - HARPOON_PULL_BACK);
-        return { ...prev, [e.targetId]: { ...cur, x: newX, vx: 0, vz: 0, stunUntil: Date.now() + 600 } };
-      });
+      const now = Date.now();
       const target = playersRef.current[e.targetId];
       const toX = target?.x ?? e.ownerX;
       const toZ = target?.z ?? e.ownerZ;
+      // Stun the target for the pull window — they can't move during the
+      // animation. We don't teleport them; the pull animates their x.
+      setPlayers((prev) => {
+        const cur = prev[e.targetId];
+        if (!cur) return prev;
+        return { ...prev, [e.targetId]: { ...cur, vx: 0, vz: 0, stunUntil: now + HARPOON_STUN_MS } };
+      });
+      // If we're the one being pulled, set up the local pull animation.
+      if (e.targetId === selfId && target) {
+        pullRef.current = {
+          startMs: now,
+          endMs: now + HARPOON_STUN_MS,
+          fromX: target.x,
+          toX: Math.max(0, target.x - HARPOON_PULL_BACK),
+        };
+      }
       playSfx("harpoon");
       setHarpoons((prev) => [
         ...prev,
-        { id: `${e.ownerId}-${Date.now()}`, fromX: e.ownerX, fromZ: e.ownerZ, toX, toZ, bornAt: Date.now() },
+        { id: `${e.ownerId}-${now}`, fromX: e.ownerX, fromZ: e.ownerZ, toX, toZ, bornAt: now },
       ]);
     } else if (e.type === "finish") {
       setPlayers((prev) => {
@@ -235,7 +252,8 @@ function World({
     lastFrameRef.current = now;
 
     const wallclockNow = Date.now();
-    const racing = wallclockNow >= startsAt && wallclockNow < endsAt;
+    // In lobby, players can always move freely — treat it as "always racing".
+    const racing = lobbyMode || (wallclockNow >= startsAt && wallclockNow < endsAt);
 
     const self = playersRef.current[selfId];
     if (!self) return;
@@ -245,7 +263,18 @@ function World({
     const input = inputRef.current;
     let { rotY, x, z, vx, vz } = self;
 
-    if (racing && !stunned && self.finishedMs == null) {
+    // Active harpoon pull on self — overrides input physics.
+    const pull = pullRef.current;
+    const isPulling = pull != null && wallclockNow < pull.endMs;
+
+    if (isPulling && pull) {
+      const t = Math.min(1, (wallclockNow - pull.startMs) / (pull.endMs - pull.startMs));
+      // ease-out: starts fast, decelerates as we reach the destination
+      const eased = 1 - Math.pow(1 - t, 2);
+      x = pull.fromX + (pull.toX - pull.fromX) * eased;
+      vx = 0;
+      vz = 0;
+    } else if (racing && !stunned && self.finishedMs == null) {
       rotY += -input.turn * TURN_RATE * dt;
       const fwdX = Math.cos(rotY);
       const fwdZ = -Math.sin(rotY);
@@ -257,6 +286,7 @@ function World({
         vz -= vz * Math.min(1, FRICTION * dt);
       }
     } else {
+      if (pull && wallclockNow >= pull.endMs) pullRef.current = null;
       vx -= vx * Math.min(1, FRICTION * 2 * dt);
       vz -= vz * Math.min(1, FRICTION * 2 * dt);
     }
@@ -324,7 +354,7 @@ function World({
       }
     }
 
-    if (!finishedRef.current && x >= TRACK_LENGTH && self.finishedMs == null) {
+    if (!lobbyMode && !finishedRef.current && x >= TRACK_LENGTH && self.finishedMs == null) {
       finishedRef.current = true;
       const finishMs = Date.now() - startsAt;
       console.log(`[race] CROSSED FINISH @ x=${x.toFixed(1)} finishMs=${finishMs}`);
@@ -468,7 +498,11 @@ function World({
     // ── Camera follow ────────────────────────────────────────────
     const fwdX = Math.cos(newSelf.rotY);
     const fwdZ = -Math.sin(newSelf.rotY);
-    const camTarget = new THREE.Vector3(newSelf.x - fwdX * 8, 6, newSelf.z - fwdZ * 8);
+    // Lobby: pull the camera further back + higher so players can see more of
+    // the track and other characters while warming up.
+    const camDist = lobbyMode ? 14 : 8;
+    const camHeight = lobbyMode ? 10 : 6;
+    const camTarget = new THREE.Vector3(newSelf.x - fwdX * camDist, camHeight, newSelf.z - fwdZ * camDist);
     camera.position.lerp(camTarget, 0.12);
     camera.lookAt(newSelf.x + fwdX * 4, 1.5, newSelf.z + fwdZ * 4);
 
