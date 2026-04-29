@@ -552,7 +552,7 @@ function PlayerGrid({ players, selfId }: { players: Player[]; selfId: string | n
             ) : (
               <div className="text-4xl mb-1">{avatar.emoji}</div>
             )}
-            <div className="font-bold truncate" style={{ color: avatar.color }}>{p.name}</div>
+            <div className="text-xl sm:text-2xl font-bold truncate" style={{ color: avatar.color }}>{p.name}</div>
             {p.id === selfId && <div className="text-xs text-slate-400 mt-0.5">you</div>}
           </div>
         );

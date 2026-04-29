@@ -38,7 +38,7 @@ export default function Leaderboard({ players }: { players: Player[] }) {
             ) : (
               <span className="text-3xl">{avatar.emoji}</span>
             )}
-            <span className="font-bold flex-1 truncate">{p.name}</span>
+            <span className="text-2xl sm:text-3xl font-bold flex-1 truncate">{p.name}</span>
             <div className="text-right">
               <div className="text-2xl font-extrabold font-mono" style={{ color: finishMs != null ? avatar.color : "#94A3B8" }}>
                 {time}

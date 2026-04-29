@@ -88,17 +88,6 @@ export default function PlayerMesh({
             {avatar.emoji}
           </Text>
         )}
-        <Text
-          position={[0, -0.95, 0]}
-          fontSize={0.6}
-          color={avatar.color}
-          outlineColor="#000"
-          outlineWidth={0.06}
-          anchorX="center"
-          anchorY="middle"
-        >
-          {name}
-        </Text>
       </Billboard>
 
       {/* Stun stars */}
