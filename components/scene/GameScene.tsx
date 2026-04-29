@@ -267,30 +267,37 @@ function World({
       vz = (vz / speed) * MAX_SPEED;
     }
 
-    x += vx * dt;
-    z += vz * dt;
-
-    if (x < 0) { x = 0; vx = 0; }
-    if (x > TRACK_LENGTH + 4) x = TRACK_LENGTH + 4;
+    // ── Substep movement + collision ───────────────────────────────
+    // Split the frame into sub-steps so even max-speed movement can't
+    // tunnel through a thin obstacle in a single frame.
     const halfW = TRACK_WIDTH / 2 - PLAYER_RADIUS;
-    if (z < -halfW) { z = -halfW; vz = 0; }
-    if (z > halfW) { z = halfW; vz = 0; }
-
-    // ── Obstacle collision (AABB push-out) ─────────────────────────
-    for (const o of OBSTACLES) {
-      const dx = x - o.cx;
-      const dz = z - o.cz;
-      const limX = o.hw + PLAYER_RADIUS;
-      const limZ = o.hd + PLAYER_RADIUS;
-      if (Math.abs(dx) < limX && Math.abs(dz) < limZ) {
-        const overlapX = limX - Math.abs(dx);
-        const overlapZ = limZ - Math.abs(dz);
-        if (overlapX < overlapZ) {
-          x = o.cx + Math.sign(dx || 1) * limX;
-          vx = 0;
-        } else {
-          z = o.cz + Math.sign(dz || 1) * limZ;
-          vz = 0;
+    const moveDist = Math.hypot(vx * dt, vz * dt);
+    const STEP = 0.25;
+    const steps = Math.max(1, Math.ceil(moveDist / STEP));
+    const sx = (vx * dt) / steps;
+    const sz = (vz * dt) / steps;
+    for (let s = 0; s < steps; s++) {
+      x += sx;
+      z += sz;
+      if (x < 0) { x = 0; vx = 0; }
+      if (x > TRACK_LENGTH + 4) { x = TRACK_LENGTH + 4; }
+      if (z < -halfW) { z = -halfW; vz = 0; }
+      if (z > halfW) { z = halfW; vz = 0; }
+      for (const o of OBSTACLES) {
+        const dx = x - o.cx;
+        const dz = z - o.cz;
+        const limX = o.hw + PLAYER_RADIUS;
+        const limZ = o.hd + PLAYER_RADIUS;
+        if (Math.abs(dx) < limX && Math.abs(dz) < limZ) {
+          const overlapX = limX - Math.abs(dx);
+          const overlapZ = limZ - Math.abs(dz);
+          if (overlapX < overlapZ) {
+            x = o.cx + Math.sign(dx || 1) * limX;
+            vx = 0;
+          } else {
+            z = o.cz + Math.sign(dz || 1) * limZ;
+            vz = 0;
+          }
         }
       }
     }
