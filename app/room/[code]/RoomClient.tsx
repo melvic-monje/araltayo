@@ -373,6 +373,7 @@ export default function RoomClient({ code }: { code: string }) {
         <main className="fixed inset-0 overflow-hidden" style={{ background: "#0B0E1A" }}>
           <div className="absolute inset-0">
             <GameScene
+              key="lobby"
               code={code}
               selfId={playerId!}
               startsAt={Date.now()}
@@ -487,6 +488,7 @@ export default function RoomClient({ code }: { code: string }) {
         <main className="fixed inset-0 overflow-hidden" style={{ background: "#0B0E1A" }}>
           <div className="absolute inset-0">
             <GameScene
+              key={`race-${room.race_starts_at}`}
               code={code}
               selfId={playerId!}
               startsAt={startsAtMs}
