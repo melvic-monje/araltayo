@@ -14,6 +14,7 @@ export default function PlayerMesh({
   rotY,
   stunUntil,
   avatarUrl,
+  isSelf,
 }: {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export default function PlayerMesh({
   rotY: number;
   stunUntil: number;
   avatarUrl: string | null;
+  isSelf: boolean;
 }) {
   const group = useRef<THREE.Group>(null);
   const stunStarsRef = useRef<THREE.Group>(null);
@@ -37,11 +39,24 @@ export default function PlayerMesh({
     return t;
   }, [avatarUrl]);
 
-  useFrame(() => {
+  useFrame((_, dt) => {
     if (group.current) {
-      group.current.position.x = x;
-      group.current.position.z = z;
-      group.current.rotation.y = rotY;
+      if (isSelf) {
+        // Self position is authoritative; write directly for zero lag.
+        group.current.position.x = x;
+        group.current.position.z = z;
+        group.current.rotation.y = rotY;
+      } else {
+        // Remote players arrive at ~12 Hz. Lerp toward target so we don't
+        // pop visibly between updates. Catch-up window ≈ 80 ms.
+        const k = Math.min(1, dt * 12);
+        group.current.position.x += (x - group.current.position.x) * k;
+        group.current.position.z += (z - group.current.position.z) * k;
+        let diff = rotY - group.current.rotation.y;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        group.current.rotation.y += diff * k;
+      }
     }
     if (stunStarsRef.current) {
       stunStarsRef.current.rotation.y += 0.1;

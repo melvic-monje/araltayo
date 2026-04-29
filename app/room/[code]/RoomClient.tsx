@@ -13,6 +13,7 @@ import HUD from "@/components/HUD";
 import Leaderboard from "@/components/Leaderboard";
 import Confetti from "@/components/Confetti";
 import AvatarUpload from "@/components/AvatarUpload";
+import OrientationGate from "@/components/OrientationGate";
 
 const RACE_DURATION_SEC = 90;
 const COUNTDOWN_LEAD_SEC = 4;
@@ -165,13 +166,13 @@ export default function RoomClient({ code }: { code: string }) {
     return () => { cancelled = true; };
   }, [phase, room, code, setRoom]);
 
-  // End early when every joined player has finished
+  // End the race the moment any player crosses the finish line (winner-takes-all)
   useEffect(() => {
     if (room?.status !== "racing" || players.length === 0) return;
-    const allFinished = players.every(
+    const someoneFinished = players.some(
       (p) => (p as Player & { finish_ms?: number | null }).finish_ms != null
     );
-    if (!allFinished) return;
+    if (!someoneFinished) return;
     let cancelled = false;
     (async () => {
       const supabase = getSupabase();
@@ -184,10 +185,10 @@ export default function RoomClient({ code }: { code: string }) {
         .maybeSingle();
       if (cancelled) return;
       if (updErr) {
-        console.error("[race] all-finished flip failed", updErr);
+        console.error("[race] winner-finish flip failed", updErr);
         return;
       }
-      console.log("[race] all players finished → room finished");
+      console.log("[race] someone finished → room finished");
       if (data) setRoom(data as Room);
     })();
     return () => { cancelled = true; };
@@ -330,46 +331,48 @@ export default function RoomClient({ code }: { code: string }) {
     }));
 
     return (
-      <main className="fixed inset-0 overflow-hidden" style={{ background: "#0B0E1A" }}>
-        <div className="absolute inset-0">
-          <GameScene
-            code={code}
-            selfId={playerId!}
-            startsAt={startsAtMs}
-            endsAt={endsAtMs}
-            initialPlayers={initialPlayers}
-            inputRef={inputRef}
-            skillTriggerRef={skillTriggerRef}
-            onCooldown={setCooldowns}
-            onLap={setMeStatus}
-            onFinish={handleFinish}
-          />
-        </div>
-
-        <HUD
-          cooldowns={cooldowns}
-          distance={meStatus.distance}
-          place={meStatus.place}
-          totalPlayers={players.length}
-          endsAt={endsAtMs}
-          onTouchForward={setForward}
-          onTouchTurn={setTurn}
-          onTouchThrow={triggerThrow}
-          onTouchHarpoon={triggerHarpoon}
-        />
-
-        {inCountdown && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20">
-            <CountdownOverlay startsAtMs={startsAtMs} />
+      <OrientationGate>
+        <main className="fixed inset-0 overflow-hidden" style={{ background: "#0B0E1A" }}>
+          <div className="absolute inset-0">
+            <GameScene
+              code={code}
+              selfId={playerId!}
+              startsAt={startsAtMs}
+              endsAt={endsAtMs}
+              initialPlayers={initialPlayers}
+              inputRef={inputRef}
+              skillTriggerRef={skillTriggerRef}
+              onCooldown={setCooldowns}
+              onLap={setMeStatus}
+              onFinish={handleFinish}
+            />
           </div>
-        )}
 
-        <div className="absolute top-4 right-4 hidden md:block z-10">
-          <Link href="/" className="text-xs text-slate-400 hover:text-slate-200 bg-black/40 backdrop-blur rounded-full px-3 py-1">
-            Leave
-          </Link>
-        </div>
-      </main>
+          <HUD
+            cooldowns={cooldowns}
+            distance={meStatus.distance}
+            place={meStatus.place}
+            totalPlayers={players.length}
+            endsAt={endsAtMs}
+            onTouchForward={setForward}
+            onTouchTurn={setTurn}
+            onTouchThrow={triggerThrow}
+            onTouchHarpoon={triggerHarpoon}
+          />
+
+          {inCountdown && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20">
+              <CountdownOverlay startsAtMs={startsAtMs} />
+            </div>
+          )}
+
+          <div className="absolute top-4 right-4 hidden md:block z-10">
+            <Link href="/" className="text-xs text-slate-400 hover:text-slate-200 bg-black/40 backdrop-blur rounded-full px-3 py-1">
+              Leave
+            </Link>
+          </div>
+        </main>
+      </OrientationGate>
     );
   }
 

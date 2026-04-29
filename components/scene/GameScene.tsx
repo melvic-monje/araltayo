@@ -417,6 +417,7 @@ function World({
           rotY={p.rotY}
           stunUntil={p.stunUntil}
           avatarUrl={avatarMap[p.id] ?? null}
+          isSelf={p.id === selfId}
         />
       ))}
       {projectiles.map((proj) => (
