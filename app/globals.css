@@ -31,6 +31,15 @@ button { cursor: pointer; }
   background-clip: text;
 }
 
+.brand-title {
+  font-family: var(--font-display), 'Rampart One', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  filter: drop-shadow(0 4px 24px rgba(244,114,182,0.35));
+}
+
 .btn-neon {
   background: linear-gradient(90deg, #22D3EE, #A78BFA);
   color: #0B0E1A;

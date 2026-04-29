@@ -27,6 +27,7 @@ import {
   type Projectile as ProjectileT,
 } from "@/lib/game";
 import { useGameChannel, type RemotePos } from "@/lib/useGameChannel";
+import { playSfx } from "@/lib/sounds";
 import Track from "./Track";
 import PlayerMesh from "./PlayerMesh";
 import Projectile from "./Projectile";
@@ -194,6 +195,7 @@ function World({
         if (prev.some((p) => p.id === e.projectileId)) return prev;
         return [...prev, { id: e.projectileId, ownerId: e.ownerId, x: e.x, z: e.z, vx: e.vx, vz: e.vz, bornAt: e.bornAt }];
       });
+      playSfx("throw");
     } else if (e.type === "stun") {
       setPlayers((prev) => {
         const cur = prev[e.targetId];
@@ -210,6 +212,7 @@ function World({
       const target = playersRef.current[e.targetId];
       const toX = target?.x ?? e.ownerX;
       const toZ = target?.z ?? e.ownerZ;
+      playSfx("harpoon");
       setHarpoons((prev) => [
         ...prev,
         { id: `${e.ownerId}-${Date.now()}`, fromX: e.ownerX, fromZ: e.ownerZ, toX, toZ, bornAt: Date.now() },

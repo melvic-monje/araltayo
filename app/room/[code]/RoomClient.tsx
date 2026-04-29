@@ -16,6 +16,7 @@ import AvatarUpload from "@/components/AvatarUpload";
 import OrientationGate from "@/components/OrientationGate";
 import CharacterPicker from "@/components/CharacterPicker";
 import { DEFAULT_CHARACTER, type CharacterId, isCharacterId } from "@/lib/characters";
+import { playMusic, stopMusic } from "@/lib/sounds";
 
 const RACE_DURATION_SEC = 90;
 const COUNTDOWN_LEAD_SEC = 4;
@@ -254,6 +255,15 @@ export default function RoomClient({ code }: { code: string }) {
     if (room?.status === "finished") setConfettiTick((t) => t + 1);
   }, [room?.status]);
 
+  // Music: racing track during the race, menu loop everywhere else.
+  useEffect(() => {
+    if (room?.status === "racing") playMusic("racing", 0.3);
+    else playMusic("menu", 0.25);
+    return () => { /* keep playing across unmounts; landing handles its own */ };
+  }, [room?.status]);
+
+  useEffect(() => () => { stopMusic(); }, []);
+
   async function handleFinish(finishMs: number) {
     if (!playerId || finishRecordedRef.current) return;
     finishRecordedRef.current = true;
@@ -391,7 +401,7 @@ export default function RoomClient({ code }: { code: string }) {
           })()}
 
           <p className="text-center text-xs text-slate-500 mt-8 leading-relaxed">
-            Controls: Arrow keys to move/turn · U throw (stuns target) · I harpoon (yanks target back) · 3 s cooldown each. Mobile: on-screen joystick + buttons.
+            Bardagulan 2026 · Arrows to move/turn · U throw (stuns) · I harpoon (yanks back) · 3 s cooldown each. Mobile: on-screen joystick + buttons.
           </p>
         </div>
       </main>

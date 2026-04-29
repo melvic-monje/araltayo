@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { usePlayerId } from "@/lib/usePlayer";
+import { playMusic } from "@/lib/sounds";
 
 function generateCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -19,6 +20,8 @@ export default function Landing() {
   const [joinCode, setJoinCode] = useState("");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => { playMusic("menu", 0.25); }, []);
 
   async function createRoom() {
     if (!playerId) return;
@@ -58,11 +61,11 @@ export default function Landing() {
   return (
     <main className="min-h-screen flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center">
-        <h1 className="text-5xl sm:text-6xl font-extrabold mb-3 tracking-tight">
-          <span className="neon-text">Spacebar Race</span>
+        <h1 className="brand-title text-6xl sm:text-7xl mb-3">
+          <span className="neon-text">Bardagulan 2026</span>
         </h1>
-        <p className="text-slate-400 mb-10">
-          Mash the spacebar. Beat your friends. 15 seconds to glory.
+        <p className="text-slate-300 mb-10 italic font-bold tracking-wide">
+          Let&apos;s get ready to <span className="neon-text">BARDUGS</span>! 🥊
         </p>
 
         {mode === "home" && (
