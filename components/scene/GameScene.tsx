@@ -249,6 +249,7 @@ function World({
     if (!finishedRef.current && x >= TRACK_LENGTH && self.finishedMs == null) {
       finishedRef.current = true;
       const finishMs = Date.now() - startsAt;
+      console.log(`[race] CROSSED FINISH @ x=${x.toFixed(1)} finishMs=${finishMs}`);
       sendEvent({ type: "finish", playerId: selfId, finishMs });
       handleEvent({ type: "finish", playerId: selfId, finishMs });
       onFinish(finishMs);
