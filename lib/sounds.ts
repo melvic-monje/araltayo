@@ -52,6 +52,8 @@ async function loadBuffer(url: string): Promise<AudioBuffer | null> {
   }
 }
 
+const MASTER_VOLUME = 0.5;
+
 export async function playSfx(name: keyof typeof SFX, volume = 0.6) {
   const ctx = getCtx();
   if (!ctx) return;
@@ -61,7 +63,7 @@ export async function playSfx(name: keyof typeof SFX, volume = 0.6) {
     const src = ctx.createBufferSource();
     src.buffer = buf;
     const gain = ctx.createGain();
-    gain.gain.value = volume;
+    gain.gain.value = volume * MASTER_VOLUME;
     src.connect(gain).connect(ctx.destination);
     src.start();
   } catch {
@@ -78,7 +80,7 @@ export function playMusic(name: keyof typeof MUSIC, volume = 0.35) {
   stopMusic();
   bgmAudio = new Audio(MUSIC[name]);
   bgmAudio.loop = true;
-  bgmAudio.volume = volume;
+  bgmAudio.volume = volume * MASTER_VOLUME;
   currentMusic = name;
   bgmAudio.play().catch(() => {
     // Autoplay blocked. Hook a one-time gesture listener to retry.
