@@ -300,6 +300,28 @@ function World({
           }
         }
       }
+
+      // ── Soft bump against other players ──────────────────────────
+      // Each client only pushes itself out of others; the other client
+      // does the same on its end. Keeps the model client-authoritative.
+      const bumpRadius = PLAYER_RADIUS * 2;
+      for (const otherId in playersRef.current) {
+        if (otherId === selfId) continue;
+        const other = playersRef.current[otherId];
+        if (other.finishedMs != null) continue;
+        const dx = x - other.x;
+        const dz = z - other.z;
+        const dist = Math.hypot(dx, dz);
+        if (dist < bumpRadius && dist > 0.001) {
+          const push = bumpRadius - dist;
+          x += (dx / dist) * push;
+          z += (dz / dist) * push;
+          // Take the speed sting out so head-on collisions don't immediately
+          // re-overlap on the next frame.
+          vx *= 0.6;
+          vz *= 0.6;
+        }
+      }
     }
 
     if (!finishedRef.current && x >= TRACK_LENGTH && self.finishedMs == null) {
