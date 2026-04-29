@@ -1,9 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Rampart_One } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "600", "700", "800"], variable: "--font-body" });
-const rampart = Rampart_One({ subsets: ["latin"], weight: ["400"], variable: "--font-display" });
+const gameria = localFont({
+  src: "./fonts/GAMERIA.ttf",
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Bardagulan 2026",
@@ -16,7 +21,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${rampart.variable}`}>
+    <html lang="en" className={`${inter.variable} ${gameria.variable}`}>
       <body className={inter.className}>{children}</body>
     </html>
   );
