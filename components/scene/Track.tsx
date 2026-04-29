@@ -1,6 +1,6 @@
 "use client";
 
-import { TRACK_LENGTH, TRACK_WIDTH } from "@/lib/game";
+import { OBSTACLES, TRACK_LENGTH, TRACK_WIDTH } from "@/lib/game";
 
 export default function Track() {
   const tileSize = 8;
@@ -65,6 +65,19 @@ export default function Track() {
           </mesh>
         );
       })}
+
+      {/* Obstacles — chicane pillars + walls forcing players to weave */}
+      {OBSTACLES.map((o, i) => (
+        <mesh
+          key={`o-${i}`}
+          position={[o.cx, o.height / 2, o.cz]}
+          castShadow
+          receiveShadow
+        >
+          <boxGeometry args={[o.hw * 2, o.height, o.hd * 2]} />
+          <meshStandardMaterial color="#FBBF24" emissive="#A16207" emissiveIntensity={0.18} />
+        </mesh>
+      ))}
     </group>
   );
 }

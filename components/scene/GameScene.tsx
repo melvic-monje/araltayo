@@ -11,6 +11,7 @@ import {
   HARPOON_PULL_BACK,
   HARPOON_RANGE,
   MAX_SPEED,
+  OBSTACLES,
   PLAYER_RADIUS,
   POSITION_BROADCAST_HZ,
   PROJECTILE_HIT_RADIUS,
@@ -274,6 +275,25 @@ function World({
     const halfW = TRACK_WIDTH / 2 - PLAYER_RADIUS;
     if (z < -halfW) { z = -halfW; vz = 0; }
     if (z > halfW) { z = halfW; vz = 0; }
+
+    // ── Obstacle collision (AABB push-out) ─────────────────────────
+    for (const o of OBSTACLES) {
+      const dx = x - o.cx;
+      const dz = z - o.cz;
+      const limX = o.hw + PLAYER_RADIUS;
+      const limZ = o.hd + PLAYER_RADIUS;
+      if (Math.abs(dx) < limX && Math.abs(dz) < limZ) {
+        const overlapX = limX - Math.abs(dx);
+        const overlapZ = limZ - Math.abs(dz);
+        if (overlapX < overlapZ) {
+          x = o.cx + Math.sign(dx || 1) * limX;
+          vx = 0;
+        } else {
+          z = o.cz + Math.sign(dz || 1) * limZ;
+          vz = 0;
+        }
+      }
+    }
 
     if (!finishedRef.current && x >= TRACK_LENGTH && self.finishedMs == null) {
       finishedRef.current = true;
