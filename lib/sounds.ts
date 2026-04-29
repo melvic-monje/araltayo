@@ -52,7 +52,7 @@ async function loadBuffer(url: string): Promise<AudioBuffer | null> {
   }
 }
 
-const MASTER_VOLUME = 0.5;
+const MASTER_VOLUME = 0.25;
 
 export async function playSfx(name: keyof typeof SFX, volume = 0.6) {
   const ctx = getCtx();
