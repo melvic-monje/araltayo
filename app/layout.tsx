@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400", "600", "700", "800"], variable: "--font-body" });
 const gameria = localFont({
   src: "./fonts/GAMERIA.ttf",
   variable: "--font-display",
+  display: "swap",
+});
+const goodGame = localFont({
+  src: "./fonts/Good-Game.ttf",
+  variable: "--font-body",
   display: "swap",
 });
 
@@ -21,8 +24,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${gameria.variable}`}>
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={`${goodGame.variable} ${gameria.variable}`}>
+      <body className={goodGame.className}>{children}</body>
     </html>
   );
 }

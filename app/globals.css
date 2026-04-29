@@ -17,7 +17,7 @@
 html, body {
   background: radial-gradient(ellipse at top, #1B2244 0%, #0B0E1A 60%);
   color: var(--color-text);
-  font-family: var(--font-display);
+  font-family: var(--font-body), 'Good Game', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
