@@ -414,20 +414,23 @@ export default function RoomClient({ code }: { code: string }) {
             </div>
           </div>
 
-          {/* HUD with skill cooldown buttons (works in lobby for practice) */}
+          {/* HUD with skill cooldown buttons (works in lobby for practice).
+              Top bar hidden so it doesn't overlap the room code panel. */}
           <HUD
             cooldowns={cooldowns}
             distance={meStatus.distance}
             place={meStatus.place}
             totalPlayers={players.length}
+            hideTopBar
             onTouchForward={setForward}
             onTouchTurn={setTurn}
             onTouchThrow={triggerThrow}
             onTouchHarpoon={triggerHarpoon}
           />
 
-          {/* Bottom controls — Ready + Start */}
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 pointer-events-none">
+          {/* Lobby controls — Ready + Start. Sit above the skill HUD so the
+              throw/harpoon buttons don't overlap on desktop. */}
+          <div className="absolute bottom-32 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 pointer-events-none">
             <div className="flex items-center gap-3 pointer-events-auto">
               <button
                 className={me?.is_ready ? "btn-ghost" : "btn-neon"}

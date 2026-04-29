@@ -8,6 +8,7 @@ export default function HUD({
   distance,
   place,
   totalPlayers,
+  hideTopBar = false,
   onTouchForward,
   onTouchTurn,
   onTouchThrow,
@@ -17,6 +18,7 @@ export default function HUD({
   distance: number;
   place: number;
   totalPlayers: number;
+  hideTopBar?: boolean;
   onTouchForward: (v: number) => void;
   onTouchTurn: (v: number) => void;
   onTouchThrow: () => void;
@@ -32,22 +34,25 @@ export default function HUD({
 
   return (
     <>
-      {/* Top status bar */}
-      <div className="absolute top-0 left-0 right-0 p-3 flex items-center justify-between pointer-events-none z-10">
-        <div className="bg-black/40 backdrop-blur rounded-xl px-3 py-2 text-white">
-          <div className="text-xs text-slate-300 uppercase tracking-widest">Place</div>
-          <div className="text-2xl font-extrabold font-mono">
-            {place}<span className="text-slate-400 text-base">/{totalPlayers}</span>
+      {/* Top status bar (hidden in lobby — the room code + player list own
+          the top of the screen there) */}
+      {!hideTopBar && (
+        <div className="absolute top-0 left-0 right-0 p-3 flex items-center justify-between pointer-events-none z-10">
+          <div className="bg-black/40 backdrop-blur rounded-xl px-3 py-2 text-white">
+            <div className="text-xs text-slate-300 uppercase tracking-widest">Place</div>
+            <div className="text-2xl font-extrabold font-mono">
+              {place}<span className="text-slate-400 text-base">/{totalPlayers}</span>
+            </div>
+          </div>
+          <div className="bg-black/40 backdrop-blur rounded-xl px-4 py-2 text-white text-right">
+            <div className="text-xs text-slate-300 uppercase tracking-widest mb-1">Progress</div>
+            <div className="w-44 h-2.5 rounded-full bg-white/10 overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-150"
+                style={{ width: `${progress}%`, background: "linear-gradient(90deg, #22D3EE, #F472B6)" }} />
+            </div>
           </div>
         </div>
-        <div className="bg-black/40 backdrop-blur rounded-xl px-4 py-2 text-white text-right">
-          <div className="text-xs text-slate-300 uppercase tracking-widest mb-1">Progress</div>
-          <div className="w-44 h-2.5 rounded-full bg-white/10 overflow-hidden">
-            <div className="h-full rounded-full transition-all duration-150"
-              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #22D3EE, #F472B6)" }} />
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* Skills bar — bottom center on desktop, mid-right on touch */}
       <div className={`absolute z-10 pointer-events-none ${isTouch ? "bottom-32 right-4" : "bottom-6 left-1/2 -translate-x-1/2"}`}>
