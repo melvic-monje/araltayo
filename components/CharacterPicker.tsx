@@ -1,8 +1,8 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, Center } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { CHARACTER_IDS, characterModelPath, type CharacterId } from "@/lib/characters";
 
@@ -31,19 +31,18 @@ export default function CharacterPicker({
       <div
         className="rounded-2xl overflow-hidden border-2"
         style={{
-          width: 140,
-          height: 180,
+          width: 160,
+          height: 200,
           borderColor: "rgba(34,211,238,0.6)",
           background: "rgba(255,255,255,0.04)",
         }}
       >
-        <Canvas camera={{ position: [0, 1.4, 3.2], fov: 35 }} dpr={[1, 1.5]}>
+        <Canvas dpr={[1, 1.5]}>
+          <PreviewCamera />
           <ambientLight intensity={0.7} />
-          <directionalLight position={[3, 5, 2]} intensity={0.9} />
+          <directionalLight position={[3, 5, 2]} intensity={1.0} />
           <Suspense fallback={null}>
-            <Center disableY>
-              <CharacterPreview id={value} />
-            </Center>
+            <CharacterPreview id={value} />
           </Suspense>
         </Canvas>
       </div>
@@ -59,16 +58,27 @@ export default function CharacterPicker({
   );
 }
 
+function PreviewCamera() {
+  const { camera } = useThree();
+  useEffect(() => {
+    camera.position.set(2.6, 1.8, 3.2);
+    camera.lookAt(0, 1.0, 0);
+    if (camera instanceof THREE.PerspectiveCamera) {
+      camera.fov = 35;
+      camera.updateProjectionMatrix();
+    }
+  }, [camera]);
+  return null;
+}
+
 function CharacterPreview({ id }: { id: string }) {
   const { scene } = useGLTF(characterModelPath(id));
   const ref = useRef<THREE.Object3D>(null);
   useFrame((_, dt) => {
     if (ref.current) ref.current.rotation.y += dt * 0.6;
   });
-  // Clone so multiple instances don't share state.
-  const cloned = scene.clone();
+  const cloned = scene.clone(true);
   return <primitive ref={ref} object={cloned} />;
 }
 
-// Pre-warm cache
 CHARACTER_IDS.forEach((id) => useGLTF.preload(characterModelPath(id)));

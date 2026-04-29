@@ -1,17 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { getSupabase } from "@/lib/supabase";
-
-const BUCKET = "spacebar-avatars";
-const MAX_BYTES = 1024 * 1024;
 
 export default function AvatarUpload({
-  playerId,
   initialUrl,
   onChange,
 }: {
-  playerId: string;
+  // playerId is no longer needed but kept for prop compatibility
+  playerId?: string;
   initialUrl: string | null;
   onChange: (url: string | null) => void;
 }) {
@@ -22,29 +18,19 @@ export default function AvatarUpload({
 
   async function handleFile(f: File) {
     setErr(null);
-    if (f.size > MAX_BYTES) {
-      setErr("Image must be under 1 MB.");
-      return;
-    }
     if (!f.type.startsWith("image/")) {
       setErr("Pick an image file.");
       return;
     }
     setBusy(true);
     try {
-      const downscaled = await downscale(f, 256);
-      const ext = downscaled.type === "image/webp" ? "webp" : "jpg";
-      const path = `${playerId}-${Date.now()}.${ext}`;
-      const supabase = getSupabase();
-      const { error } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, downscaled, { upsert: true, contentType: downscaled.type });
-      if (error) throw error;
-      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-      setUrl(data.publicUrl);
-      onChange(data.publicUrl);
+      // Downscale + re-encode as a data URL. Photo lives only in the
+      // players row for this room — gone when the room is reset.
+      const dataUrl = await downscaleToDataUrl(f, 256);
+      setUrl(dataUrl);
+      onChange(dataUrl);
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Upload failed");
+      setErr(e instanceof Error ? e.message : "Could not load that image.");
     } finally {
       setBusy(false);
     }
@@ -66,7 +52,7 @@ export default function AvatarUpload({
           <span className="text-3xl">📷</span>
         )}
         {busy && (
-          <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-xs">Uploading…</span>
+          <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-xs">Loading…</span>
         )}
       </button>
       <input
@@ -94,22 +80,23 @@ export default function AvatarUpload({
   );
 }
 
-async function downscale(file: File, maxDim: number): Promise<Blob> {
-  const bitmap = await createImageBitmap(file);
+async function downscaleToDataUrl(file: File, maxDim: number): Promise<string> {
+  // imageOrientation: "from-image" applies EXIF rotation so iPhone photos
+  // don't end up sideways.
+  const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" } as ImageBitmapOptions);
   const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
-  const w = Math.round(bitmap.width * scale);
-  const h = Math.round(bitmap.height * scale);
+  const w = Math.max(1, Math.round(bitmap.width * scale));
+  const h = Math.max(1, Math.round(bitmap.height * scale));
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
   const ctx = canvas.getContext("2d")!;
   ctx.drawImage(bitmap, 0, 0, w, h);
   bitmap.close?.();
-  return await new Promise<Blob>((resolve, reject) =>
-    canvas.toBlob(
-      (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-      "image/webp",
-      0.85
-    )
-  );
+  let dataUrl = canvas.toDataURL("image/webp", 0.82);
+  if (!dataUrl.startsWith("data:image/webp")) {
+    // Older Safari falls back to PNG — explicitly try JPEG which is smaller.
+    dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+  }
+  return dataUrl;
 }
