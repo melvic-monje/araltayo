@@ -1,8 +1,8 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
-import { Suspense, useEffect, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Bounds, useGLTF } from "@react-three/drei";
+import { Suspense, useRef } from "react";
 import * as THREE from "three";
 import { CHARACTER_IDS, characterModelPath, type CharacterId } from "@/lib/characters";
 
@@ -37,12 +37,13 @@ export default function CharacterPicker({
           background: "rgba(255,255,255,0.04)",
         }}
       >
-        <Canvas dpr={[1, 1.5]}>
-          <PreviewCamera />
+        <Canvas dpr={[1, 1.5]} camera={{ position: [3, 2, 4], fov: 35 }}>
           <ambientLight intensity={0.7} />
           <directionalLight position={[3, 5, 2]} intensity={1.0} />
           <Suspense fallback={null}>
-            <CharacterPreview id={value} />
+            <Bounds fit clip observe margin={1.4}>
+              <CharacterPreview id={value} />
+            </Bounds>
           </Suspense>
         </Canvas>
       </div>
@@ -56,19 +57,6 @@ export default function CharacterPicker({
       </button>
     </div>
   );
-}
-
-function PreviewCamera() {
-  const { camera } = useThree();
-  useEffect(() => {
-    camera.position.set(2.6, 1.8, 3.2);
-    camera.lookAt(0, 1.0, 0);
-    if (camera instanceof THREE.PerspectiveCamera) {
-      camera.fov = 35;
-      camera.updateProjectionMatrix();
-    }
-  }, [camera]);
-  return null;
 }
 
 function CharacterPreview({ id }: { id: string }) {
