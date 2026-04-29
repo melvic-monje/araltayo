@@ -150,14 +150,21 @@ export default function RoomClient({ code }: { code: string }) {
       .from("players")
       .update({ finish_ms: null, finished_at: null, rank: null, is_ready: false })
       .eq("room_code", code);
-    await supabase
+    const { data, error: updErr } = await supabase
       .from("rooms")
       .update({
         status: "racing",
         race_starts_at: startsAt.toISOString(),
         race_ends_at: endsAt.toISOString(),
       })
-      .eq("code", code);
+      .eq("code", code)
+      .select()
+      .maybeSingle();
+    if (updErr) {
+      console.error("[race] startRace failed", updErr);
+      return;
+    }
+    if (data) setRoom(data as Room);
   }
 
   async function playAgain() {
@@ -167,10 +174,13 @@ export default function RoomClient({ code }: { code: string }) {
       .from("players")
       .update({ finish_ms: null, finished_at: null, rank: null, is_ready: false })
       .eq("room_code", code);
-    await supabase
+    const { data } = await supabase
       .from("rooms")
       .update({ status: "lobby", race_starts_at: null, race_ends_at: null })
-      .eq("code", code);
+      .eq("code", code)
+      .select()
+      .maybeSingle();
+    if (data) setRoom(data as Room);
     finishRecordedRef.current = false;
     setPhase("countdown");
   }
