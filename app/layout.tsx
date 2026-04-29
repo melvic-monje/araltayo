@@ -7,8 +7,8 @@ const gameria = localFont({
   variable: "--font-display",
   display: "swap",
 });
-const goodGame = localFont({
-  src: "./fonts/Good-Game.ttf",
+const shifaRame = localFont({
+  src: "./fonts/Shifa-Rame.ttf",
   variable: "--font-body",
   display: "swap",
 });
@@ -24,8 +24,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${goodGame.variable} ${gameria.variable}`}>
-      <body className={goodGame.className}>{children}</body>
+    <html lang="en" className={`${shifaRame.variable} ${gameria.variable}`}>
+      <body className={shifaRame.className}>{children}</body>
     </html>
   );
 }
