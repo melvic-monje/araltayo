@@ -62,8 +62,13 @@ export function useRoom(code: string | null) {
       )
       .subscribe();
 
+    // Polling fallback — postgres_changes can silently miss rows. Re-fetch
+    // every 3s so the lobby stays in sync even if a realtime event was lost.
+    const pollId = setInterval(load, 3000);
+
     return () => {
       mounted = false;
+      clearInterval(pollId);
       supabase.removeChannel(channel);
     };
   }, [code]);

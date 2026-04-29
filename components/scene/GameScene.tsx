@@ -39,7 +39,7 @@ export type GameSceneProps = {
   selfId: string;
   startsAt: number;
   endsAt: number;
-  initialPlayers: { id: string; name: string; avatarUrl: string | null }[];
+  initialPlayers: { id: string; name: string; avatarUrl: string | null; characterId: string | null }[];
   inputRef: React.MutableRefObject<PlayerInput>;
   skillTriggerRef: React.MutableRefObject<{ throw?: number; harpoon?: number }>;
   onCooldown: (s: { throw: number; harpoon: number }) => void;
@@ -117,6 +117,18 @@ function World({
     return m;
   }, [initialPlayers]);
 
+  const characterMap = useMemo<Record<string, string | null>>(() => {
+    const m: Record<string, string | null> = {};
+    initialPlayers.forEach((p) => { m[p.id] = p.characterId; });
+    return m;
+  }, [initialPlayers]);
+
+  const nameMap = useMemo<Record<string, string>>(() => {
+    const m: Record<string, string> = {};
+    initialPlayers.forEach((p) => { m[p.id] = p.name; });
+    return m;
+  }, [initialPlayers]);
+
   const startZ = useMemo(() => {
     const map: Record<string, number> = {};
     const n = initialPlayers.length;
@@ -157,8 +169,22 @@ function World({
   const handlePos = (p: RemotePos) => {
     setPlayers((prev) => {
       const cur = prev[p.id];
-      if (!cur) return prev; // unknown player; ignore
-      return { ...prev, [p.id]: { ...cur, ...p } };
+      if (cur) return { ...prev, [p.id]: { ...cur, ...p } };
+      // Late-arriving player — register them with what we know.
+      return {
+        ...prev,
+        [p.id]: {
+          id: p.id,
+          name: nameMap[p.id] ?? "Player",
+          x: p.x,
+          z: p.z,
+          rotY: p.rotY,
+          vx: p.vx,
+          vz: p.vz,
+          stunUntil: p.stunUntil,
+          finishedMs: p.finishedMs,
+        },
+      };
     });
   };
 
@@ -412,6 +438,7 @@ function World({
           key={p.id}
           id={p.id}
           name={p.name}
+          characterId={characterMap[p.id] ?? null}
           x={p.x}
           z={p.z}
           rotY={p.rotY}

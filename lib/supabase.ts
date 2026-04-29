@@ -33,6 +33,8 @@ export type Player = {
   press_count: number;
   joined_at: string;
   avatar_url?: string | null;
+  character_id?: string | null;
+  is_ready?: boolean;
   finish_ms?: number | null;
   finished_at?: string | null;
   rank?: number | null;

@@ -14,6 +14,8 @@ import Leaderboard from "@/components/Leaderboard";
 import Confetti from "@/components/Confetti";
 import AvatarUpload from "@/components/AvatarUpload";
 import OrientationGate from "@/components/OrientationGate";
+import CharacterPicker from "@/components/CharacterPicker";
+import { DEFAULT_CHARACTER, type CharacterId, isCharacterId } from "@/lib/characters";
 
 const RACE_DURATION_SEC = 90;
 const COUNTDOWN_LEAD_SEC = 4;
@@ -27,10 +29,12 @@ export default function RoomClient({ code }: { code: string }) {
 
   const [name, setName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [characterId, setCharacterId] = useState<CharacterId>(DEFAULT_CHARACTER);
   const [joining, setJoining] = useState(false);
   const [joinError, setJoinError] = useState<string | null>(null);
   const [confettiTick, setConfettiTick] = useState(0);
   const [phase, setPhase] = useState<"countdown" | "racing" | "post">("countdown");
+  const [togglingReady, setTogglingReady] = useState(false);
 
   const [cooldowns, setCooldowns] = useState({ throw: 0, harpoon: 0 });
   const [meStatus, setMeStatus] = useState({ distance: 0, place: 1 });
@@ -68,6 +72,8 @@ export default function RoomClient({ code }: { code: string }) {
       name: name.trim().slice(0, 20),
       press_count: 0,
       avatar_url: avatarUrl,
+      character_id: characterId,
+      is_ready: false,
       finish_ms: null,
       finished_at: null,
     };
@@ -90,6 +96,47 @@ export default function RoomClient({ code }: { code: string }) {
     setJoining(false);
   }
 
+  async function tryFullscreenLandscape() {
+    if (typeof window === "undefined") return;
+    const isCoarse = matchMedia("(pointer: coarse)").matches;
+    if (!isCoarse) return;
+    try {
+      if (document.fullscreenElement == null) {
+        await document.documentElement.requestFullscreen?.();
+      }
+    } catch {
+      /* iOS Safari rejects on non-video elements; ignore. */
+    }
+    try {
+      type SO = ScreenOrientation & { lock?: (o: string) => Promise<void> };
+      await (screen.orientation as SO).lock?.("landscape");
+    } catch {
+      /* OS may refuse without fullscreen. */
+    }
+  }
+
+  async function toggleReady() {
+    if (!playerId || !me || togglingReady) return;
+    setTogglingReady(true);
+    const next = !me.is_ready;
+    if (next) {
+      // The Ready click is a user gesture — try to enter fullscreen + lock
+      // landscape now so the race screen renders correctly.
+      await tryFullscreenLandscape();
+    }
+    const supabase = getSupabase();
+    const { data } = await supabase
+      .from("players")
+      .update({ is_ready: next })
+      .eq("id", playerId)
+      .select()
+      .single();
+    if (data) {
+      setPlayers((prev) => prev.map((p) => (p.id === playerId ? (data as Player) : p)));
+    }
+    setTogglingReady(false);
+  }
+
   async function startRace() {
     if (!room || !isHost) return;
     const supabase = getSupabase();
@@ -97,7 +144,7 @@ export default function RoomClient({ code }: { code: string }) {
     const endsAt = new Date(startsAt.getTime() + RACE_DURATION_SEC * 1000);
     await supabase
       .from("players")
-      .update({ finish_ms: null, finished_at: null, rank: null })
+      .update({ finish_ms: null, finished_at: null, rank: null, is_ready: false })
       .eq("room_code", code);
     await supabase
       .from("rooms")
@@ -114,7 +161,7 @@ export default function RoomClient({ code }: { code: string }) {
     const supabase = getSupabase();
     await supabase
       .from("players")
-      .update({ finish_ms: null, finished_at: null, rank: null })
+      .update({ finish_ms: null, finished_at: null, rank: null, is_ready: false })
       .eq("room_code", code);
     await supabase
       .from("rooms")
@@ -252,8 +299,9 @@ export default function RoomClient({ code }: { code: string }) {
     return (
       <Center>
         <h1 className="text-4xl font-extrabold mb-2">Room <span className="neon-text font-mono">{code}</span></h1>
-        <p className="text-slate-400 mb-6">Pick a name and (optionally) a picture to join.</p>
-        <form onSubmit={joinAsPlayer} className="flex flex-col gap-4 max-w-xs mx-auto items-center">
+        <p className="text-slate-400 mb-6">Pick your character, name, and (optional) picture.</p>
+        <form onSubmit={joinAsPlayer} className="flex flex-col gap-5 max-w-md mx-auto items-center">
+          <CharacterPicker value={characterId} onChange={setCharacterId} />
           {playerId && (
             <AvatarUpload
               playerId={playerId}
@@ -270,7 +318,7 @@ export default function RoomClient({ code }: { code: string }) {
             onChange={(e) => setName(e.target.value)}
           />
           <button className="btn-neon w-full" type="submit" disabled={joining || !playerId}>
-            {joining ? "Joining…" : "Join Race"}
+            {joining ? "Joining…" : "Join Lobby"}
           </button>
           {joinError && <p className="text-pink-400 text-sm">{joinError}</p>}
         </form>
@@ -301,15 +349,46 @@ export default function RoomClient({ code }: { code: string }) {
 
           <PlayerGrid players={players} selfId={playerId} />
 
-          <div className="mt-10 text-center">
-            {isHost ? (
-              <button className="btn-neon text-xl" onClick={startRace} disabled={players.length < 1}>
-                Start Race
-              </button>
-            ) : (
-              <p className="text-slate-400 italic">Waiting for host to start…</p>
-            )}
-          </div>
+          {(() => {
+            const readyCount = players.filter((p) => p.is_ready).length;
+            const allReady = players.length > 0 && readyCount === players.length;
+            return (
+              <div className="mt-10 text-center space-y-4">
+                <div className="text-sm text-slate-400">
+                  <span className="font-mono font-bold" style={{ color: allReady ? "#22D3EE" : "#F472B6" }}>
+                    {readyCount}/{players.length}
+                  </span> ready
+                </div>
+                <button
+                  className={me?.is_ready ? "btn-ghost text-lg" : "btn-neon text-lg"}
+                  onClick={toggleReady}
+                  disabled={togglingReady}
+                >
+                  {me?.is_ready ? "Unready" : "I'm Ready"}
+                </button>
+                {isHost ? (
+                  <div>
+                    <button
+                      className="btn-neon text-xl"
+                      onClick={startRace}
+                      disabled={!allReady}
+                    >
+                      Start Race
+                    </button>
+                    {!allReady && (
+                      <p className="text-xs text-slate-500 mt-2">
+                        Waiting for everyone to ready up…
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-slate-400 italic text-sm">
+                    {allReady ? "Waiting for host to start…" : "Tap I'm Ready when you're set."}
+                  </p>
+                )}
+              </div>
+            );
+          })()}
 
           <p className="text-center text-xs text-slate-500 mt-8 leading-relaxed">
             Controls: Arrow keys to move/turn · U throw (stuns target) · I harpoon (yanks target back) · 3 s cooldown each. Mobile: on-screen joystick + buttons.
@@ -327,7 +406,8 @@ export default function RoomClient({ code }: { code: string }) {
     const initialPlayers = players.map((p) => ({
       id: p.id,
       name: p.name,
-      avatarUrl: (p as Player & { avatar_url?: string | null }).avatar_url ?? null,
+      avatarUrl: p.avatar_url ?? null,
+      characterId: isCharacterId(p.character_id) ? p.character_id : null,
     }));
 
     return (
@@ -433,17 +513,25 @@ function PlayerGrid({ players, selfId }: { players: Player[]; selfId: string | n
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
       {players.map((p) => {
         const avatar = avatarFor(p.id);
-        const url = (p as Player & { avatar_url?: string | null }).avatar_url;
+        const url = p.avatar_url;
+        const ready = p.is_ready;
         return (
           <div
             key={p.id}
-            className="rounded-2xl p-4 text-center border"
+            className="relative rounded-2xl p-4 text-center border transition-all"
             style={{
-              background: "rgba(255,255,255,0.04)",
-              borderColor: p.id === selfId ? avatar.color : "rgba(255,255,255,0.1)",
-              boxShadow: p.id === selfId ? `0 0 24px ${avatar.color}55` : "none",
+              background: ready ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.04)",
+              borderColor: ready ? "#22D3EE" : p.id === selfId ? avatar.color : "rgba(255,255,255,0.1)",
+              boxShadow: ready
+                ? "0 0 24px rgba(34,211,238,0.35)"
+                : p.id === selfId ? `0 0 24px ${avatar.color}55` : "none",
             }}
           >
+            {ready && (
+              <span className="absolute top-2 right-2 text-xs font-bold" style={{ color: "#22D3EE" }}>
+                ✓ READY
+              </span>
+            )}
             {url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={url} alt="" className="w-12 h-12 mx-auto mb-2 rounded-full object-cover" />
