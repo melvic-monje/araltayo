@@ -1,366 +1,114 @@
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { createClient } from "@/lib/supabase-server";
-import { Reveal, ScrollReveal, ScrollStagger } from "@/components/Motion";
-import ThemeToggle from "@/components/ThemeToggle";
+"use client";
 
-const HERO_IMG     = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&auto=format&fit=crop";
-const BUDDY_IMG    = "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=800&q=80&auto=format&fit=crop";
-const LIBRARY_IMG  = "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80&auto=format&fit=crop";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { getSupabase } from "@/lib/supabase";
+import { usePlayerId } from "@/lib/usePlayer";
 
-const FEATURES = [
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-      </svg>
-    ),
-    title: "Quiz Generator",
-    description: "I-paste mo lang ang notes mo — mag-ge-generate agad ng multiple-choice quiz para ma-test mo ang sarili mo.",
-    accent: "var(--accent-purple)",
-  },
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-      </svg>
-    ),
-    title: "Reviewer",
-    description: "Gawa ng structured study reviewer mula sa iyong notes — puwede pa i-print para sa buong klase.",
-    accent: "var(--accent-cyan)",
-  },
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-      </svg>
-    ),
-    title: "Flashcards",
-    description: "Mag-memorize ng terms at definitions gamit ang AI-generated flashcards — perfect for vocab, formulas, at definitions.",
-    accent: "var(--accent-green)",
-  },
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m1.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-      </svg>
-    ),
-    title: "Explainer",
-    description: "Di mo gets ang topic? Ipapaliwanag ng AI sa simpleng paraan — may Filipino context pa para mas madaling maintindihan.",
-    accent: "var(--accent-yellow)",
-  },
-];
+function generateCode(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 4; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
 
-const STEPS = [
-  { number: "01", title: "Libre lang mag-register", description: "Walang credit card. Mag-sign up gamit ang email mo in under a minute. Get 10 free AI requests daily." },
-  { number: "02", title: "Piliin ang tool mo", description: "Quiz, Reviewer, Flashcards, Explainer, o Study Buddy — ikaw ang bahala kung saan ka magsisimula." },
-  { number: "03", title: "I-paste ang notes mo", description: "Kahit galing sa libro, sa board, o sa sariling notes mo — i-paste lang at hayaan ang AI." },
-  { number: "04", title: "Mag-aral with powerful AI Tools", description: "10 free AI requests per day. Kailangan ng more? Get AralPro for only ₱149/month." },
-];
+export default function Landing() {
+  const router = useRouter();
+  const playerId = usePlayerId();
+  const [mode, setMode] = useState<"home" | "join">("home");
+  const [joinCode, setJoinCode] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-export default async function LandingPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (user) redirect("/dashboard");
+  async function createRoom() {
+    if (!playerId) return;
+    setCreating(true);
+    setError(null);
+    const supabase = getSupabase();
+
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const code = generateCode();
+      const { error: insertErr } = await supabase
+        .from("rooms")
+        .insert({ code, host_id: playerId, status: "lobby" });
+      if (!insertErr) {
+        router.push(`/room/${code}?host=1`);
+        return;
+      }
+      if (!insertErr.message.toLowerCase().includes("duplicate")) {
+        setError(insertErr.message);
+        setCreating(false);
+        return;
+      }
+    }
+    setError("Could not allocate a unique room code, please try again.");
+    setCreating(false);
+  }
+
+  function joinRoom(e: React.FormEvent) {
+    e.preventDefault();
+    const code = joinCode.trim().toUpperCase();
+    if (code.length !== 4) {
+      setError("Room codes are 4 characters.");
+      return;
+    }
+    router.push(`/room/${code}`);
+  }
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--bg-page)" }}>
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="max-w-md w-full text-center">
+        <h1 className="text-5xl sm:text-6xl font-extrabold mb-3 tracking-tight">
+          <span className="neon-text">Spacebar Race</span>
+        </h1>
+        <p className="text-slate-400 mb-10">
+          Mash the spacebar. Beat your friends. 15 seconds to glory.
+        </p>
 
-      {/* Nav */}
-      <header className="sticky top-0 z-20"
-        style={{ background: "var(--bg-navbar)", borderBottom: "1px solid var(--border-subtle)", backdropFilter: "blur(20px)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-          <span className="text-xl font-semibold gradient-text" style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em" }}>
-            AralTayo
-          </span>
-          <div className="flex items-center gap-1 sm:gap-3">
-            <Link href="/pricing"
-              className="hidden sm:inline text-sm font-medium px-4 py-1.5 rounded-full transition-all"
-              style={{ color: "var(--text-muted)" }}>
-              Pricing
-            </Link>
-            <ThemeToggle />
-            <Link href="/login"
-              className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 rounded-full transition-all"
-              style={{ color: "var(--text-muted)" }}>
-              Log in
-            </Link>
-            <Link href="/signup" className="btn-glow text-xs sm:text-sm px-4 sm:px-5 py-2">
-              Magsimula
-            </Link>
+        {mode === "home" && (
+          <div className="flex flex-col gap-3">
+            <button
+              className="btn-neon text-lg py-4"
+              disabled={!playerId || creating}
+              onClick={createRoom}
+            >
+              {creating ? "Creating..." : "Create Room"}
+            </button>
+            <button className="btn-ghost text-lg py-4" onClick={() => setMode("join")}>
+              Join Room
+            </button>
           </div>
-        </div>
-      </header>
+        )}
 
-      {/* Hero — split layout */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <div className="absolute top-[-80px] left-0 w-[600px] h-[500px] rounded-full opacity-25"
-            style={{ background: "radial-gradient(ellipse, var(--accent-purple) 0%, transparent 70%)" }} />
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full opacity-15"
-            style={{ background: "radial-gradient(ellipse, var(--accent-red-strong) 0%, transparent 70%)" }} />
-        </div>
+        {mode === "join" && (
+          <form onSubmit={joinRoom} className="flex flex-col gap-3">
+            <input
+              autoFocus
+              className="code-input"
+              maxLength={4}
+              placeholder="ABCD"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+            />
+            <button className="btn-neon text-lg py-4" type="submit">
+              Join
+            </button>
+            <button
+              type="button"
+              className="text-sm text-slate-400 hover:text-slate-200 transition-colors mt-2"
+              onClick={() => {
+                setMode("home");
+                setError(null);
+                setJoinCode("");
+              }}
+            >
+              ← Back
+            </button>
+          </form>
+        )}
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-28 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-
-          {/* Text */}
-          <div className="flex-1 text-center lg:text-left">
-            <Reveal delay={0.05}>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-7"
-                style={{ background: "var(--accent-purple-bg)", border: "1px solid var(--accent-purple-border)", color: "var(--accent-purple)" }}>
-                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-                Libre magsimula — para sa lahat ng Filipino students
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.2}>
-              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-semibold leading-[1.05] mb-6"
-                style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                Mag-aral with{" "}
-                <span className="gradient-text italic">focus</span>
-                <br />and joy.
-              </h1>
-            </Reveal>
-
-            <Reveal delay={0.35}>
-              <p className="text-lg max-w-xl mx-auto lg:mx-0 mb-9 leading-relaxed"
-                style={{ color: "var(--text-body)" }}>
-                Mas madali na mag-aral dahil sa AralTayo — ang AI-powered study platform na
-                ginawa para sa mga Filipino students. Gumawa ng quiz, reviewer, at flashcards
-                mula sa notes mo in seconds. Libre magsimula — pero kung gusto mo ng unlimited, get AralPro for only ₱149/month.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.5}>
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <Link href="/signup" className="btn-glow text-base px-8 py-3.5 w-full sm:w-auto text-center">
-                  Magsimula nang libre
-                </Link>
-                <Link href="/login" className="btn-outline-glow text-sm px-8 py-3.5 w-full sm:w-auto text-center">
-                  Mag-log in
-                </Link>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.65}>
-              <p className="mt-4 text-xs" style={{ color: "var(--text-faint)" }}>
-                Libre lang mag-register. Get 10 free AI requests daily.
-              </p>
-            </Reveal>
-          </div>
-
-          {/* Hero image */}
-          <Reveal delay={0.3} y={32} duration={1.1} className="flex-1 w-full max-w-lg lg:max-w-none relative">
-            <div className="relative rounded-2xl overflow-hidden"
-              style={{ border: "1px solid var(--border-strong)", boxShadow: "var(--shadow-glow)" }}>
-              <Image
-                src={HERO_IMG}
-                alt="Filipino students studying together"
-                width={700}
-                height={480}
-                className="w-full object-cover"
-                priority
-              />
-              <div className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(232,130,107,0.1) 100%)" }} />
-            </div>
-
-            {/* Floating stat badges */}
-            <div className="absolute -bottom-4 left-0 sm:-left-4 px-4 py-2.5 rounded-2xl shadow-xl"
-              style={{ background: "var(--bg-card-solid)", border: "1px solid var(--accent-purple-border)" }}>
-              <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>AI requests per day</p>
-              <p className="text-2xl font-semibold gradient-text" style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em" }}>10</p>
-            </div>
-            <div className="absolute -top-4 right-0 sm:-right-4 px-4 py-2.5 rounded-2xl shadow-xl"
-              style={{ background: "var(--bg-card-solid)", border: "1px solid var(--accent-cyan-border)" }}>
-              <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Start for</p>
-              <p className="text-lg font-semibold" style={{ color: "var(--accent-cyan)", fontFamily: "var(--font-heading)" }}>Free</p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-        <ScrollReveal className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-purple)" }}>
-            Tools
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-            Kabado sa next exam? Relax—we&apos;ll help you <span className="gradient-text italic">pass</span>.
-          </h2>
-        </ScrollReveal>
-
-        <ScrollStagger className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {FEATURES.map((f) => (
-            <div key={f.title} className="p-6 rounded-2xl"
-              style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: `color-mix(in srgb, ${f.accent} 14%, transparent)`, color: f.accent }}>
-                {f.icon}
-              </div>
-              <h3 className="font-semibold mb-2 text-lg" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                {f.title}
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{f.description}</p>
-            </div>
-          ))}
-        </ScrollStagger>
-      </section>
-
-      {/* Study Buddy — photo left, text right */}
-      <section style={{ background: "var(--bg-surface)", borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 flex flex-col lg:flex-row items-center gap-12">
-          <ScrollReveal className="flex-1 w-full max-w-md lg:max-w-none">
-            <div className="relative rounded-2xl overflow-hidden"
-              style={{ border: "1px solid var(--border-card)", boxShadow: "var(--shadow-glow)" }}>
-              <Image
-                src={BUDDY_IMG}
-                alt="Students studying and discussing together"
-                width={640}
-                height={420}
-                className="w-full object-cover"
-              />
-              <div className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.1) 0%, transparent 60%)" }} />
-            </div>
-          </ScrollReveal>
-          <ScrollReveal className="flex-1 text-center lg:text-left">
-            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-purple)" }}>
-              Study Buddy
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-semibold mb-5" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-              Study better with a{" "}
-              <span className="gradient-text italic">buddy</span>.
-            </h2>
-            <p className="text-base leading-relaxed mb-6" style={{ color: "var(--text-body)" }}>
-              Mag-aral with friends in real-time, o gamitin ang AI Tutor para mas mabilis at mas marami kang matutunan.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              {["Real-time study rooms", "AI Tutor na may Filipino context"].map((b) => (
-                <span key={b} className="text-xs font-semibold px-3 py-1.5 rounded-full"
-                  style={{ background: "var(--accent-purple-bg)", color: "var(--accent-purple)", border: "1px solid var(--accent-purple-border)" }}>
-                  {b}
-                </span>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* How it works — with photo */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-        <ScrollReveal className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--accent-cyan)" }}>
-            How It Works
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-            In 4 Steps, Ready ka na.
-          </h2>
-        </ScrollReveal>
-
-        <div className="flex flex-col lg:flex-row items-start gap-12">
-          <ScrollStagger className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {STEPS.map((step) => (
-              <div key={step.number}>
-                <div className="text-5xl font-semibold mb-2 leading-none"
-                  style={{ fontFamily: "var(--font-heading)", color: "var(--accent-purple-bg-strong)", letterSpacing: "-0.03em" }}>
-                  {step.number}
-                </div>
-                <h3 className="font-semibold mb-1.5 text-lg" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                  {step.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
-                  {step.description}
-                </p>
-              </div>
-            ))}
-          </ScrollStagger>
-
-          <ScrollReveal className="flex-1 w-full max-w-md lg:max-w-none">
-            <div className="rounded-2xl overflow-hidden"
-              style={{ border: "1px solid var(--accent-cyan-border)", boxShadow: "0 16px 48px rgba(95,178,168,0.14)" }}>
-              <Image
-                src={LIBRARY_IMG}
-                alt="Students studying with laptops"
-                width={640}
-                height={420}
-                className="w-full object-cover"
-              />
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* Safety note */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20">
-        <ScrollReveal>
-          <div className="rounded-2xl p-8 sm:p-10"
-            style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-            <div className="flex flex-col sm:flex-row items-start gap-5">
-              <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center"
-                style={{ background: "var(--accent-green-bg)", color: "var(--accent-green)" }}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2"
-                  style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                  Ligtas para sa mga kabataan
-                </h3>
-                <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-body)" }}>
-                  AralTayo is designed for all ages. Para sa mga students, sineseryoso namin ang inyong
-                  privacy at kaligtasan — ang inyong personal na impormasyon ay protektado at hindi
-                  ibinabahagi sa kahit sino.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {["Privacy-first", "Safe for all ages", "Libre magsimula", "10 free requests/day"].map((b) => (
-                    <span key={b} className="text-xs font-semibold px-3 py-1 rounded-full"
-                      style={{ background: "var(--accent-green-bg)", color: "var(--accent-green)", border: "1px solid var(--accent-green-border)" }}>
-                      {b}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* CTA */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-24 text-center">
-        <ScrollReveal>
-          <h2 className="text-3xl sm:text-5xl font-semibold mb-5"
-            style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-            Ready ka na bang <span className="gradient-text italic">mag-aral</span>?
-          </h2>
-          <p className="text-base sm:text-lg mb-8 max-w-xl mx-auto" style={{ color: "var(--text-body)" }}>
-            Join our growing community ng students sa buong Pilipinas na gumagamit ng AralTayo sa pag-aaral nila.
-          </p>
-          <Link href="/signup" className="btn-glow text-base px-10 py-4 inline-block">
-            Magsimula nang libre
-          </Link>
-        </ScrollReveal>
-      </section>
-
-      {/* Footer */}
-      <footer style={{ borderTop: "1px solid var(--border-subtle)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-lg font-semibold gradient-text" style={{ fontFamily: "var(--font-heading)", letterSpacing: "-0.02em" }}>
-            AralTayo
-          </span>
-          <p className="text-xs text-center" style={{ color: "var(--text-faint)" }}>
-            AI study platform para sa mga Filipino students. araltayo.ph
-          </p>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-xs" style={{ color: "var(--text-faint)" }}>Log in</Link>
-            <Link href="/signup" className="text-xs" style={{ color: "var(--text-faint)" }}>Sign up</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+        {error && <p className="text-pink-400 text-sm mt-4">{error}</p>}
+      </div>
+    </main>
   );
 }

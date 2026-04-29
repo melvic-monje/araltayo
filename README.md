@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Spacebar Race
 
-## Getting Started
+Real-time multiplayer party game. Host shares the leaderboard on Zoom; everyone joins from their own device with a 4-character room code and mashes spacebar for 15 seconds.
 
-First, run the development server:
+## Stack
+
+- Next.js 15 (App Router) + TypeScript + Tailwind CSS v4
+- Supabase (Postgres + Realtime)
+- `canvas-confetti` for the winner moment
+- Web Audio API for countdown beeps + winner fanfare (no audio files)
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Open the SQL editor and run [`supabase/schema.sql`](./supabase/schema.sql)
+3. Copy `.env.local.example` to `.env.local` and fill in:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+4. `npm run dev` → http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy to Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Push this folder to a GitHub repo
+2. Import the repo in Vercel
+3. Add the same two env vars in **Project Settings → Environment Variables**
+4. Deploy
 
-## Learn More
+## How it works
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Spacebar batching**: keypresses update local React state instantly; a 200 ms `setInterval` flushes the latest count to Supabase. Other clients animate the progress bar smoothly between values.
+- **Synchronized countdown**: the host writes `race_starts_at = now() + 4s` and `race_ends_at = race_starts_at + 15s`. Every client runs its own ticker against `Date.now()`, so there's no per-client drift even if someone joins mid-countdown.
+- **Player identity**: a UUID is generated on first load and stored in `localStorage` so refreshes don't kick the player out. Whoever creates the room is the host.
+- **Anti-cheat**: a `CHECK (press_count <= 600)` constraint at the database layer caps any single-player count at 40 presses/sec × 15 s. RLS is open for the anon key — fine for casual play, tighten if you reuse the project.

@@ -1,44 +1,39 @@
-import { createServerClient } from "@supabase/ssr";
-import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+"use client";
 
-export function createBrowserClient() {
-  return createSupabaseBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+let _client: SupabaseClient | null = null;
+
+export function getSupabase(): SupabaseClient {
+  if (_client) return _client;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) {
+    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  }
+  _client = createClient(url, key, {
+    realtime: { params: { eventsPerSecond: 20 } },
+  });
+  return _client;
 }
 
-export async function createClient() {
-  const cookieStore = await cookies();
+export type Room = {
+  code: string;
+  host_id: string;
+  status: "lobby" | "racing" | "finished";
+  race_starts_at: string | null;
+  race_ends_at: string | null;
+  created_at: string;
+};
 
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch {
-            // Server component — cookies can't be set in RSC, ignore
-          }
-        },
-      },
-    }
-  );
-}
-
-export function createServiceClient() {
-  const { createClient: createAdminClient } = require("@supabase/supabase-js");
-  return createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { persistSession: false } }
-  );
-}
+export type Player = {
+  id: string;
+  room_code: string;
+  name: string;
+  press_count: number;
+  joined_at: string;
+  avatar_url?: string | null;
+  finish_ms?: number | null;
+  finished_at?: string | null;
+  rank?: number | null;
+};
