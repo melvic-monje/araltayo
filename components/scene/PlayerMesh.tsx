@@ -89,11 +89,11 @@ export default function PlayerMesh({
           </Text>
         )}
         <Text
-          position={[0, -0.7, 0]}
-          fontSize={0.32}
+          position={[0, -0.95, 0]}
+          fontSize={0.6}
           color={avatar.color}
           outlineColor="#000"
-          outlineWidth={0.04}
+          outlineWidth={0.06}
           anchorX="center"
           anchorY="middle"
         >
