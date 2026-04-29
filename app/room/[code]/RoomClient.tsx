@@ -17,6 +17,7 @@ import OrientationGate from "@/components/OrientationGate";
 import CharacterPicker from "@/components/CharacterPicker";
 import { DEFAULT_CHARACTER, type CharacterId, isCharacterId } from "@/lib/characters";
 import { playMusic, stopMusic } from "@/lib/sounds";
+import { useClickSfx } from "@/lib/useClickSfx";
 
 const RACE_DURATION_SEC = 90;
 const COUNTDOWN_LEAD_SEC = 4;
@@ -263,6 +264,9 @@ export default function RoomClient({ code }: { code: string }) {
   }, [room?.status]);
 
   useEffect(() => () => { stopMusic(); }, []);
+
+  // Click sound on buttons everywhere except the race screen.
+  useClickSfx(room?.status !== "racing");
 
   async function handleFinish(finishMs: number) {
     if (!playerId || finishRecordedRef.current) return;

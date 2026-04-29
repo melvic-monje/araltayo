@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { usePlayerId } from "@/lib/usePlayer";
 import { playMusic } from "@/lib/sounds";
+import { useClickSfx } from "@/lib/useClickSfx";
 
 function generateCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -22,6 +23,7 @@ export default function Landing() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => { playMusic("menu", 0.25); }, []);
+  useClickSfx(true);
 
   async function createRoom() {
     if (!playerId) return;

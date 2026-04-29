@@ -12,11 +12,12 @@
 const SFX: Record<string, string> = {
   throw: "/audio/throw.wav",
   harpoon: "/audio/harpoon.wav",
+  click: "/audio/click.m4a",
 };
 
 const MUSIC: Record<string, string> = {
-  menu: "/audio/menu.wav",
-  racing: "/audio/racing.ogg",
+  menu: "/audio/menu.m4a",
+  racing: "/audio/racing.m4a",
 };
 
 let audioCtx: AudioContext | null = null;
