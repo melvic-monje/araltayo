@@ -8,7 +8,6 @@ export default function HUD({
   distance,
   place,
   totalPlayers,
-  endsAt,
   onTouchForward,
   onTouchTurn,
   onTouchThrow,
@@ -18,27 +17,16 @@ export default function HUD({
   distance: number;
   place: number;
   totalPlayers: number;
-  endsAt: number;
   onTouchForward: (v: number) => void;
   onTouchTurn: (v: number) => void;
   onTouchThrow: () => void;
   onTouchHarpoon: () => void;
 }) {
-  const [secondsLeft, setSecondsLeft] = useState<number>(() =>
-    Math.max(0, Math.ceil((endsAt - Date.now()) / 1000))
-  );
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
     setIsTouch(matchMedia("(pointer: coarse)").matches);
   }, []);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setSecondsLeft(Math.max(0, Math.ceil((endsAt - Date.now()) / 1000)));
-    }, 250);
-    return () => clearInterval(id);
-  }, [endsAt]);
 
   const progress = Math.min(100, (distance / TRACK_LENGTH) * 100);
 
@@ -52,15 +40,9 @@ export default function HUD({
             {place}<span className="text-slate-400 text-base">/{totalPlayers}</span>
           </div>
         </div>
-        <div className="bg-black/40 backdrop-blur rounded-xl px-3 py-2 text-white text-center">
-          <div className="text-xs text-slate-300 uppercase tracking-widest">Time</div>
-          <div className="text-2xl font-extrabold font-mono" style={{ color: secondsLeft <= 5 ? "#F472B6" : "#22D3EE" }}>
-            {secondsLeft}s
-          </div>
-        </div>
-        <div className="bg-black/40 backdrop-blur rounded-xl px-3 py-2 text-white text-right">
-          <div className="text-xs text-slate-300 uppercase tracking-widest">Progress</div>
-          <div className="w-32 h-2 rounded-full bg-white/10 mt-1 overflow-hidden">
+        <div className="bg-black/40 backdrop-blur rounded-xl px-4 py-2 text-white text-right">
+          <div className="text-xs text-slate-300 uppercase tracking-widest mb-1">Progress</div>
+          <div className="w-44 h-2.5 rounded-full bg-white/10 overflow-hidden">
             <div className="h-full rounded-full transition-all duration-150"
               style={{ width: `${progress}%`, background: "linear-gradient(90deg, #22D3EE, #F472B6)" }} />
           </div>

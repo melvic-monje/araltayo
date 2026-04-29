@@ -19,7 +19,9 @@ import { DEFAULT_CHARACTER, type CharacterId, isCharacterId } from "@/lib/charac
 import { playMusic, stopMusic } from "@/lib/sounds";
 import { useClickSfx } from "@/lib/useClickSfx";
 
-const RACE_DURATION_SEC = 90;
+// Safety only — race normally ends when someone crosses the finish line.
+// Stale rooms get auto-finished after this if no one ever finishes.
+const RACE_DURATION_SEC = 10 * 60;
 const COUNTDOWN_LEAD_SEC = 4;
 
 const GameScene = dynamic(() => import("@/components/scene/GameScene"), { ssr: false });
@@ -447,7 +449,6 @@ export default function RoomClient({ code }: { code: string }) {
             distance={meStatus.distance}
             place={meStatus.place}
             totalPlayers={players.length}
-            endsAt={endsAtMs}
             onTouchForward={setForward}
             onTouchTurn={setTurn}
             onTouchThrow={triggerThrow}

@@ -39,9 +39,9 @@ export default function Track() {
         <meshStandardMaterial color="#F472B6" />
       </mesh>
 
-      {/* Start gate */}
-      <mesh position={[0, 2, 0]}>
-        <boxGeometry args={[0.4, 4, TRACK_WIDTH]} />
+      {/* Start gate — half the wall height (walls are 2u tall) */}
+      <mesh position={[0, 0.5, 0]}>
+        <boxGeometry args={[0.4, 1, TRACK_WIDTH]} />
         <meshStandardMaterial color="#FBBF24" />
       </mesh>
 
