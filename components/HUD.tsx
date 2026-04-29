@@ -54,9 +54,10 @@ export default function HUD({
         </div>
       )}
 
-      {/* Skills bar — bottom center on desktop, mid-right on touch */}
-      <div className={`absolute z-10 pointer-events-none ${isTouch ? "bottom-32 right-4" : "bottom-6 left-1/2 -translate-x-1/2"}`}>
-        <div className={`flex gap-3 ${isTouch ? "flex-col" : "flex-row"}`}>
+      {/* Skills bar — bottom center on desktop, bottom-right (horizontal)
+          on touch so it sits opposite the joystick like a console gamepad. */}
+      <div className={`absolute z-10 pointer-events-none ${isTouch ? "bottom-6 right-4" : "bottom-6 left-1/2 -translate-x-1/2"}`}>
+        <div className="flex flex-row gap-3">
           <SkillButton
             label="Throw"
             keyHint="U"
