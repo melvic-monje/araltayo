@@ -140,8 +140,11 @@ function World({
   const startZ = useMemo(() => {
     const map: Record<string, number> = {};
     const n = initialPlayers.length;
+    // Auto-fit lanes to track width so 11 players don't spawn in walls.
+    const usable = TRACK_WIDTH - 2 * PLAYER_RADIUS - 1;
+    const spacing = n > 1 ? Math.min(2.5, usable / (n - 1)) : 0;
     initialPlayers.forEach((p, i) => {
-      const offset = (i - (n - 1) / 2) * 2.5;
+      const offset = (i - (n - 1) / 2) * spacing;
       map[p.id] = offset;
     });
     return map;

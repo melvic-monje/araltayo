@@ -3,7 +3,7 @@
 // Z is left/right, Y is up.
 
 export const TRACK_LENGTH = 300;
-export const TRACK_WIDTH = 12;
+export const TRACK_WIDTH = 18;
 export const PLAYER_RADIUS = 0.6;
 
 /**

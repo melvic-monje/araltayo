@@ -471,7 +471,38 @@ export default function RoomClient({ code }: { code: string }) {
     );
   }
 
-  // Racing — 3D scene + HUD
+  // Racing — 3D scene + HUD. Once *this* player has finished, drop them
+  // straight to the live leaderboard so they can't keep roaming the track.
+  const meFinished = me?.finish_ms != null;
+  if (room.status === "racing" && meFinished) {
+    const sortedFinished = [...players].sort((a, b) => {
+      const af = a.finish_ms;
+      const bf = b.finish_ms;
+      if (af != null && bf != null) return af - bf;
+      if (af != null) return -1;
+      if (bf != null) return 1;
+      return 0;
+    });
+    return (
+      <main className="min-h-screen p-6 sm:p-10">
+        <div className="max-w-3xl mx-auto">
+          <header className="flex items-center justify-between mb-6">
+            <span className="text-sm text-slate-400 font-mono">Room {code}</span>
+            <span className="text-xs uppercase tracking-widest text-slate-500">You finished</span>
+          </header>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-center mb-2 brand-title">
+            <span className="neon-text">Finish line!</span>
+          </h1>
+          <p className="text-center text-slate-300 mb-8">
+            Your time: <span className="font-mono font-bold" style={{ color: "#22D3EE" }}>{(me!.finish_ms! / 1000).toFixed(2)}s</span>
+            {" · "}Race still in progress…
+          </p>
+          <Leaderboard players={sortedFinished} />
+        </div>
+      </main>
+    );
+  }
+
   if (room.status === "racing" && room.race_starts_at && room.race_ends_at) {
     const startsAtMs = new Date(room.race_starts_at).getTime();
     const endsAtMs = new Date(room.race_ends_at).getTime();
