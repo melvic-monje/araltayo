@@ -13,6 +13,7 @@ const SFX: Record<string, string> = {
   throw: "/audio/throw.wav",
   harpoon: "/audio/harpoon.wav",
   click: "/audio/click.m4a",
+  malupiton: "/audio/malupiton.mp3",
 };
 
 const MUSIC: Record<string, string> = {
