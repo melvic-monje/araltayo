@@ -1,8 +1,23 @@
 "use client";
 
+import { useMemo } from "react";
+import * as THREE from "three";
 import { OBSTACLES, TRACK_LENGTH, TRACK_WIDTH } from "@/lib/game";
 
 export default function Track() {
+  const finishTex = useMemo(() => {
+    const loader = new THREE.TextureLoader();
+    const t = loader.load("/finish-line.jpg");
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  }, []);
+  // Map the photo onto the front + back faces of the arch box; sides + top/
+  // bottom keep a solid color so the photo isn't smeared along the X axis.
+  const finishMats = useMemo(() => {
+    const photo = new THREE.MeshStandardMaterial({ map: finishTex });
+    const trim = new THREE.MeshStandardMaterial({ color: "#A78BFA" });
+    return [trim, trim, trim, trim, photo, photo];
+  }, [finishTex]);
   const tileSize = 8;
   const tilesX = Math.ceil(TRACK_LENGTH / tileSize);
   const tilesZ = Math.ceil(TRACK_WIDTH / tileSize);
@@ -50,9 +65,8 @@ export default function Track() {
         <planeGeometry args={[2, TRACK_WIDTH]} />
         <meshStandardMaterial color="#A78BFA" emissive="#7C3AED" emissiveIntensity={0.5} />
       </mesh>
-      <mesh position={[TRACK_LENGTH, 4, 0]}>
+      <mesh position={[TRACK_LENGTH, 4, 0]} material={finishMats}>
         <boxGeometry args={[0.6, 8, TRACK_WIDTH + 2]} />
-        <meshStandardMaterial color="#A78BFA" />
       </mesh>
 
       {/* Distance markers every 50 units */}
