@@ -61,40 +61,6 @@ export const HARPOON_STUN_MS = 1200;  // stun + animated pull duration
 
 export const POSITION_BROADCAST_HZ = 12;
 
-// Mines — deterministic per-room, scattered between the spawn area and the finish.
-export const MINE_COUNT = 8;
-export const MINE_HIT_RADIUS = 1.0;
-export const MINE_STUN_MS = 1500;
-
-export type Mine = { id: string; x: number; z: number };
-
-function mulberry32(seed: number) {
-  return function () {
-    let t = (seed += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function hashString(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
-}
-
-export function generateMines(seed: string): Mine[] {
-  const rnd = mulberry32(hashString(seed));
-  const mines: Mine[] = [];
-  const halfW = TRACK_WIDTH / 2 - PLAYER_RADIUS - 0.5;
-  for (let i = 0; i < MINE_COUNT; i++) {
-    const x = 25 + rnd() * (TRACK_LENGTH - 55);
-    const z = (rnd() * 2 - 1) * halfW;
-    mines.push({ id: `mine-${i}`, x, z });
-  }
-  return mines;
-}
-
 export type PlayerInput = {
   forward: number;   // -1, 0, 1
   turn: number;      // -1, 0, 1
@@ -153,10 +119,4 @@ export type FinishEvent = {
   finishMs: number;
 };
 
-export type MineHitEvent = {
-  type: "mine";
-  mineId: string;
-  hitterId: string;
-};
-
-export type GameEvent = ThrowEvent | StunEvent | HarpoonEvent | FinishEvent | MineHitEvent;
+export type GameEvent = ThrowEvent | StunEvent | HarpoonEvent | FinishEvent;

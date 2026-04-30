@@ -12,8 +12,6 @@ import {
   HARPOON_RANGE,
   HARPOON_STUN_MS,
   MAX_SPEED,
-  MINE_HIT_RADIUS,
-  MINE_STUN_MS,
   OBSTACLES,
   PLAYER_RADIUS,
   POSITION_BROADCAST_HZ,
@@ -25,9 +23,7 @@ import {
   TRACK_LENGTH,
   TRACK_WIDTH,
   TURN_RATE,
-  generateMines,
   type GameEvent,
-  type Mine as MineT,
   type PlayerInput,
   type PlayerState,
   type Projectile as ProjectileT,
@@ -38,7 +34,6 @@ import Track from "./Track";
 import PlayerMesh from "./PlayerMesh";
 import Projectile from "./Projectile";
 import HarpoonLine from "./HarpoonLine";
-import Mine from "./Mine";
 
 type HarpoonShot = { id: string; fromX: number; fromZ: number; toX: number; toZ: number; bornAt: number };
 
@@ -181,10 +176,6 @@ function World({
   const [harpoons, setHarpoons] = useState<HarpoonShot[]>([]);
   const harpoonsRef = useRef<HarpoonShot[]>([]);
   harpoonsRef.current = harpoons;
-  const initialMines = useMemo(() => generateMines(code), [code]);
-  const [mines, setMines] = useState<MineT[]>(initialMines);
-  const minesRef = useRef<MineT[]>(initialMines);
-  minesRef.current = mines;
 
   const handlePos = (p: RemotePos) => {
     setPlayers((prev) => {
@@ -253,8 +244,6 @@ function World({
         if (!cur) return prev;
         return { ...prev, [e.playerId]: { ...cur, finishedMs: e.finishMs } };
       });
-    } else if (e.type === "mine") {
-      setMines((prev) => prev.filter((m) => m.id !== e.mineId));
     }
   };
 
@@ -367,24 +356,6 @@ function World({
         }
       }
 
-      // ── Mine collision (self only) ────────────────────────────────
-      // Walking into a mine stuns you and removes it for everyone.
-      if (!stunned && self.finishedMs == null) {
-        for (const m of minesRef.current) {
-          const dx = x - m.x;
-          const dz = z - m.z;
-          if (Math.hypot(dx, dz) < MINE_HIT_RADIUS) {
-            const until = Date.now() + MINE_STUN_MS;
-            setMines((prev) => prev.filter((p) => p.id !== m.id));
-            handleEvent({ type: "stun", targetId: selfId, until });
-            sendEvent({ type: "stun", targetId: selfId, until });
-            sendEvent({ type: "mine", mineId: m.id, hitterId: selfId });
-            playSfx("throw", 0.8);
-            vx = 0; vz = 0;
-            break;
-          }
-        }
-      }
     }
 
     if (!lobbyMode && !finishedRef.current && x >= TRACK_LENGTH && self.finishedMs == null) {
@@ -584,9 +555,6 @@ function World({
           toX={h.toX}
           toZ={h.toZ}
         />
-      ))}
-      {mines.map((m) => (
-        <Mine key={m.id} x={m.x} z={m.z} />
       ))}
     </>
   );
