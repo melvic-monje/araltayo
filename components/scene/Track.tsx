@@ -11,12 +11,13 @@ export default function Track() {
     t.colorSpace = THREE.SRGBColorSpace;
     return t;
   }, []);
-  // Map the photo onto the front + back faces of the arch box; sides + top/
-  // bottom keep a solid color so the photo isn't smeared along the X axis.
+  // boxGeometry face order: [+X, -X, +Y, -Y, +Z, -Z]. The arch box is thin on
+  // X (0.6) and wide on Z, so racers see the +X / -X faces. Put the photo
+  // there; trim covers the slim sides + top + bottom.
   const finishMats = useMemo(() => {
     const photo = new THREE.MeshStandardMaterial({ map: finishTex });
     const trim = new THREE.MeshStandardMaterial({ color: "#A78BFA" });
-    return [trim, trim, trim, trim, photo, photo];
+    return [photo, photo, trim, trim, trim, trim];
   }, [finishTex]);
   const tileSize = 8;
   const tilesX = Math.ceil(TRACK_LENGTH / tileSize);
