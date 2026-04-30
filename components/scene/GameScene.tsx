@@ -212,10 +212,9 @@ function World({
         if (!cur) return prev;
         return { ...prev, [e.targetId]: { ...cur, stunUntil: e.until, vx: 0, vz: 0 } };
       });
-      // Stun events are only broadcast on stone (throw) hits — harpoons set
-      // stun via the harpoon event path. Cue the "malupiton" taunt for
-      // everyone in the room.
-      playSfx("malupiton", 1.0);
+      // Stun events are only broadcast on stone (throw) hits. Play the
+      // "malupiton" taunt only for the unlucky person who got hit.
+      if (e.targetId === selfId) playSfx("malupiton", 1.0);
     } else if (e.type === "harpoon") {
       const now = Date.now();
       const target = playersRef.current[e.targetId];
