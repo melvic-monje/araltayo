@@ -227,13 +227,15 @@ export default function RoomClient({ code }: { code: string }) {
     return () => { cancelled = true; };
   }, [phase, room, code, setRoom]);
 
-  // End the race the moment any player crosses the finish line (winner-takes-all)
+  // End the race once every joined player has crossed the finish line.
+  // Individual finishers see the leaderboard immediately (handled above),
+  // so the race continues for the remaining drivers in the meantime.
   useEffect(() => {
     if (room?.status !== "racing" || players.length === 0) return;
-    const someoneFinished = players.some(
+    const allFinished = players.every(
       (p) => (p as Player & { finish_ms?: number | null }).finish_ms != null
     );
-    if (!someoneFinished) return;
+    if (!allFinished) return;
     let cancelled = false;
     (async () => {
       const supabase = getSupabase();
@@ -246,10 +248,10 @@ export default function RoomClient({ code }: { code: string }) {
         .maybeSingle();
       if (cancelled) return;
       if (updErr) {
-        console.error("[race] winner-finish flip failed", updErr);
+        console.error("[race] all-finished flip failed", updErr);
         return;
       }
-      console.log("[race] someone finished → room finished");
+      console.log("[race] all players finished → room finished");
       if (data) setRoom(data as Room);
     })();
     return () => { cancelled = true; };
