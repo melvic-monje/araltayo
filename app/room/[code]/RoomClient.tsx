@@ -227,15 +227,16 @@ export default function RoomClient({ code }: { code: string }) {
     return () => { cancelled = true; };
   }, [phase, room, code, setRoom]);
 
-  // End the race once every joined player has crossed the finish line.
-  // Individual finishers see the leaderboard immediately (handled above),
-  // so the race continues for the remaining drivers in the meantime.
+  // End the race once 3 players (or all of them, if fewer than 3) have
+  // crossed the finish line — top-3 podium. Individual finishers see the
+  // leaderboard immediately so they don't keep roaming the track.
   useEffect(() => {
     if (room?.status !== "racing" || players.length === 0) return;
-    const allFinished = players.every(
+    const finishedCount = players.filter(
       (p) => (p as Player & { finish_ms?: number | null }).finish_ms != null
-    );
-    if (!allFinished) return;
+    ).length;
+    const threshold = Math.min(3, players.length);
+    if (finishedCount < threshold) return;
     let cancelled = false;
     (async () => {
       const supabase = getSupabase();
@@ -248,10 +249,10 @@ export default function RoomClient({ code }: { code: string }) {
         .maybeSingle();
       if (cancelled) return;
       if (updErr) {
-        console.error("[race] all-finished flip failed", updErr);
+        console.error("[race] podium flip failed", updErr);
         return;
       }
-      console.log("[race] all players finished → room finished");
+      console.log("[race] podium reached → room finished");
       if (data) setRoom(data as Room);
     })();
     return () => { cancelled = true; };
